@@ -5,8 +5,6 @@ include 'common'
 include 'support:logging'
 include 'support:monitoring'
 
-include 'service:order:core'
-
 include 'service:payment:payment-core'
 include 'service:payment:payment-api'
 
@@ -15,5 +13,8 @@ include 'service:coupon:coupon-api'
 
 include 'service:timesale:timesale-core'
 include 'service:timesale:timesale-api'
+
+include 'service:order:order-core'
+include 'service:order:order-api'
 
 include 'service:eureka:eureka-core'
