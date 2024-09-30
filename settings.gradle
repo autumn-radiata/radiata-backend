@@ -16,3 +16,5 @@ include 'service:coupon:coupon-api'
 include 'service:timesale:timesale-core'
 include 'service:timesale:timesale-api'
 
+include 'service:order:order-core'
+include 'service:order:order-api'
