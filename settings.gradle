@@ -9,3 +9,10 @@ include 'service:order:core'
 
 include 'service:payment:payment-core'
 include 'service:payment:payment-api'
+
+include 'service:coupon:coupon-core'
+include 'service:coupon:coupon-api'
+
+include 'service:timesale:timesale-core'
+include 'service:timesale:timesale-api'
+
