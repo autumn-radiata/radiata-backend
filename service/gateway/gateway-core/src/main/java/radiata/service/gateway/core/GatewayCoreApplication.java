@@ -1,4 +1,4 @@
-package radiata.service.user.api.gatewaycore;
+package radiata.service.gateway.core;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
