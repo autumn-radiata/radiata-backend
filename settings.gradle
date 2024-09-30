@@ -9,3 +9,5 @@ include 'service:order:core'
 
 include 'service:payment:payment-core'
 include 'service:payment:payment-api'
+
+include 'service:eureka:eureka-core'
