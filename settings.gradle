@@ -8,6 +8,14 @@ include 'support:monitoring'
 include 'service:payment:payment-core'
 include 'service:payment:payment-api'
 
+include 'service:brand:brand-api'
+include 'service:brand:brand-core'
+
+include 'service:user:user-api'
+include 'service:user:user-core'
+
+include 'service:gateway:gateway-core'
+
 include 'service:coupon:coupon-core'
 include 'service:coupon:coupon-api'
 
