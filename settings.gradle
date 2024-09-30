@@ -17,3 +17,12 @@ include 'service:user:user-api'
 include 'service:user:user-core'
 
 include 'service:gateway:gateway-core'
+
+include 'service:coupon:coupon-core'
+include 'service:coupon:coupon-api'
+
+include 'service:timesale:timesale-core'
+include 'service:timesale:timesale-api'
+
+include 'service:order:order-core'
+include 'service:order:order-api'

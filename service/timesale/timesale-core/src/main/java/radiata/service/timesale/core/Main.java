@@ -1,4 +1,4 @@
-package radiata.service.order;
+package radiata.service.timesale.core;
 
 public class Main {
 
