@@ -1,0 +1,8 @@
+rootProject.name = 'autumn'
+
+include 'common'
+
+include 'support:logging'
+include 'support:monitoring'
+
+include 'service:order:core'
