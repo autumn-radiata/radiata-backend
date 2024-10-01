@@ -10,8 +10,15 @@ repositories {
 }
 
 dependencies {
+
+    // module
     implementation project(':common')
-    api project(':database')
+    implementation project(':database')
+
+    // library
+    implementation 'com.github.ksuid:ksuid:1.1.2'
+
+    // test
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
