@@ -5,10 +5,12 @@ import static radiata.common.message.ExceptionMessage.INVALID_INPUT_COUPON_DISCO
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import radiata.common.exception.BusinessException;
 
 @Embeddable
+@EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CouponDiscountRate {
 
@@ -22,5 +24,11 @@ public class CouponDiscountRate {
         }
 
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+
+        return value.toString();
     }
 }
