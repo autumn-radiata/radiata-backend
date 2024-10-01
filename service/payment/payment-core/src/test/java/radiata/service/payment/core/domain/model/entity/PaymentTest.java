@@ -2,6 +2,7 @@ package radiata.service.payment.core.domain.model.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.github.ksuid.Ksuid;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import org.assertj.core.data.TemporalUnitWithinOffset;
@@ -20,6 +21,7 @@ class PaymentTest {
     @BeforeEach
     void setUp() {
         tossPayment = Payment.of(
+            Ksuid.newKsuid().toString(),
             "user01",
             "transaction01",
             Money.of(1000),
@@ -43,6 +45,7 @@ class PaymentTest {
     void pay_payment_create() {
         // given
         Payment payPayment = Payment.of(
+            Ksuid.newKsuid().toString(),
             "user01",
             "transaction01",
             Money.of(1000),

@@ -3,6 +3,7 @@ package radiata.service.payment.core.domain.model.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.github.ksuid.Ksuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ class PayAccountTest {
     @BeforeEach
     void setUp() {
         Account account = Account.of(Bank.TOSSBANK, "1234567890");
-        payAccount = PayAccount.of("주거래계좌01", account);
+        payAccount = PayAccount.of(Ksuid.newKsuid().toString(), "주거래계좌01", account);
     }
 
     @Test

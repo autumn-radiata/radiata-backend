@@ -3,6 +3,7 @@ package radiata.service.payment.core.domain.model.entity;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.github.ksuid.Ksuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ class PayUserTest {
 
     @BeforeEach
     void setUp() {
-        payUser = PayUser.of("user01", "password01");
+        payUser = PayUser.of(Ksuid.newKsuid().toString(), "user01", "password01");
     }
 
     @Test
@@ -78,7 +79,7 @@ class PayUserTest {
 
         // when & then
         BusinessException exception = assertThrows(BusinessException.class, () -> payUser.withdraw(money));
-        
+
         assertThat(exception.getMessage()).isEqualTo(ExceptionMessage.INSUFFICIENT_BALANCE.getMessage());
         assertThat(exception.getHttpStatus()).isEqualTo(ExceptionMessage.INSUFFICIENT_BALANCE.getHttpStatus());
         assertThat(exception.getCode()).isEqualTo(ExceptionMessage.INSUFFICIENT_BALANCE.getCode());

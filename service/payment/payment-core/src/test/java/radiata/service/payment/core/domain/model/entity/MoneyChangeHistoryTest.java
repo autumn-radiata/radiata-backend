@@ -2,6 +2,7 @@ package radiata.service.payment.core.domain.model.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.github.ksuid.Ksuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,8 +15,8 @@ class MoneyChangeHistoryTest {
 
     @BeforeEach
     void setUp() {
-        PayUser payUser = PayUser.of("user01", "password01");
-        moneyChangeHistory = MoneyChangeHistory.of(Money.of(1000), payUser);
+        PayUser payUser = PayUser.of(Ksuid.newKsuid().toString(), "user01", "password01");
+        moneyChangeHistory = MoneyChangeHistory.of(Ksuid.newKsuid().toString(), Money.of(1000), payUser);
     }
 
     @Test

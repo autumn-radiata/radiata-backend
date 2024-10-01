@@ -2,6 +2,7 @@ package radiata.service.payment.core.domain.model.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.github.ksuid.Ksuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ class FirmBankingRequestHistoryTest {
     @BeforeEach
     void setUp() {
         firmBankingRequestHistory = FirmBankingRequestHistory.of(
+            Ksuid.newKsuid().toString(),
             Money.of(1000L),
             FirmBankingRequestStatus.SUCCESS,
             Account.of(Bank.CITI, "1234567890"),
