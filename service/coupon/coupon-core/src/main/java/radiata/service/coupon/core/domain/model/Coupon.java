@@ -99,7 +99,7 @@ public class Coupon extends BaseEntity {
 
         LocalDateTime now = LocalDateTime.now();
 
-        return now.isAfter(issueStartDate) && now.isBefore(issueEndDate);
+        return (now.isEqual(issueStartDate) || now.isAfter(issueStartDate)) && now.isBefore(issueEndDate);
     }
 
     public boolean availableIssueQuantity() {

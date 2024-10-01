@@ -11,7 +11,7 @@ import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
 import radiata.service.coupon.core.domain.model.constant.CouponType;
 
-class CouponIssueTest {
+class CouponTest {
 
     @Nested
     @DisplayName("발급 수량 테스트")
@@ -216,6 +216,21 @@ class CouponIssueTest {
             boolean result = coupon.availableIssueDate();
             // Then
             assertThat(result).isFalse();
+        }
+
+        @Test
+        @DisplayName("발급 시간이 현재 시각과 동일하면 True를 반환한다.")
+        void availableIssueDate_4() {
+            // Given
+            LocalDateTime now = LocalDateTime.now();
+            Coupon coupon = Coupon.builder()
+                .issueStartDate(now)
+                .issueEndDate(LocalDateTime.now().plusDays(1))
+                .build();
+            // When
+            boolean result = coupon.availableIssueDate();
+            // Then
+            assertThat(result).isTrue();
         }
     }
 
