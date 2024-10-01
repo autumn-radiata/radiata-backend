@@ -31,7 +31,7 @@ import radiata.service.coupon.core.domain.model.vo.CouponDiscountRate;
 @Entity
 @Getter
 @Builder
-@SQLRestriction("deleted_at IS NOT NULL")
+@SQLRestriction("deleted_at IS NULL")
 @Table(name = "r_coupon")
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
