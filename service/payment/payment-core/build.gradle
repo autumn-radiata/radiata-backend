@@ -10,6 +10,22 @@ repositories {
 }
 
 dependencies {
+
+    /* module */
+
+    implementation project(':common')
+    implementation project(':database')
+
+    /* library */
+
+    // ksuid
+    implementation 'com.github.ksuid:ksuid:1.1.2'
+
+    // spring security crypto
+    implementation 'org.springframework.security:spring-security-crypto'
+
+    /* test */
+
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
