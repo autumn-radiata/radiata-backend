@@ -1,14 +1,10 @@
 package radiata.common.domain.order.dto.request;
 
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@Getter
-@AllArgsConstructor
-public class OrderCreateRequestDto {
+public record OrderCreateRequestDto(
+    String address,
+    String comment,
+    List<OrderItemCreateRequestDto> itemList) {
 
-    private String address;
-    private String comment;
-    private List<OrderItemCreateRequestDto> itemList;
 }
