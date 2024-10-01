@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import radiata.service.order.core.domain.model.vo.OrderStatus;
+import radiata.service.order.core.domain.model.constant.OrderStatus;
 
 @Entity
 @Table(name = "r_order")

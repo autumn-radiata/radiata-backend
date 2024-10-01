@@ -1,4 +1,4 @@
-package radiata.service.order.core.domain.model.vo;
+package radiata.service.order.core.domain.model.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
