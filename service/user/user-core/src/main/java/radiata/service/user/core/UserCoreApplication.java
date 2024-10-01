@@ -1,4 +1,4 @@
-package radiata.service.user.core.usercore;
+package radiata.service.user.core;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
