@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgres://localhost:5432/radiata-dev-postgres-total
+    url: jdbc:postgresql://localhost:5432/radiata-dev-postgres-total
     username: radiata
     password: 1234
     driver-class-name: org.postgresql.Driver
