@@ -44,7 +44,7 @@ public class PointHistory {
     @Enumerated(EnumType.STRING)
     private PointType pointType;
 
-    //todo : baseEntity 상속으로 삭제 예정
+    //todo :  baseEntity 추가후 @CreationTimestamp로 초기화
     @Column
     private LocalDateTime issueAt;
 
