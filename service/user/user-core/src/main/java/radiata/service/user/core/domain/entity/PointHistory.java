@@ -46,7 +46,7 @@ public class PointHistory {
 
     @Column
     @CreationTimestamp
-    private Timestamp issueAt=Timestamp.from(Instant.now());
+    private Timestamp issueAt;
 
     public static PointHistory of(User user, int rewardPoint, PointType pointType) {
         return PointHistory.builder()
