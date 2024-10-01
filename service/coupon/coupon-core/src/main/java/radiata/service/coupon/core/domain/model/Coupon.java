@@ -2,6 +2,7 @@ package radiata.service.coupon.core.domain.model;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
+import static radiata.common.message.ExceptionMessage.*;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -19,6 +20,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
+import org.springframework.cglib.core.Local;
+import radiata.common.exception.BusinessException;
+import radiata.common.message.ExceptionMessage;
 import radiata.database.model.BaseEntity;
 import radiata.service.coupon.core.domain.model.constant.CouponSaleType;
 import radiata.service.coupon.core.domain.model.constant.CouponType;
@@ -68,5 +72,39 @@ public class Coupon extends BaseEntity {
 
     @OneToMany(mappedBy = "coupon", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<CouponIssue> couponIssues;
+
+
+    public void issue() {
+
+        // 1. 현재 시간이 발급 가능한 시간인지 확인한다.
+        if (!availableIssueDate()) {
+            throw new BusinessException(COUPON_ISSUE_PERIOD);
+        }
+        // 2. 쿠폰 할인 타입이 선착순이면 쿠폰 발급 수량에 대한 Validation 을 수행한다.
+        if (isFirstComeFirstServed()) {
+            if (!availableIssueQuantity()) {
+                throw new BusinessException(COUPON_ISSUE_QUANTITY_LIMITED);
+            }
+        }
+
+        issueQuantity++;
+    }
+
+    public boolean isFirstComeFirstServed() {
+
+        return this.couponType.isFirstComeFirstServed();
+    }
+
+    public boolean availableIssueDate() {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        return now.isAfter(issueStartDate) && now.isBefore(issueEndDate);
+    }
+
+    public boolean availableIssueQuantity() {
+
+        return issueQuantity < totalQuantity;
+    }
 
 }
