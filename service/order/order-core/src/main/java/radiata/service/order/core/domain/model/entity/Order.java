@@ -46,7 +46,7 @@ public class Order {
     private Set<OrderItem> itemList;
 
     // 주문 생성
-    public static Order create(
+    public static Order of(
         String id,
         String userId,
         Integer orderPrice,

@@ -42,7 +42,7 @@ public class OrderItem {
     private Integer paymentPrice;
 
 
-    public static OrderItem create(
+    public static OrderItem of(
         String id,
         Order order,
         String productId,

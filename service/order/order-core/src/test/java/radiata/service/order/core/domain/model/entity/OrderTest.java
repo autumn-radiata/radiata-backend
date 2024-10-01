@@ -20,7 +20,7 @@ class OrderTest {
     @BeforeEach
     void setUp() {
 
-        order = Order.create(
+        order = Order.of(
             KsuidGenerator.generate(),
             "userId-01",
             0,
@@ -28,7 +28,7 @@ class OrderTest {
             "Test-comment-01"
             );
 
-        orderItem = OrderItem.create(
+        orderItem = OrderItem.of(
             KsuidGenerator.generate(),
             order,
             "productId-01",
