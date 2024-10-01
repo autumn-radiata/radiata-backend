@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
+import org.hibernate.validator.constraints.Range;
 
 public record CouponCreateRequestDto(
 
@@ -24,7 +25,7 @@ public record CouponCreateRequestDto(
     @Positive(message = "할인 금액은 음수가 될 수 없습니다.")
     Integer discountAmount, // 할인 금액
 
-    @Size(min = 1, max = 100, message = "할인율은 최대 1% ~ 100% 까지 입력할 수 있습니다.")
+    @Range(min = 1, max = 100, message = "할인율은 최대 1% ~ 100% 까지 입력할 수 있습니다.")
     @Positive(message = "할인율은 음수가 될 수 없습니다.")
     Integer discountRate, // 할인율
 
