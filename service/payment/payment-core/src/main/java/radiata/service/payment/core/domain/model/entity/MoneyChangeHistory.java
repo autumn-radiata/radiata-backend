@@ -36,11 +36,12 @@ public class MoneyChangeHistory {
     private PayUser payUser;
 
     public static MoneyChangeHistory of(
+        String id,
         Money amount,
         PayUser payUser
     ) {
         return MoneyChangeHistory.builder()
-            .id(Ksuid.newKsuid().toString())
+            .id(id)
             .amount(amount)
             .payUser(payUser)
             .build();

@@ -37,11 +37,12 @@ public class PayUser {
     private Money balance;
 
     public static PayUser of(
+        String id,
         String userId,
         String encodedPassword
     ) {
         return PayUser.builder()
-            .id(Ksuid.newKsuid().toString())
+            .id(id)
             .userId(userId)
             .password(encodedPassword)
             .balance(Money.of(0L))

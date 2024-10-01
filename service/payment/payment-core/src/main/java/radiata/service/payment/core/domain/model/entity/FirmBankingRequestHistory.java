@@ -54,13 +54,14 @@ public class FirmBankingRequestHistory {
     private Account toAccount;
 
     public static FirmBankingRequestHistory of(
+        String id,
         Money amount,
         FirmBankingRequestStatus status,
         Account fromAccount,
         Account toAccount
     ) {
         return FirmBankingRequestHistory.builder()
-            .id(Ksuid.newKsuid().toString())
+            .id(id)
             .amount(amount)
             .status(status)
             .fromAccount(fromAccount)

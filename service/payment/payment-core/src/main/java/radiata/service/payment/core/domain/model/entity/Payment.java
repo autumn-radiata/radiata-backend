@@ -50,13 +50,14 @@ public class Payment {
     private LocalDateTime approvedAt;
 
     public static Payment of(
+        String id,
         String userId,
         String transactionId,
         Money amount,
         PaymentType type
     ) {
         return Payment.builder()
-            .id(Ksuid.newKsuid().toString())
+            .id(id)
             .userId(userId)
             .transactionId(transactionId)
             .amount(amount)

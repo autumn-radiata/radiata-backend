@@ -36,11 +36,12 @@ public class PayAccount {
     private Boolean isDefault;
 
     public static PayAccount of(
+        String id,
         String nickname,
         Account account
     ) {
         return PayAccount.builder()
-            .id(Ksuid.newKsuid().toString())
+            .id(id)
             .nickname(nickname)
             .account(account)
             .isDefault(false)
