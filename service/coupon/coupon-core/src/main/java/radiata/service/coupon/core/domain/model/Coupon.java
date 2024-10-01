@@ -37,34 +37,34 @@ public class Coupon extends BaseEntity {
     private String id;
 
     @Column(nullable = false, length = 100)
-    private String title;
+    private String title; // 쿠폰명
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private CouponType couponType;
+    private CouponType couponType; // 쿠폰 타입
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private CouponSaleType couponSaleType;
+    private CouponSaleType couponSaleType; // 쿠폰 할인 타입
 
-    private Integer totalQuantity;
+    private Integer totalQuantity; // 쿠폰 발급 최대 수량
 
-    private Integer issueQuantity;
+    private Integer issueQuantity; // 쿠폰 현재 발급 수량
 
-    private Integer discountAmount;
+    private Integer discountAmount; // 할인 금액
 
     @Embedded
-    private CouponDiscountRate discountRate;
+    private CouponDiscountRate discountRate; // 할인율
 
-    private Integer minAvailableAmount;
+    private Integer minAvailableAmount; // 최소 사용 금액
 
-    private Integer maxAvailableAmount;
-
-    @Column(nullable = false)
-    private LocalDateTime issueStartDate;
+    private Integer maxAvailableAmount; // 최대 사용 금액
 
     @Column(nullable = false)
-    private LocalDateTime issueEndDate;
+    private LocalDateTime issueStartDate; // 발급 시작일
+
+    @Column(nullable = false)
+    private LocalDateTime issueEndDate; // 발급 종료일
 
     @OneToMany(mappedBy = "coupon", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<CouponIssue> couponIssues;
