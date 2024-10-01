@@ -1,6 +1,5 @@
 package radiata.service.payment.core.domain.model.entity;
 
-import com.github.ksuid.Ksuid;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
@@ -23,7 +22,7 @@ import radiata.service.payment.core.domain.model.vo.Money;
 @Getter
 @Entity
 @Table(name = "r_firm_banking_request_history")
-@SQLRestriction("deleted_at IS NOT NULL")
+@SQLRestriction("deleted_at IS NULL")
 @Builder // 빌더 패턴은 테스트 용도로만 사용
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA 객체는 기본 생성자를 필요로 함
