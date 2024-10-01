@@ -1,69 +1,124 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.3.4' apply(false)
-	id 'io.spring.dependency-management' version '1.1.6' apply(false)
+    id 'java'
+    id 'jacoco'
+    id 'org.springframework.boot' version '3.3.4' apply(false)
+    id 'io.spring.dependency-management' version '1.1.6' apply(false)
 }
 
 allprojects {
-	group = 'radiata'
-	version = '0.0.1-SNAPSHOT'
+    group = 'radiata'
+    version = '0.0.1-SNAPSHOT'
 
-	apply plugin: 'java'
-	apply plugin: 'java-library'
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'jacoco'
 
-	repositories {
-		mavenCentral()
-	}
+    repositories {
+        mavenCentral()
+    }
 
-	test {
-		useJUnitPlatform()
-	}
+    test {
+        useJUnitPlatform()
+        finalizedBy 'jacocoTestReport' // test 끝나면 jacocoTestReport 동작
+    }
 
-	java {
-		toolchain {
-			languageVersion = JavaLanguageVersion.of(21)
-		}
-	}
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
 
-	configurations {
-		compileOnly {
-			extendsFrom annotationProcessor
-		}
-	}
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+    
+    // jacoco report 설정
+    jacocoTestReport {
+        reports {
+            // 리포트 타입마다 리포트 저장 경로를 설정할 수 있습니다.
+            html.destination file("jacoco/report")
+        }
+
+        // QueryDsl Q class 제외
+        def Qdomains = []
+        for (qPattern in '**/QA'..'**/QZ') {
+            Qdomains.add(qPattern + '*')
+        }
+
+        // 커버리지 보고서 제외 범위 설정
+        getClassDirectories().setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, exclude: [
+                            "**/*Application*",
+                            "**/*Config*",
+                            "**/dto",
+                            "**/*Exception*"
+                    ] + Qdomains)
+                })
+        )
+
+        // jacocoTestReport 끝나면 jacocoTestCoverageVerification 동작
+        finalizedBy 'jacocoTestCoverageVerification'
+    }
+
+    // jacoco 커버리지 검증 설정
+    jacocoTestCoverageVerification {
+
+        def Qdomains = []
+        for (qPattern in '*.QA'..'*.QZ') {
+            Qdomains.add(qPattern + '*')
+        }
+
+        violationRules {
+            rule {
+                enabled = true // 커버리지 적용 여부
+                element = 'CLASS' // 커버리지 적용 단위
+
+                excludes = [
+                        "**/*Application*",
+                        "**/*Config*",
+                        "**/dto",
+                        "**/*Exception*"
+                ] + Qdomains
+            }
+        }
+    }
 }
 
 subprojects {
 
-	if (isDirectory()) {
-		return
-	}
+    if (isDirectory()) {
+        return
+    }
 
-	apply plugin: 'org.springframework.boot'
-	apply plugin: 'io.spring.dependency-management'
-	bootJar.enabled = false
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    bootJar.enabled = false
 
-	dependencies {
-		/* module */
+    dependencies {
+        /* module */
 
-		/* library */
+        /* library */
 
-		// spring
-		implementation 'org.springframework.boot:spring-boot-starter'
+        // spring
+        implementation 'org.springframework.boot:spring-boot-starter'
 
-		// validation
-		implementation 'org.springframework.boot:spring-boot-starter-validation'
+        // validation
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-		// lombok
-		compileOnly 'org.projectlombok:lombok'
-		annotationProcessor 'org.projectlombok:lombok'
+        // lombok
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
 
-		/* test */
+        /* test */
 
-		testImplementation 'org.springframework.boot:spring-boot-starter-test'
-		testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	}
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
 }
 
 def isDirectory() {
-	return project.name == 'support' || project.name == 'service'
+    return project.name == 'support' || project.name == 'service'
 }

@@ -253,6 +253,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-/jacoco
+/**/jacoco
 
 postgresql/

@@ -17,10 +17,15 @@ public enum ExceptionMessage {
     // 잘못된 형식의 입력 400
     INVALID_INPUT(BAD_REQUEST, "1001", "유효하지 않은 입력값입니다."),
     // 존재하지 않는 값 404
-    NOT_FOUND(HttpStatus.NOT_FOUND, "1002", "존재하지 않는 입력값입니다."),
+    NOT_FOUND(NOT_FOUND, "1002", "존재하지 않는 입력값입니다."),
+
     // 시스템 에러 500
     SYSTEM_ERROR(INTERNAL_SERVER_ERROR, "1003", "알 수 없는 에러가 발생했습니다."),
 
+    /* 결제 2000번대 */
+
+    // 잔액 부족 402
+    INSUFFICIENT_BALANCE(PAYMENT_REQUIRED, "2001", "충전금이 부족합니다."),
 
     /* 쿠폰 6000번대 */
 
