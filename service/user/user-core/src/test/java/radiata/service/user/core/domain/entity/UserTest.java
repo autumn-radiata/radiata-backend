@@ -7,9 +7,11 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import radiata.service.user.core.domain.vo.Address;
-import radiata.service.user.core.domain.vo.PointType;
-import radiata.service.user.core.domain.vo.UserRole;
+import radiata.service.user.core.domain.model.entity.PointHistory;
+import radiata.service.user.core.domain.model.entity.User;
+import radiata.service.user.core.domain.model.vo.Address;
+import radiata.service.user.core.domain.model.vo.PointType;
+import radiata.service.user.core.domain.model.vo.UserRole;
 
 
 class UserTest {

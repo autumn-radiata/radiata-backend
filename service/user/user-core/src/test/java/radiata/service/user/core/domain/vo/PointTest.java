@@ -2,12 +2,12 @@ package radiata.service.user.core.domain.vo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
+import radiata.service.user.core.domain.model.vo.Point;
 
 class PointTest {
 

@@ -1,11 +1,10 @@
-package radiata.service.user.core.domain.entity;
+package radiata.service.user.core.domain.model.entity;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,15 +13,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
-import radiata.service.user.core.domain.vo.Address;
-import radiata.service.user.core.domain.vo.Point;
-import radiata.service.user.core.domain.vo.UserRole;
+import radiata.service.user.core.domain.model.vo.Address;
+import radiata.service.user.core.domain.model.vo.Point;
+import radiata.service.user.core.domain.model.vo.UserRole;
 
 @Entity
 @Getter

@@ -1,4 +1,4 @@
-package radiata.service.user.core.domain.vo;
+package radiata.service.user.core.domain.model.vo;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
