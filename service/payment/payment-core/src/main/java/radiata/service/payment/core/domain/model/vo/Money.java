@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Money {
 
     public static final Money ZERO = new Money(0L);
-    
+
     private Long amount;
 
     public Money(long amount) {
@@ -28,7 +28,7 @@ public class Money {
         return new Money(this.amount + money.amount);
     }
 
-    public Money subtract(final Money money) {
+    public Money subtract(Money money) {
         return new Money(this.amount - money.amount);
     }
 
