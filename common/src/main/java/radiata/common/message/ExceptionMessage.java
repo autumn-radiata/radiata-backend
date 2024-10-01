@@ -27,9 +27,9 @@ public enum ExceptionMessage {
     // 잔액 부족 402
     INSUFFICIENT_BALANCE(PAYMENT_REQUIRED, "2001", "충전금이 부족합니다."),
 
-    /* 유저 2000번대 */
+    /* 유저 3000번대 */
 
-    POINT_ISSUE_LACK(BAD_REQUEST, "2001", "적립금이 부족합니다."),
+    POINT_ISSUE_LACK(BAD_REQUEST, "3001", "적립금이 부족합니다."),
 
 
 
