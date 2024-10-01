@@ -3,7 +3,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +41,7 @@ class UserTest {
             .user(user)
             .rewardPoint(100)
             .pointType(PointType.SUBSCRIBE)
-            .issueAt(Timestamp.from(Instant.now()))
+            .issueAt(LocalDateTime.now())
             .build();
     }
 
@@ -84,10 +86,14 @@ class UserTest {
 
         user.addPointHistory(pointHistory);
 
-        List<PointHistory> pointHistories = user.getPointHistories();
+        Set<PointHistory> pointHistories = user.getPointHistories();
+
         assertThat(pointHistories).hasSize(1);
-        assertThat(pointHistories.get(0).getRewardPoint()).isEqualTo(100);
-        assertThat(pointHistories.get(0).getPointType()).isEqualTo(PointType.SUBSCRIBE);
+
+        PointHistory addedPointHistory = pointHistories.iterator().next();
+
+        assertThat(addedPointHistory.getRewardPoint()).isEqualTo(100);
+        assertThat(addedPointHistory.getPointType()).isEqualTo(PointType.SUBSCRIBE);
     }
 
 

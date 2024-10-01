@@ -12,7 +12,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -60,7 +62,7 @@ public class User{
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Builder.Default
-    private List<PointHistory> pointHistories = new ArrayList<>();
+    private Set<PointHistory> pointHistories = new HashSet<>();
 
     /**
      * 사용자 생성
