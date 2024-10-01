@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "p_order_item")
+@Table(name = "r_order_item")
 @Getter
 @Builder // 테스트 용
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -51,6 +51,7 @@ public class OrderItem {
         Integer quantity,
         Integer unitPrice) {
 
+        // TODO - 쿠폰&적립금 형식 정해지면 paymentPrice 계산 추가
         return OrderItem.builder()
             .id(id)
             .order(order)
@@ -59,7 +60,7 @@ public class OrderItem {
             .rewardPointId(rewardPointId)
             .quantity(quantity)
             .unitPrice(unitPrice)
-            .paymentPrice(unitPrice * quantity) // 쿠폰 & 적립금 형식 정해지면 추가
+            .paymentPrice(unitPrice * quantity)
             .build();
     }
 }
