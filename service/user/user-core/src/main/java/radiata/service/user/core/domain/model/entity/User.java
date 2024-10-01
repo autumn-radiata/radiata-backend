@@ -51,7 +51,7 @@ public class User{
     private Address address;
 
     @Embedded
-    private Point total_point;
+    private Point totalPoint;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -74,7 +74,7 @@ public class User{
             .nickname(nickname)
             .phone(phone)
             .address(address)
-            .total_point(Point.builder().point(0).build())
+            .totalPoint(Point.builder().point(0).build())
             .role(role)
             .build();
 

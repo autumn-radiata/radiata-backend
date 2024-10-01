@@ -14,6 +14,7 @@ import radiata.service.user.core.domain.model.vo.PointType;
 import radiata.service.user.core.domain.model.vo.UserRole;
 
 
+@DisplayName("유저 도메인 test")
 class UserTest {
 
     private User user;

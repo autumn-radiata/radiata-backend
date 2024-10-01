@@ -12,11 +12,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLRestriction;
 import radiata.service.user.core.domain.model.vo.PointType;
 
 @Entity
@@ -24,6 +26,7 @@ import radiata.service.user.core.domain.model.vo.PointType;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
 @Builder
+@SQLRestriction("deleted_at IS NULL")
 @Table(name = "r_point_history")
 public class PointHistory {
 
@@ -41,9 +44,9 @@ public class PointHistory {
     @Enumerated(EnumType.STRING)
     private PointType pointType;
 
+    //todo : baseEntity 상속으로 삭제 예정
     @Column
-    @CreationTimestamp
-    private Timestamp issueAt;
+    private LocalDateTime issueAt;
 
     public static PointHistory of(User user, int rewardPoint, PointType pointType) {
         return PointHistory.builder()

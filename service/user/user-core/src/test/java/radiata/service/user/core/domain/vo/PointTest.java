@@ -9,6 +9,7 @@ import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
 import radiata.service.user.core.domain.model.vo.Point;
 
+@DisplayName("point 값객체 동작 test")
 class PointTest {
 
     private Point point;
