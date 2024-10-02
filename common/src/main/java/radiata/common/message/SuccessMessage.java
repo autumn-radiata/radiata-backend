@@ -9,6 +9,13 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum SuccessMessage {
 
+
+
+
+    /* 쿠폰 */
+    CREATE_COUPON(HttpStatus.OK, "0", "쿠폰이 생성 되었습니다.")
+
+
     ;
 
     private final HttpStatus httpStatus;
