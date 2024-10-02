@@ -49,6 +49,8 @@ public class Payment extends BaseEntity {
 
     private LocalDateTime approvedAt;
 
+    private LocalDateTime settledAt;
+
     public static Payment of(
         String id,
         String userId,
@@ -86,5 +88,6 @@ public class Payment extends BaseEntity {
      */
     public void settle() {
         this.status = PaymentStatus.SETTLED;
+        this.settledAt = LocalDateTime.now();
     }
 }
