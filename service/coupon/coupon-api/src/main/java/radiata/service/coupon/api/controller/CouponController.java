@@ -4,6 +4,7 @@ import static org.springframework.data.domain.Sort.Direction.ASC;
 import static radiata.common.message.SuccessMessage.CREATE_COUPON;
 import static radiata.common.message.SuccessMessage.GET_COUPON;
 import static radiata.common.message.SuccessMessage.GET_COUPONS;
+import static radiata.common.message.SuccessMessage.UPDATE_COUPON;
 import static radiata.common.response.SuccessResponse.success;
 
 import jakarta.validation.Valid;
@@ -13,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import radiata.common.domain.coupon.dto.condition.CouponSearchCondition;
 import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
+import radiata.common.domain.coupon.dto.request.CouponUpdateRequestDto;
 import radiata.common.response.CommonResponse;
 import radiata.service.coupon.api.service.CouponApiService;
 
@@ -60,6 +63,18 @@ public class CouponController {
 
         return ResponseEntity.status(GET_COUPON.getHttpStatus())
             .body(success(GET_COUPON.getMessage(), couponApiService.getCoupon(couponId)));
+    }
+
+    @PatchMapping("/{couponId}")
+    public ResponseEntity<? extends CommonResponse> updateCoupon(
+        @PathVariable
+        String couponId,
+        @RequestBody
+        CouponUpdateRequestDto requestDto
+    ) {
+
+        return ResponseEntity.status(UPDATE_COUPON.getHttpStatus())
+            .body(success(UPDATE_COUPON.getMessage(), couponApiService.updateCoupon(couponId, requestDto)));
     }
 
 }

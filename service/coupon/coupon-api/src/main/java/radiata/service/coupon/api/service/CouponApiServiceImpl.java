@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import radiata.common.domain.coupon.dto.condition.CouponSearchCondition;
 import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
+import radiata.common.domain.coupon.dto.request.CouponUpdateRequestDto;
 import radiata.common.domain.coupon.dto.response.CouponResponseDto;
 import radiata.service.coupon.core.service.interfaces.CouponService;
 
@@ -31,5 +32,11 @@ public class CouponApiServiceImpl implements CouponApiService {
     public CouponResponseDto getCoupon(String couponId) {
 
         return couponService.getCoupon(couponId);
+    }
+
+    @Override
+    public CouponResponseDto updateCoupon(String couponId, CouponUpdateRequestDto requestDto) {
+
+        return couponService.updateCoupon(couponId, requestDto);
     }
 }

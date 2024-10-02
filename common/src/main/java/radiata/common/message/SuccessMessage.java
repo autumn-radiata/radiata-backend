@@ -15,7 +15,9 @@ public enum SuccessMessage {
     /* 쿠폰 */
     CREATE_COUPON(HttpStatus.OK, "0", "쿠폰이 생성 되었습니다."),
     GET_COUPONS(HttpStatus.OK, "0", "쿠폰 목록을 조회가 완료 되었습니다."),
-    GET_COUPON(HttpStatus.OK, "0", "쿠폰 조회가 완료 되었습니다.")
+    GET_COUPON(HttpStatus.OK, "0", "쿠폰 조회가 완료 되었습니다."),
+    UPDATE_COUPON(HttpStatus.OK, "0", "쿠폰 수정이 완료 되었습니다."),
+    DELETE_COUPON(HttpStatus.OK, "0", "쿠폰 삭제가 완료 되었습니다."),
 
 
     ;
