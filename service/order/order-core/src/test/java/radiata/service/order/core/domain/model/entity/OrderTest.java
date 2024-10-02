@@ -1,6 +1,5 @@
 package radiata.service.order.core.domain.model.entity;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.github.ksuid.KsuidGenerator;
@@ -38,9 +37,7 @@ class OrderTest {
             10000
         );
     }
-    //give : 이런 값이 주어질 때
-    //when : 이런 로직이 실행될 때
-    //then : 이렇게 되어야 한다.
+
 
     @Test
     @DisplayName("주문 생성 Test")
@@ -73,9 +70,11 @@ class OrderTest {
     @Test
     @DisplayName("주문 엔티티 - 상품목록 지정 Test")
     void testSetOrderItems(){
-        Set<OrderItem> orderItems = new HashSet<>();
         // given
+        Set<OrderItem> orderItems = new HashSet<>();
         orderItems.add(orderItem);
+
+        // when
         order.setOrderItems(orderItems);
 
         // then
@@ -93,7 +92,7 @@ class OrderTest {
     @Test
     @DisplayName("주문 상태 변경 Test")
     void updateOrderStatus(){
-        // given
+        // when
         order.updateOrderStatus(OrderStatus.PAYMENT_PENDING);
 
         // then
