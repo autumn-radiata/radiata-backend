@@ -53,7 +53,9 @@ public enum ExceptionMessage {
 
     COUPON_INVALID_INPUT_AMOUNT_DONT_WRITE_DISCOUNT_RATE(BAD_REQUEST, "6007", "정액 쿠폰은 할인율을 입력 할 수 없습니다."),
 
-    COUPON_INVALID_INPUT_UNLIMITED(BAD_REQUEST, "6008", "무제한 쿠폰은 발급 수량을 입력할 수 없습니다.");
+    COUPON_INVALID_INPUT_UNLIMITED(BAD_REQUEST, "6008", "무제한 쿠폰은 발급 수량을 입력할 수 없습니다."),
+
+    DUPLICATED_COUPON_ISSUE(BAD_REQUEST, "6009", "이미 발급 된 쿠폰입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

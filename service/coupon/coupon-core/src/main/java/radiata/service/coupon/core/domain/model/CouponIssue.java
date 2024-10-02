@@ -49,4 +49,13 @@ public class CouponIssue extends BaseEntity {
 
     private LocalDateTime expiredAt;
 
+    public static CouponIssue from(Coupon coupon, String userId, String couponIssueId) {
+
+        return CouponIssue.builder()
+            .id(couponIssueId)
+            .coupon(coupon)
+            .userId(userId)
+            .couponStatus(CouponStatus.ISSUED)
+            .build();
+    }
 }

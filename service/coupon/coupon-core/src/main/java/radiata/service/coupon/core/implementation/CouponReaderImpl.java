@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import radiata.common.annotation.Implementation;
 import radiata.common.domain.coupon.dto.condition.CouponSearchCondition;
 import radiata.common.exception.BusinessException;
-import radiata.service.coupon.core.domain.CouponQueryRepository;
+import radiata.service.coupon.core.domain.repository.CouponQueryRepository;
 import radiata.service.coupon.core.domain.model.Coupon;
 import radiata.service.coupon.core.domain.repository.CouponRepository;
 import radiata.service.coupon.core.implementation.interfaces.CouponReader;
