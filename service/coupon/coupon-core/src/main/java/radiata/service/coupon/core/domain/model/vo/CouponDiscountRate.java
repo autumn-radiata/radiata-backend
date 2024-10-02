@@ -21,8 +21,10 @@ public class CouponDiscountRate {
 
     public CouponDiscountRate(Integer value) {
 
-        if (value == null || value < 1 || value > 100) {
-            throw new BusinessException(INVALID_INPUT_COUPON_DISCOUNT_RATE);
+        if (value != null) {
+            if (value < 1 || value > 100) {
+                throw new BusinessException(INVALID_INPUT_COUPON_DISCOUNT_RATE);
+            }
         }
 
         this.value = value;

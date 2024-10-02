@@ -6,7 +6,11 @@ import org.springframework.stereotype.Service;
 import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
 import radiata.common.domain.coupon.dto.request.CouponUpdateRequestDto;
 import radiata.common.domain.coupon.dto.response.CouponResponseDto;
+import radiata.common.exception.BusinessException;
+import radiata.common.message.ExceptionMessage;
 import radiata.service.coupon.core.domain.model.Coupon;
+import radiata.service.coupon.core.domain.model.constant.CouponSaleType;
+import radiata.service.coupon.core.domain.model.constant.CouponType;
 import radiata.service.coupon.core.implementation.interfaces.CouponIdCreator;
 import radiata.service.coupon.core.implementation.interfaces.CouponSaver;
 import radiata.service.coupon.core.service.interfaces.CouponService;
@@ -23,11 +27,46 @@ public class CouponServiceImplV1 implements CouponService {
     @Override
     public CouponResponseDto createCoupon(CouponCreateRequestDto requestDto) {
 
+        validateCouponCreateRequestDto(requestDto);
+
         String couponId = couponIdCreator.create();
 
         Coupon savedCoupon = couponSaver.save(couponMapper.toEntity(requestDto, couponId));
 
         return couponMapper.toDto(savedCoupon);
+    }
+
+    private void validateCouponCreateRequestDto(CouponCreateRequestDto requestDto) {
+
+        if (requestDto.couponType().equals(CouponType.FIRST_COME_FIRST_SERVED.toString())) {
+            if (requestDto.totalQuantity() == null) {
+                throw new BusinessException(ExceptionMessage.COUPON_INVALID_INPUT_FIRST_COME_FIRST_SERVED);
+            }
+        }
+
+        if (requestDto.couponType().equals(CouponType.UNLIMITED.toString())) {
+            if (requestDto.totalQuantity() != null) {
+                throw new BusinessException(ExceptionMessage.COUPON_INVALID_INPUT_UNLIMITED);
+            }
+        }
+
+        if (requestDto.couponSaleType().equals(CouponSaleType.RATE.toString())) {
+            if (requestDto.discountRate() == null) {
+                throw new BusinessException(ExceptionMessage.COUPON_INVALID_INPUT_RATE);
+            }
+            if (requestDto.discountAmount() != null) {
+                throw new BusinessException(ExceptionMessage.COUPON_INVALID_INPUT_RATE_DONT_WRITE_DISCOUNT_AMOUNT);
+            }
+        }
+
+        if (requestDto.couponSaleType().equals(CouponSaleType.AMOUNT.toString())) {
+            if (requestDto.discountAmount() == null) {
+                throw new BusinessException(ExceptionMessage.COUPON_INVALID_INPUT_AMOUNT);
+            }
+            if (requestDto.discountRate() != null) {
+                throw new BusinessException(ExceptionMessage.COUPON_INVALID_INPUT_AMOUNT_DONT_WRITE_DISCOUNT_RATE);
+            }
+        }
     }
 
     @Override

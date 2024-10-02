@@ -19,6 +19,7 @@ dependencies {
     implementation 'com.github.ksuid:ksuid:1.1.2'
 
     // test
+    testImplementation 'com.h2database:h2:2.1.214'
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
