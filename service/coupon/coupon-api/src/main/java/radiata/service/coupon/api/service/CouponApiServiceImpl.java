@@ -55,4 +55,10 @@ public class CouponApiServiceImpl implements CouponApiService {
 
         return couponIssueService.issue(couponId, userId);
     }
+
+    @Override
+    public CouponIssueResponseDto useIssueCoupon(String couponIssueId, String userId) {
+
+        return couponIssueService.useCouponIssue(couponIssueId, userId);
+    }
 }

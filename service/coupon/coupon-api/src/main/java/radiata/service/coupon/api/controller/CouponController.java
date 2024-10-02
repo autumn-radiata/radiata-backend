@@ -6,6 +6,7 @@ import static radiata.common.message.SuccessMessage.CREATE_COUPON;
 import static radiata.common.message.SuccessMessage.DELETE_COUPON;
 import static radiata.common.message.SuccessMessage.GET_COUPON;
 import static radiata.common.message.SuccessMessage.GET_COUPONS;
+import static radiata.common.message.SuccessMessage.ISSUE_COUPON;
 import static radiata.common.message.SuccessMessage.UPDATE_COUPON;
 import static radiata.common.response.SuccessResponse.success;
 
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import radiata.common.domain.coupon.dto.condition.CouponSearchCondition;
 import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
@@ -31,14 +31,13 @@ import radiata.common.message.SuccessMessage;
 import radiata.common.response.CommonResponse;
 import radiata.service.coupon.api.service.CouponApiService;
 
-@RequestMapping("/coupons")
 @RestController
 @RequiredArgsConstructor
 public class CouponController {
 
     private final CouponApiService couponApiService;
 
-    @PostMapping
+    @PostMapping("/coupons")
     public ResponseEntity<? extends CommonResponse> createCoupon(
         @Valid @RequestBody
         CouponCreateRequestDto requestDto
@@ -48,7 +47,7 @@ public class CouponController {
             .body(success(CREATE_COUPON.getMessage(), couponApiService.createCoupon(requestDto)));
     }
 
-    @GetMapping
+    @GetMapping("/coupons")
     public ResponseEntity<? extends CommonResponse> getCoupons(
         @ModelAttribute
         CouponSearchCondition condition,
@@ -60,7 +59,7 @@ public class CouponController {
             .body(success(GET_COUPONS.getMessage(), couponApiService.getCoupons(condition, pageable)));
     }
 
-    @GetMapping("/{couponId}")
+    @GetMapping("/coupons/{couponId}")
     public ResponseEntity<? extends CommonResponse> getCoupons(
         @PathVariable
         String couponId
@@ -70,7 +69,7 @@ public class CouponController {
             .body(success(GET_COUPON.getMessage(), couponApiService.getCoupon(couponId)));
     }
 
-    @PatchMapping("/{couponId}")
+    @PatchMapping("/coupons/{couponId}")
     public ResponseEntity<? extends CommonResponse> updateCoupon(
         @PathVariable
         String couponId,
@@ -82,7 +81,7 @@ public class CouponController {
             .body(success(UPDATE_COUPON.getMessage(), couponApiService.updateCoupon(couponId, requestDto)));
     }
 
-    @DeleteMapping("/{couponId}")
+    @DeleteMapping("/coupons/{couponId}")
     public ResponseEntity<? extends CommonResponse> deleteCoupon(
         @PathVariable
         String couponId
@@ -94,7 +93,7 @@ public class CouponController {
             .body(success(DELETE_COUPON.getMessage()));
     }
 
-    @PostMapping("/{couponId}/issue")
+    @PostMapping("/coupons/{couponId}/issue")
     public ResponseEntity<? extends CommonResponse> issueCoupon(
         @PathVariable
         String couponId,
@@ -104,6 +103,18 @@ public class CouponController {
 
         return ResponseEntity.status(ISSUE_COUPON.getHttpStatus())
             .body(success(ISSUE_COUPON.getMessage(), couponApiService.issueCoupon(couponId, userId)));
+    }
+
+    @PatchMapping("/couponissues/{couponIssueId}")
+    public ResponseEntity<? extends CommonResponse> useIssueCoupon(
+        @PathVariable
+        String couponIssueId,
+        @RequestHeader("X-UserId")
+        String userId
+    ) {
+
+        return ResponseEntity.status(USE_COUPON_ISSUE.getHttpStatus())
+            .body(success(USE_COUPON_ISSUE.getMessage(), couponApiService.useIssueCoupon(couponIssueId, userId)));
     }
 
 }

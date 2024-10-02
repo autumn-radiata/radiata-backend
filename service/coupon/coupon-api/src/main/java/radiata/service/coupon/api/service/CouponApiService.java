@@ -21,4 +21,6 @@ public interface CouponApiService {
     void deleteCoupon(String couponId);
 
     CouponIssueResponseDto issueCoupon(String couponId, String userId);
+
+    CouponIssueResponseDto useIssueCoupon(String couponIssueId, String userId);
 }

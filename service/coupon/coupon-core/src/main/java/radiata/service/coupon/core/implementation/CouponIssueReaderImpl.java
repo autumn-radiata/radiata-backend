@@ -6,17 +6,22 @@ import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
 import radiata.service.coupon.core.domain.model.CouponIssue;
 import radiata.service.coupon.core.domain.repository.CouponIssueQueryRepository;
+import radiata.service.coupon.core.domain.repository.CouponIssueRepository;
 import radiata.service.coupon.core.implementation.interfaces.CouponIssueReader;
 
 @Implementation
 @RequiredArgsConstructor
 public class CouponIssueReaderImpl implements CouponIssueReader {
 
+    private final CouponIssueRepository couponIssueRepository;
     private final CouponIssueQueryRepository couponIssueQueryRepository;
 
     @Override
     public CouponIssue readCouponIssue(String couponIssueId) {
-        return null;
+
+        return couponIssueRepository.findById(couponIssueId).orElseThrow(
+            () -> new BusinessException(ExceptionMessage.NOT_FOUND)
+        );
     }
 
     @Override
