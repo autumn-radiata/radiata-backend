@@ -24,7 +24,7 @@ import radiata.service.coupon.core.domain.model.constant.CouponStatus;
 @Getter
 @Builder
 @SQLRestriction("deleted_at IS NULL")
-@Table(name = "r_coupon")
+@Table(name = "r_coupon_issue")
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
 public class CouponIssue extends BaseEntity {
