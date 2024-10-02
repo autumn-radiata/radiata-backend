@@ -20,7 +20,7 @@ public enum SuccessMessage {
     DELETE_COUPON(HttpStatus.OK, "0", "쿠폰 삭제가 완료 되었습니다."),
 
 
-    ;
+    ISSUE_COUPON(HttpStatus.OK, "0", "쿠폰이 발급 되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

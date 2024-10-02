@@ -7,14 +7,18 @@ import org.springframework.stereotype.Service;
 import radiata.common.domain.coupon.dto.condition.CouponSearchCondition;
 import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
 import radiata.common.domain.coupon.dto.request.CouponUpdateRequestDto;
+import radiata.common.domain.coupon.dto.response.CouponIssueResponseDto;
 import radiata.common.domain.coupon.dto.response.CouponResponseDto;
 import radiata.service.coupon.core.service.interfaces.coupon.CouponService;
+import radiata.service.coupon.core.service.interfaces.coupon_issue.CouponIssueService;
 
 @Service
 @RequiredArgsConstructor
 public class CouponApiServiceImpl implements CouponApiService {
 
     private final CouponService couponService;
+
+    private final CouponIssueService couponIssueService;
 
     @Override
     public CouponResponseDto createCoupon(CouponCreateRequestDto requestDto) {
@@ -44,5 +48,11 @@ public class CouponApiServiceImpl implements CouponApiService {
     public void deleteCoupon(String couponId) {
 
         couponService.deleteCoupon(couponId);
+    }
+
+    @Override
+    public CouponIssueResponseDto issueCoupon(String couponId, String userId) {
+
+        return couponIssueService.issue(couponId, userId);
     }
 }

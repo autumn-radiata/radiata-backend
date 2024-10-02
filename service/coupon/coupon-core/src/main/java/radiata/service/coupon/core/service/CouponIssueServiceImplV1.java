@@ -3,6 +3,7 @@ package radiata.service.coupon.core.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import radiata.common.domain.coupon.dto.response.CouponIssueResponseDto;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
 import radiata.service.coupon.core.domain.model.Coupon;
@@ -26,10 +27,10 @@ public class CouponIssueServiceImplV1 implements CouponIssueService {
     private final CouponIssueIdCreator couponIssueIdCreator;
 
     @Override
-    public void issue(String couponId, String userId) {
+    public CouponIssueResponseDto issue(String couponId, String userId) {
         Coupon coupon = couponReader.readCoupon(couponId);
         coupon.issue();
-        saveCouponIssue(couponId, userId);
+        return couponIssueMapper.toDto(saveCouponIssue(couponId, userId));
     }
 
     public CouponIssue saveCouponIssue(String couponId, String userId) {
