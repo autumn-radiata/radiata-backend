@@ -10,4 +10,6 @@ public interface CouponIssueRepository {
     CouponIssue save(CouponIssue couponIssue);
 
     Optional<CouponIssue> findById(String couponIssueId);
+
+    void delete(CouponIssue couponIssue);
 }

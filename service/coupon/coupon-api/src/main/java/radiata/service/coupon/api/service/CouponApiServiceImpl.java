@@ -73,4 +73,10 @@ public class CouponApiServiceImpl implements CouponApiService {
 
         return couponIssueService.getCouponIssues(userId, pageable);
     }
+
+    @Override
+    public void deleteCouponIssue(String couponIssueId, String userId) {
+
+        couponIssueService.deleteCouponIssue(couponIssueId, userId);
+    }
 }

@@ -141,4 +141,18 @@ public class CouponController {
             .body(success(GET_COUPON_ISSUES.getMessage(), couponApiService.getCouponIssues(userId, pageable)));
     }
 
+    @DeleteMapping("/couponissues/{couponIssueId}")
+    public ResponseEntity<? extends CommonResponse> deleteCouponIssue(
+        @PathVariable
+        String couponIssueId,
+        @RequestHeader("X-UserId")
+        String userId
+    ) {
+
+        couponApiService.deleteCouponIssue(couponIssueId, userId);
+
+        return ResponseEntity.status(DELETE_COUPON_ISSUES.getHttpStatus())
+            .body(success(DELETE_COUPON_ISSUES.getMessage()));
+    }
+
 }

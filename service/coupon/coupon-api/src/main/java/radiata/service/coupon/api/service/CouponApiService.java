@@ -27,4 +27,6 @@ public interface CouponApiService {
     CouponIssueResponseDto getCouponIssue(String couponIssueId, String userId);
 
     Page<CouponIssueResponseDto> getCouponIssues(String userId, Pageable pageable);
+
+    void deleteCouponIssue(String couponIssueId, String userId);
 }

@@ -10,6 +10,7 @@ import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
 import radiata.service.coupon.core.domain.model.Coupon;
 import radiata.service.coupon.core.domain.model.CouponIssue;
+import radiata.service.coupon.core.implementation.interfaces.CouponIssueDeleter;
 import radiata.service.coupon.core.implementation.interfaces.CouponIssueIdCreator;
 import radiata.service.coupon.core.implementation.interfaces.CouponIssueReader;
 import radiata.service.coupon.core.implementation.interfaces.CouponIssueSaver;
@@ -27,6 +28,7 @@ public class CouponIssueServiceImplV1 implements CouponIssueService {
     private final CouponIssueReader couponIssueReader;
     private final CouponIssueMapper couponIssueMapper;
     private final CouponIssueIdCreator couponIssueIdCreator;
+    private final CouponIssueDeleter couponIssueDeleter;
 
     @Override
     public CouponIssueResponseDto issue(String couponId, String userId) {
@@ -79,5 +81,16 @@ public class CouponIssueServiceImplV1 implements CouponIssueService {
     public Page<CouponIssueResponseDto> getCouponIssues(String userId, Pageable pageable) {
 
         return couponIssueReader.readCouponIssuesByUserId(userId, pageable).map(couponIssueMapper::toDto);
+    }
+
+    @Override
+    public void deleteCouponIssue(String couponIssueId, String userId) {
+        CouponIssue couponIssue = couponIssueReader.readCouponIssue(couponIssueId);
+
+        if (!couponIssue.getUserId().equals(userId)) {
+            throw new BusinessException(ExceptionMessage.NOT_AUTHORIZED);
+        }
+
+        couponIssueDeleter.delete(couponIssue);
     }
 }
