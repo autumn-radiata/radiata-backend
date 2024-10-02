@@ -3,6 +3,7 @@ package radiata.service.coupon.core.domain.model;
 import static jakarta.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
+import static radiata.service.coupon.core.domain.model.constant.CouponStatus.*;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +19,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.annotation.CreatedDate;
+import radiata.common.exception.BusinessException;
+import radiata.common.message.ExceptionMessage;
 import radiata.service.coupon.core.domain.model.constant.CouponStatus;
 
 @Entity
@@ -55,8 +58,25 @@ public class CouponIssue extends BaseEntity {
             .id(couponIssueId)
             .coupon(coupon)
             .userId(userId)
-            .couponStatus(CouponStatus.ISSUED)
+            .couponStatus(ISSUED)
             .expiredAt(coupon.getIssueEndDate())
             .build();
     }
+
+    public void use(String userId) {
+
+        if (!this.userId.equals(userId)) {
+            throw new BusinessException(ExceptionMessage.COUPON_CAN_NOT_USE);
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(expiredAt) || couponStatus.equals(EXPIRED) || couponStatus.equals(USED) || usedAt.isBefore(now)) {
+            throw new BusinessException(ExceptionMessage.COUPON_CAN_NOT_USE);
+        }
+
+        this.usedAt = now;
+        this.couponStatus = USED;
+    }
+
+
 }

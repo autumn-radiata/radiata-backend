@@ -55,7 +55,9 @@ public enum ExceptionMessage {
 
     COUPON_INVALID_INPUT_UNLIMITED(BAD_REQUEST, "6008", "무제한 쿠폰은 발급 수량을 입력할 수 없습니다."),
 
-    DUPLICATED_COUPON_ISSUE(BAD_REQUEST, "6009", "이미 발급 된 쿠폰입니다.");
+    DUPLICATED_COUPON_ISSUE(BAD_REQUEST, "6009", "이미 발급 된 쿠폰입니다."),
+
+    COUPON_CAN_NOT_USE(BAD_REQUEST, "6010", "해당 쿠폰을 사용할 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
