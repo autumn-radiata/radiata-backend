@@ -124,4 +124,19 @@ public class Coupon extends BaseEntity {
         return issuedQuantity < totalQuantity;
     }
 
+    public void update(String title, CouponType couponType, CouponSaleType couponSaleType, Integer totalQuantity,
+        Integer discountAmount, CouponDiscountRate discountRate, Integer minAvailableAmount,
+        Integer maxAvailableAmount, LocalDateTime issueStartDate, LocalDateTime issueEndDate) {
+
+        this.title = title;
+        this.couponType = couponType;
+        this.couponSaleType = couponSaleType;
+        this.totalQuantity = totalQuantity;
+        this.discountAmount = discountAmount;
+        this.discountRate = discountRate;
+        this.minAvailableAmount = minAvailableAmount;
+        this.maxAvailableAmount = maxAvailableAmount;
+        this.issueStartDate = issueStartDate;
+        this.issueEndDate = issueEndDate;
+    }
 }

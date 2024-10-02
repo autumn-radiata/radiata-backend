@@ -2,6 +2,7 @@ package radiata.service.coupon.core.service.mapper;
 
 import org.springframework.stereotype.Component;
 import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
+import radiata.common.domain.coupon.dto.request.CouponUpdateRequestDto;
 import radiata.common.domain.coupon.dto.response.CouponResponseDto;
 import radiata.service.coupon.core.domain.model.Coupon;
 import radiata.service.coupon.core.domain.model.constant.CouponSaleType;
@@ -46,6 +47,23 @@ public class CouponMapperImpl implements CouponMapper {
             coupon.getMaxAvailableAmount(),
             coupon.getIssueStartDate(),
             coupon.getIssueEndDate()
+        );
+    }
+
+    @Override
+    public void update(Coupon coupon, CouponUpdateRequestDto requestDto) {
+
+        coupon.update(
+            requestDto.title(),
+            CouponType.valueOf(requestDto.couponType()),
+            CouponSaleType.valueOf(requestDto.couponSaleType()),
+            requestDto.totalQuantity(),
+            requestDto.discountAmount(),
+            new CouponDiscountRate(requestDto.discountRate()),
+            requestDto.minAvailableAmount(),
+            requestDto.maxAvailableAmount(),
+            requestDto.issueStartDate(),
+            requestDto.issueEndDate()
         );
     }
 }

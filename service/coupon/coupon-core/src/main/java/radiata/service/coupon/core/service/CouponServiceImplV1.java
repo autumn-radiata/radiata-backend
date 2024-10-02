@@ -102,6 +102,9 @@ public class CouponServiceImplV1 implements CouponService {
     @Override
     public CouponResponseDto updateCoupon(String couponId, CouponUpdateRequestDto requestDto) {
 
-        return null;
+        Coupon coupon = couponReader.readCoupon(couponId);
+        couponMapper.update(coupon, requestDto);
+
+        return couponMapper.toDto(coupon);
     }
 }
