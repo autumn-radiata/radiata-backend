@@ -56,6 +56,7 @@ public class CouponIssue extends BaseEntity {
             .coupon(coupon)
             .userId(userId)
             .couponStatus(CouponStatus.ISSUED)
+            .expiredAt(coupon.getIssueEndDate())
             .build();
     }
 }
