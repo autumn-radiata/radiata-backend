@@ -26,7 +26,7 @@ class CouponTest {
                 .totalQuantity(100)
                 .build();
             // When
-            boolean result = coupon.availableIssueQuantity();
+            boolean result = coupon.availableIssuedQuantity();
             // Then
             assertThat(result).isTrue();
         }
@@ -40,7 +40,7 @@ class CouponTest {
                 .totalQuantity(100)
                 .build();
             // When
-            boolean result = coupon.availableIssueQuantity();
+            boolean result = coupon.availableIssuedQuantity();
             // Then
             assertThat(result).isTrue();
         }
@@ -54,7 +54,7 @@ class CouponTest {
                 .totalQuantity(100)
                 .build();
             // When
-            boolean result = coupon.availableIssueQuantity();
+            boolean result = coupon.availableIssuedQuantity();
             // Then
             assertThat(result).isFalse();
         }
@@ -68,7 +68,7 @@ class CouponTest {
                 .totalQuantity(100)
                 .build();
             // When
-            boolean result = coupon.availableIssueQuantity();
+            boolean result = coupon.availableIssuedQuantity();
             // Then
             assertThat(result).isFalse();
         }
