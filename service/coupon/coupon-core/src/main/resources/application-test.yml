@@ -17,4 +17,4 @@ spring:
   data:
     redis:
       host: localhost
-      port: 6380
+      port: 63801
