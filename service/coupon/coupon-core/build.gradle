@@ -12,8 +12,8 @@ repositories {
 dependencies {
 
     // module
-    implementation project(':common')
-    implementation project(':database')
+    api project(':common')
+    api project(':database')
 
     // library
     implementation 'com.github.ksuid:ksuid:1.1.2'

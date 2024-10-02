@@ -1,7 +1,10 @@
 package radiata.service.coupon.api.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import radiata.common.domain.coupon.dto.condition.CouponSearchCondition;
 import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
 import radiata.common.domain.coupon.dto.response.CouponResponseDto;
 import radiata.service.coupon.core.service.interfaces.CouponService;
@@ -16,5 +19,11 @@ public class CouponApiServiceImpl implements CouponApiService {
     public CouponResponseDto createCoupon(CouponCreateRequestDto requestDto) {
 
         return couponService.createCoupon(requestDto);
+    }
+
+    @Override
+    public Page<CouponResponseDto> getCoupons(CouponSearchCondition condition, Pageable pageable) {
+
+        return couponService.getCoupons(condition, pageable);
     }
 }

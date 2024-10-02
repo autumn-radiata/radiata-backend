@@ -42,7 +42,7 @@ public class CouponMapperImpl implements CouponMapper {
             coupon.getTotalQuantity(),
             coupon.getIssuedQuantity(),
             coupon.getDiscountAmount(),
-            coupon.getDiscountRate().getValue(),
+            coupon.getDiscountRate() != null ? coupon.getDiscountRate().getValue() : null,
             coupon.getMinAvailableAmount(),
             coupon.getMaxAvailableAmount(),
             coupon.getIssueStartDate(),
