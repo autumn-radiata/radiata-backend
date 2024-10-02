@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import radiata.common.annotation.Implementation;
 import radiata.common.domain.coupon.dto.condition.CouponSearchCondition;
 import radiata.common.exception.BusinessException;
+import radiata.service.coupon.core.domain.CouponQueryRepository;
 import radiata.service.coupon.core.domain.model.Coupon;
 import radiata.service.coupon.core.domain.repository.CouponRepository;
 import radiata.service.coupon.core.implementation.interfaces.CouponReader;
@@ -17,6 +18,7 @@ import radiata.service.coupon.core.implementation.interfaces.CouponReader;
 public class CouponReaderImpl implements CouponReader {
 
     private final CouponRepository couponRepository;
+    private final CouponQueryRepository couponQueryRepository;
 
     @Override
     public Coupon readCoupon(String couponId) {
@@ -29,6 +31,6 @@ public class CouponReaderImpl implements CouponReader {
     @Override
     public Page<Coupon> readCouponsByCondition(CouponSearchCondition condition, Pageable pageable) {
 
-        return null;
+        return couponQueryRepository.findCouponsByCondition(condition, pageable);
     }
 }

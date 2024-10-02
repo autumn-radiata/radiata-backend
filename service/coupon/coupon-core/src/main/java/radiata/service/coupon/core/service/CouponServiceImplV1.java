@@ -2,8 +2,10 @@ package radiata.service.coupon.core.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import radiata.common.domain.coupon.dto.condition.CouponSearchCondition;
 import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
 import radiata.common.domain.coupon.dto.request.CouponUpdateRequestDto;
 import radiata.common.domain.coupon.dto.response.CouponResponseDto;
@@ -82,9 +84,9 @@ public class CouponServiceImplV1 implements CouponService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<CouponResponseDto> getCoupons() {
+    public Page<CouponResponseDto> getCoupons(CouponSearchCondition condition, Pageable pageable) {
 
-        return null;
+        return couponReader.readCouponsByCondition(condition, pageable).map(couponMapper::toDto);
     }
 
     @Override
