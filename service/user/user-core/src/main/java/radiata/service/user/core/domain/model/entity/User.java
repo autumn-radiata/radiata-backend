@@ -11,9 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +20,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 import radiata.service.user.core.domain.model.vo.Address;
 import radiata.service.user.core.domain.model.vo.Point;
-import radiata.service.user.core.domain.model.vo.UserRole;
+import radiata.service.user.core.domain.model.constant.UserRole;
 
 @Entity
 @Getter
