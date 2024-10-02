@@ -22,7 +22,7 @@ class CouponTest {
         void availableIssueQuantity_1() {
             // Given
             Coupon coupon = Coupon.builder()
-                .issueQuantity(0)
+                .issuedQuantity(0)
                 .totalQuantity(100)
                 .build();
             // When
@@ -36,7 +36,7 @@ class CouponTest {
         void availableIssueQuantity_2() {
             // Given
             Coupon coupon = Coupon.builder()
-                .issueQuantity(99)
+                .issuedQuantity(99)
                 .totalQuantity(100)
                 .build();
             // When
@@ -50,7 +50,7 @@ class CouponTest {
         void availableIssueQuantity_3() {
             // Given
             Coupon coupon = Coupon.builder()
-                .issueQuantity(100)
+                .issuedQuantity(100)
                 .totalQuantity(100)
                 .build();
             // When
@@ -64,7 +64,7 @@ class CouponTest {
         void availableIssueQuantity_4() {
             // Given
             Coupon coupon = Coupon.builder()
-                .issueQuantity(101)
+                .issuedQuantity(101)
                 .totalQuantity(100)
                 .build();
             // When
@@ -86,12 +86,12 @@ class CouponTest {
                 .couponType(CouponType.UNLIMITED)
                 .issueStartDate(LocalDateTime.now().minusDays(1))
                 .issueEndDate(LocalDateTime.now().plusDays(1))
-                .issueQuantity(0)
+                .issuedQuantity(0)
                 .build();
             // When
             coupon.issue();
             // Then
-            assertThat(coupon.getIssueQuantity()).isEqualTo(1);
+            assertThat(coupon.getIssuedQuantity()).isEqualTo(1);
         }
 
         @Test
@@ -102,7 +102,7 @@ class CouponTest {
                 .couponType(CouponType.UNLIMITED)
                 .issueStartDate(LocalDateTime.now().plusDays(1))
                 .issueEndDate(LocalDateTime.now().plusDays(2))
-                .issueQuantity(0)
+                .issuedQuantity(0)
                 .build();
             // When + Then
             BusinessException result = catchThrowableOfType(() -> coupon.issue(),
@@ -121,13 +121,13 @@ class CouponTest {
                 .couponType(CouponType.FIRST_COME_FIRST_SERVED)
                 .issueStartDate(LocalDateTime.now().minusDays(1))
                 .issueEndDate(LocalDateTime.now().plusDays(1))
-                .issueQuantity(0)
+                .issuedQuantity(0)
                 .totalQuantity(100)
                 .build();
             // When
             coupon.issue();
             // Then
-            assertThat(coupon.getIssueQuantity()).isEqualTo(1);
+            assertThat(coupon.getIssuedQuantity()).isEqualTo(1);
         }
 
         @Test
@@ -138,7 +138,7 @@ class CouponTest {
                 .couponType(CouponType.FIRST_COME_FIRST_SERVED)
                 .issueStartDate(LocalDateTime.now().plusDays(1))
                 .issueEndDate(LocalDateTime.now().plusDays(2))
-                .issueQuantity(0)
+                .issuedQuantity(0)
                 .totalQuantity(100)
                 .build();
             // When + Then
@@ -158,7 +158,7 @@ class CouponTest {
                 .couponType(CouponType.FIRST_COME_FIRST_SERVED)
                 .issueStartDate(LocalDateTime.now().minusDays(1))
                 .issueEndDate(LocalDateTime.now().plusDays(1))
-                .issueQuantity(100)
+                .issuedQuantity(100)
                 .totalQuantity(100)
                 .build();
             // When + Then
