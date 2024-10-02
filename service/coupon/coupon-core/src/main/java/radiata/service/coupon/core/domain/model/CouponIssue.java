@@ -18,7 +18,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.annotation.CreatedDate;
-import radiata.database.model.BaseEntity;
 import radiata.service.coupon.core.domain.model.constant.CouponStatus;
 
 @Entity

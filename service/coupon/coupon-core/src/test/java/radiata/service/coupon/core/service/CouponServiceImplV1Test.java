@@ -15,6 +15,7 @@ import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
 import radiata.common.domain.coupon.dto.response.CouponResponseDto;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
+import radiata.service.coupon.core.CouponCoreConfiguration;
 import radiata.service.coupon.core.domain.model.constant.CouponSaleType;
 import radiata.service.coupon.core.domain.model.constant.CouponType;
 import radiata.service.coupon.core.implementation.interfaces.CouponIdCreator;
@@ -24,7 +25,7 @@ import radiata.service.coupon.core.service.mapper.CouponMapper;
 
 @ActiveProfiles("test")
 @Transactional
-@SpringBootTest
+@SpringBootTest(classes = CouponCoreConfiguration.class)
 class CouponServiceImplV1Test {
 
     @Autowired
