@@ -31,10 +31,10 @@ public class CouponIssueServiceImplV1 implements CouponIssueService {
     private final CouponIssueDeleter couponIssueDeleter;
 
     @Override
-    public CouponIssueResponseDto issue(String couponId, String userId) {
+    public void issue(String couponId, String userId) {
         Coupon coupon = couponReader.readCoupon(couponId);
         coupon.issue();
-        return couponIssueMapper.toDto(saveCouponIssue(couponId, userId));
+        saveCouponIssue(couponId, userId);
     }
 
     public CouponIssue saveCouponIssue(String couponId, String userId) {

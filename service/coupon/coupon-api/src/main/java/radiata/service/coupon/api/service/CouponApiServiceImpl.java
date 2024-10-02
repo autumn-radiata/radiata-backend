@@ -9,6 +9,7 @@ import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
 import radiata.common.domain.coupon.dto.request.CouponUpdateRequestDto;
 import radiata.common.domain.coupon.dto.response.CouponIssueResponseDto;
 import radiata.common.domain.coupon.dto.response.CouponResponseDto;
+import radiata.service.coupon.core.component.DistributeLockExecutor;
 import radiata.service.coupon.core.service.interfaces.coupon.CouponService;
 import radiata.service.coupon.core.service.interfaces.coupon_issue.CouponIssueService;
 
@@ -17,8 +18,8 @@ import radiata.service.coupon.core.service.interfaces.coupon_issue.CouponIssueSe
 public class CouponApiServiceImpl implements CouponApiService {
 
     private final CouponService couponService;
-
     private final CouponIssueService couponIssueService;
+    private final DistributeLockExecutor distributeLockExecutor;
 
     @Override
     public CouponResponseDto createCoupon(CouponCreateRequestDto requestDto) {
@@ -51,9 +52,11 @@ public class CouponApiServiceImpl implements CouponApiService {
     }
 
     @Override
-    public CouponIssueResponseDto issueCoupon(String couponId, String userId) {
+    public void issueCoupon(String couponId, String userId) {
 
-        return couponIssueService.issue(couponId, userId);
+        distributeLockExecutor.execute("lock_" + couponId, 10000, 10000, () -> {
+            couponIssueService.issue(couponId, userId);
+        });
     }
 
     @Override

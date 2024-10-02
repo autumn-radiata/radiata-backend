@@ -101,8 +101,10 @@ public class CouponController {
         String userId
     ) {
 
+        couponApiService.issueCoupon(couponId, userId);
+
         return ResponseEntity.status(ISSUE_COUPON.getHttpStatus())
-            .body(success(ISSUE_COUPON.getMessage(), couponApiService.issueCoupon(couponId, userId)));
+            .body(success(ISSUE_COUPON.getMessage()));
     }
 
     @PatchMapping("/couponissues/{couponIssueId}")

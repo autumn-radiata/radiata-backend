@@ -20,7 +20,7 @@ public interface CouponApiService {
 
     void deleteCoupon(String couponId);
 
-    CouponIssueResponseDto issueCoupon(String couponId, String userId);
+    void issueCoupon(String couponId, String userId);
 
     CouponIssueResponseDto useCouponIssue(String couponIssueId, String userId);
 
