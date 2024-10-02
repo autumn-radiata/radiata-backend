@@ -21,7 +21,9 @@ public enum SuccessMessage {
 
 
     ISSUE_COUPON(HttpStatus.OK, "0", "쿠폰이 발급 되었습니다."),
-    USE_COUPON_ISSUE(HttpStatus.OK, "0", "쿠폰 사용이 완료 되었습니다.");
+    USE_COUPON_ISSUE(HttpStatus.OK, "0", "쿠폰 사용이 완료 되었습니다."),
+    GET_COUPON_ISSUE(HttpStatus.OK, "0", "발급 쿠폰 조회가 완료 되었습니다."),
+    GET_COUPON_ISSUES(HttpStatus.OK, "0", "발급 쿠폰 목록 조회가 완료 되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

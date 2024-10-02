@@ -1,6 +1,8 @@
 package radiata.service.coupon.core.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.coupon.dto.response.CouponIssueResponseDto;
@@ -59,5 +61,23 @@ public class CouponIssueServiceImplV1 implements CouponIssueService {
         couponIssue.use(userId);
 
         return couponIssueMapper.toDto(couponIssue);
+    }
+
+    @Override
+    public CouponIssueResponseDto getCouponIssue(String couponIssueId, String userId) {
+
+        CouponIssue couponIssue = couponIssueReader.readCouponIssue(couponIssueId);
+
+        if (!couponIssue.getUserId().equals(userId)) {
+            throw new BusinessException(ExceptionMessage.NOT_AUTHORIZED);
+        }
+
+        return couponIssueMapper.toDto(couponIssue);
+    }
+
+    @Override
+    public Page<CouponIssueResponseDto> getCouponIssues(String userId, Pageable pageable) {
+
+        return couponIssueReader.readCouponIssuesByUserId(userId, pageable).map(couponIssueMapper::toDto);
     }
 }

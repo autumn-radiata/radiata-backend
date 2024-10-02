@@ -57,8 +57,20 @@ public class CouponApiServiceImpl implements CouponApiService {
     }
 
     @Override
-    public CouponIssueResponseDto useIssueCoupon(String couponIssueId, String userId) {
+    public CouponIssueResponseDto useCouponIssue(String couponIssueId, String userId) {
 
         return couponIssueService.useCouponIssue(couponIssueId, userId);
+    }
+
+    @Override
+    public CouponIssueResponseDto getCouponIssue(String couponIssueId, String userId) {
+
+        return couponIssueService.getCouponIssue(couponIssueId, userId);
+    }
+
+    @Override
+    public Page<CouponIssueResponseDto> getCouponIssues(String userId, Pageable pageable) {
+
+        return couponIssueService.getCouponIssues(userId, pageable);
     }
 }

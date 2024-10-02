@@ -1,6 +1,7 @@
 package radiata.service.coupon.api.controller;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 import static radiata.common.message.SuccessMessage.*;
 import static radiata.common.message.SuccessMessage.CREATE_COUPON;
 import static radiata.common.message.SuccessMessage.DELETE_COUPON;
@@ -27,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 import radiata.common.domain.coupon.dto.condition.CouponSearchCondition;
 import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
 import radiata.common.domain.coupon.dto.request.CouponUpdateRequestDto;
-import radiata.common.message.SuccessMessage;
 import radiata.common.response.CommonResponse;
 import radiata.service.coupon.api.service.CouponApiService;
 
@@ -114,7 +114,31 @@ public class CouponController {
     ) {
 
         return ResponseEntity.status(USE_COUPON_ISSUE.getHttpStatus())
-            .body(success(USE_COUPON_ISSUE.getMessage(), couponApiService.useIssueCoupon(couponIssueId, userId)));
+            .body(success(USE_COUPON_ISSUE.getMessage(), couponApiService.useCouponIssue(couponIssueId, userId)));
+    }
+
+    @GetMapping("/couponissues/{couponIssueId}")
+    public ResponseEntity<? extends CommonResponse> getCouponIssue(
+        @PathVariable
+        String couponIssueId,
+        @RequestHeader("X-UserId")
+        String userId
+    ) {
+
+        return ResponseEntity.status(GET_COUPON_ISSUE.getHttpStatus())
+            .body(success(GET_COUPON_ISSUE.getMessage(), couponApiService.getCouponIssue(couponIssueId, userId)));
+    }
+
+    @GetMapping("/couponissues")
+    public ResponseEntity<? extends CommonResponse> getCouponIssues(
+        @RequestHeader("X-UserId")
+        String userId,
+        @PageableDefault(size = 10, sort = "createdAt", direction = DESC)
+        Pageable pageable
+    ) {
+
+        return ResponseEntity.status(GET_COUPON_ISSUES.getHttpStatus())
+            .body(success(GET_COUPON_ISSUES.getMessage(), couponApiService.getCouponIssues(userId, pageable)));
     }
 
 }

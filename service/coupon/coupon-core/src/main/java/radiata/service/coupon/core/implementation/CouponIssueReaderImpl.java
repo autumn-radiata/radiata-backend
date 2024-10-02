@@ -1,6 +1,8 @@
 package radiata.service.coupon.core.implementation;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import radiata.common.annotation.Implementation;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
@@ -28,5 +30,11 @@ public class CouponIssueReaderImpl implements CouponIssueReader {
     public CouponIssue readFirstCouponIssue(String couponId, String userId) {
 
         return couponIssueQueryRepository.findFirstCouponIssue(couponId, userId);
+    }
+
+    @Override
+    public Page<CouponIssue> readCouponIssuesByUserId(String userId, Pageable pageable) {
+
+        return couponIssueQueryRepository.findCouponIssuesByUserId(userId, pageable);
     }
 }

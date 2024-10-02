@@ -22,5 +22,9 @@ public interface CouponApiService {
 
     CouponIssueResponseDto issueCoupon(String couponId, String userId);
 
-    CouponIssueResponseDto useIssueCoupon(String couponIssueId, String userId);
+    CouponIssueResponseDto useCouponIssue(String couponIssueId, String userId);
+
+    CouponIssueResponseDto getCouponIssue(String couponIssueId, String userId);
+
+    Page<CouponIssueResponseDto> getCouponIssues(String userId, Pageable pageable);
 }
