@@ -11,4 +11,6 @@ public interface CouponApiService {
     CouponResponseDto createCoupon(CouponCreateRequestDto requestDto);
 
     Page<CouponResponseDto> getCoupons(CouponSearchCondition condition, Pageable pageable);
+
+    CouponResponseDto getCoupon(String couponId);
 }

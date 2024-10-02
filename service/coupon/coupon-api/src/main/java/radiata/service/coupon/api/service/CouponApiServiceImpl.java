@@ -26,4 +26,10 @@ public class CouponApiServiceImpl implements CouponApiService {
 
         return couponService.getCoupons(condition, pageable);
     }
+
+    @Override
+    public CouponResponseDto getCoupon(String couponId) {
+
+        return couponService.getCoupon(couponId);
+    }
 }

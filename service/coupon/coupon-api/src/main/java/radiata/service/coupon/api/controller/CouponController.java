@@ -2,6 +2,8 @@ package radiata.service.coupon.api.controller;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static radiata.common.message.SuccessMessage.CREATE_COUPON;
+import static radiata.common.message.SuccessMessage.GET_COUPON;
+import static radiata.common.message.SuccessMessage.GET_COUPONS;
 import static radiata.common.response.SuccessResponse.success;
 
 import jakarta.validation.Valid;
@@ -11,6 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,8 +48,18 @@ public class CouponController {
         Pageable pageable
     ) {
 
-        return ResponseEntity.status(CREATE_COUPON.getHttpStatus())
-            .body(success(CREATE_COUPON.getMessage(), couponApiService.getCoupons(condition, pageable)));
+        return ResponseEntity.status(GET_COUPONS.getHttpStatus())
+            .body(success(GET_COUPONS.getMessage(), couponApiService.getCoupons(condition, pageable)));
+    }
+
+    @GetMapping("/{couponId}")
+    public ResponseEntity<? extends CommonResponse> getCoupons(
+        @PathVariable
+        String couponId
+    ) {
+
+        return ResponseEntity.status(GET_COUPON.getHttpStatus())
+            .body(success(GET_COUPON.getMessage(), couponApiService.getCoupon(couponId)));
     }
 
 }
