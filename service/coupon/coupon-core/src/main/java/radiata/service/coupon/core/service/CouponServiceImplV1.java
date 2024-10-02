@@ -3,6 +3,7 @@ package radiata.service.coupon.core.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
 import radiata.common.domain.coupon.dto.request.CouponUpdateRequestDto;
 import radiata.common.domain.coupon.dto.response.CouponResponseDto;
@@ -12,17 +13,20 @@ import radiata.service.coupon.core.domain.model.Coupon;
 import radiata.service.coupon.core.domain.model.constant.CouponSaleType;
 import radiata.service.coupon.core.domain.model.constant.CouponType;
 import radiata.service.coupon.core.implementation.interfaces.CouponIdCreator;
+import radiata.service.coupon.core.implementation.interfaces.CouponReader;
 import radiata.service.coupon.core.implementation.interfaces.CouponSaver;
 import radiata.service.coupon.core.service.interfaces.CouponService;
 import radiata.service.coupon.core.service.mapper.CouponMapper;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CouponServiceImplV1 implements CouponService {
 
     private final CouponMapper couponMapper;
     private final CouponIdCreator couponIdCreator;
     private final CouponSaver couponSaver;
+    private final CouponReader couponReader;
 
     @Override
     public CouponResponseDto createCoupon(CouponCreateRequestDto requestDto) {
@@ -70,17 +74,21 @@ public class CouponServiceImplV1 implements CouponService {
     }
 
     @Override
-    public CouponResponseDto deleteCoupon(String couponId) {
-        return null;
-    }
-
-    @Override
-    public Page<CouponResponseDto> getCoupons() {
-        return null;
-    }
-
-    @Override
+    @Transactional(readOnly = true)
     public CouponResponseDto getCoupon(String couponId) {
+
+        return couponMapper.toDto(couponReader.readCoupon(couponId));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<CouponResponseDto> getCoupons() {
+
+        return null;
+    }
+
+    @Override
+    public CouponResponseDto deleteCoupon(String couponId) {
         return null;
     }
 
