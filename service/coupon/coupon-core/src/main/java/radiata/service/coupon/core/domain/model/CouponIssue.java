@@ -70,7 +70,12 @@ public class CouponIssue extends BaseEntity {
         }
 
         LocalDateTime now = LocalDateTime.now();
-        if (now.isAfter(expiredAt) || couponStatus.equals(EXPIRED) || couponStatus.equals(USED) || usedAt.isBefore(now)) {
+
+        if (now.isAfter(expiredAt) || couponStatus.equals(EXPIRED) || couponStatus.equals(USED)) {
+            throw new BusinessException(ExceptionMessage.COUPON_CAN_NOT_USE);
+        }
+
+        if (usedAt != null && usedAt.isBefore(now)) {
             throw new BusinessException(ExceptionMessage.COUPON_CAN_NOT_USE);
         }
 
