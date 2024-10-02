@@ -1,5 +1,5 @@
 package radiata.service.coupon.core.service.interfaces.coupon_issue;
 
-public interface CouponIssueService extends CouponIssueCreateService {
+public interface CouponIssueService extends CouponIssueCreateService, CouponIssueUpdateService {
 
 }

@@ -50,4 +50,14 @@ public class CouponIssueServiceImplV1 implements CouponIssueService {
             throw new BusinessException(ExceptionMessage.DUPLICATED_COUPON_ISSUE);
         }
     }
+
+    @Override
+    public CouponIssueResponseDto useCouponIssue(String couponIssueId, String userId) {
+
+        CouponIssue couponIssue = couponIssueReader.readCouponIssue(couponIssueId);
+
+        couponIssue.use(userId);
+
+        return couponIssueMapper.toDto(couponIssue);
+    }
 }
