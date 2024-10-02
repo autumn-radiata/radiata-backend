@@ -20,9 +20,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
-import org.springframework.cglib.core.Local;
 import radiata.common.exception.BusinessException;
-import radiata.common.message.ExceptionMessage;
 import radiata.database.model.BaseEntity;
 import radiata.service.coupon.core.domain.model.constant.CouponSaleType;
 import radiata.service.coupon.core.domain.model.constant.CouponType;
@@ -53,7 +51,7 @@ public class Coupon extends BaseEntity {
 
     private Integer totalQuantity; // 쿠폰 발급 최대 수량
 
-    private Integer issueQuantity; // 쿠폰 현재 발급 수량
+    private Integer issuedQuantity; // 쿠폰 현재 발급 수량
 
     private Integer discountAmount; // 할인 금액
 
@@ -73,6 +71,25 @@ public class Coupon extends BaseEntity {
     @OneToMany(mappedBy = "coupon", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<CouponIssue> couponIssues;
 
+    public static Coupon of(String id, String title, CouponType couponType, CouponSaleType couponSaleType, Integer totalQuantity,
+        Integer issuedQuantity, Integer discountAmount, CouponDiscountRate discountRate, Integer minAvailableAmount,
+        Integer maxAvailableAmount, LocalDateTime issueStartDate, LocalDateTime issueEndDate) {
+
+        return Coupon.builder()
+            .id(id)
+            .title(title)
+            .couponType(couponType)
+            .couponSaleType(couponSaleType)
+            .totalQuantity(totalQuantity)
+            .issuedQuantity(issuedQuantity)
+            .discountAmount(discountAmount)
+            .discountRate(discountRate)
+            .minAvailableAmount(minAvailableAmount)
+            .maxAvailableAmount(maxAvailableAmount)
+            .issueStartDate(issueStartDate)
+            .issueEndDate(issueEndDate)
+            .build();
+    }
 
     public void issue() {
 
@@ -82,12 +99,12 @@ public class Coupon extends BaseEntity {
         }
         // 2. 쿠폰 할인 타입이 선착순이면 쿠폰 발급 수량에 대한 Validation 을 수행한다.
         if (isFirstComeFirstServed()) {
-            if (!availableIssueQuantity()) {
+            if (!availableIssuedQuantity()) {
                 throw new BusinessException(COUPON_ISSUE_QUANTITY_LIMITED);
             }
         }
 
-        issueQuantity++;
+        issuedQuantity++;
     }
 
     public boolean isFirstComeFirstServed() {
@@ -102,9 +119,9 @@ public class Coupon extends BaseEntity {
         return (now.isEqual(issueStartDate) || now.isAfter(issueStartDate)) && now.isBefore(issueEndDate);
     }
 
-    public boolean availableIssueQuantity() {
+    public boolean availableIssuedQuantity() {
 
-        return issueQuantity < totalQuantity;
+        return issuedQuantity < totalQuantity;
     }
 
 }
