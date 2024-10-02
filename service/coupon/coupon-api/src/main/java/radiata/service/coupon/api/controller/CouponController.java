@@ -8,18 +8,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
 import radiata.common.response.CommonResponse;
 import radiata.service.coupon.api.service.CouponApiService;
 
+@RequestMapping("/coupons")
 @RestController
 @RequiredArgsConstructor
 public class CouponController {
 
     private final CouponApiService couponApiService;
 
-    @PostMapping("/api/coupons")
+    @PostMapping
     public ResponseEntity<? extends CommonResponse> createCoupon(
         @Valid @RequestBody
         CouponCreateRequestDto requestDto
