@@ -18,7 +18,7 @@ import radiata.service.coupon.core.implementation.interfaces.CouponDeleter;
 import radiata.service.coupon.core.implementation.interfaces.CouponIdCreator;
 import radiata.service.coupon.core.implementation.interfaces.CouponReader;
 import radiata.service.coupon.core.implementation.interfaces.CouponSaver;
-import radiata.service.coupon.core.service.interfaces.CouponService;
+import radiata.service.coupon.core.service.interfaces.coupon.CouponService;
 import radiata.service.coupon.core.service.mapper.CouponMapper;
 
 @Service

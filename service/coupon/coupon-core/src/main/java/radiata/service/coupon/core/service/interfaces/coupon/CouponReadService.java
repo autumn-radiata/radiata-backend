@@ -1,4 +1,4 @@
-package radiata.service.coupon.core.service.interfaces;
+package radiata.service.coupon.core.service.interfaces.coupon;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
