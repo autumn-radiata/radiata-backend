@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import radiata.service.order.core.domain.model.constant.OrderStatus;
 
-@DisplayName("주문 도메인 Test")
+@DisplayName("주문 엔티티 Test")
 class OrderTest {
 
     private Order order;
@@ -22,7 +22,6 @@ class OrderTest {
         order = Order.of(
             KsuidGenerator.generate(),
             "userId-01",
-            0,
             "Test-Address-01",
             "Test-comment-01"
             );
@@ -68,7 +67,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("주문 엔티티 - 상품목록 지정 Test")
+    @DisplayName("주문 상품목록 지정 Test")
     void testSetOrderItems(){
         // given
         Set<OrderItem> orderItems = new HashSet<>();

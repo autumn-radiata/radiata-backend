@@ -49,7 +49,6 @@ public class Order {
     public static Order of(
         String id,
         String userId,
-        Integer orderPrice,
         String address,
         String comment) {
 
@@ -57,12 +56,17 @@ public class Order {
             .id(id)
             .userId(userId)
             .status(OrderStatus.PAYMENT_REQUESTED)
-            .orderPrice(orderPrice)
+            .orderPrice(0)
             .isRefunded(false)
             .address(address)
             .comment(comment)
             .build();
     }
+
+    public void setOrderPrice(Integer orderPrice) {
+        this.orderPrice = orderPrice;
+    }
+
 
     public void setOrderItems(Set<OrderItem> itemList) {
         this.itemList = itemList;
