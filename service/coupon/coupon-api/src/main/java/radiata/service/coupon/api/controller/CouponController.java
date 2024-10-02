@@ -2,6 +2,7 @@ package radiata.service.coupon.api.controller;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static radiata.common.message.SuccessMessage.CREATE_COUPON;
+import static radiata.common.message.SuccessMessage.DELETE_COUPON;
 import static radiata.common.message.SuccessMessage.GET_COUPON;
 import static radiata.common.message.SuccessMessage.GET_COUPONS;
 import static radiata.common.message.SuccessMessage.UPDATE_COUPON;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -75,6 +77,18 @@ public class CouponController {
 
         return ResponseEntity.status(UPDATE_COUPON.getHttpStatus())
             .body(success(UPDATE_COUPON.getMessage(), couponApiService.updateCoupon(couponId, requestDto)));
+    }
+
+    @DeleteMapping("/{couponId}")
+    public ResponseEntity<? extends CommonResponse> deleteCoupon(
+        @PathVariable
+        String couponId
+    ) {
+
+        couponApiService.deleteCoupon(couponId);
+
+        return ResponseEntity.status(DELETE_COUPON.getHttpStatus())
+            .body(success(DELETE_COUPON.getMessage()));
     }
 
 }

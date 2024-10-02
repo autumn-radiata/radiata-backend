@@ -39,4 +39,10 @@ public class CouponApiServiceImpl implements CouponApiService {
 
         return couponService.updateCoupon(couponId, requestDto);
     }
+
+    @Override
+    public void deleteCoupon(String couponId) {
+
+        couponService.deleteCoupon(couponId);
+    }
 }

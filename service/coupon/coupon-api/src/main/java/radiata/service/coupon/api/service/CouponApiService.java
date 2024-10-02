@@ -16,4 +16,6 @@ public interface CouponApiService {
     CouponResponseDto getCoupon(String couponId);
 
     CouponResponseDto updateCoupon(String couponId, CouponUpdateRequestDto requestDto);
+
+    void deleteCoupon(String couponId);
 }
