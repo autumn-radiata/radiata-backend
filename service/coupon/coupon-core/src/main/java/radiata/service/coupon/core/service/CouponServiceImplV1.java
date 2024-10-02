@@ -14,6 +14,7 @@ import radiata.common.message.ExceptionMessage;
 import radiata.service.coupon.core.domain.model.Coupon;
 import radiata.service.coupon.core.domain.model.constant.CouponSaleType;
 import radiata.service.coupon.core.domain.model.constant.CouponType;
+import radiata.service.coupon.core.implementation.interfaces.CouponDeleter;
 import radiata.service.coupon.core.implementation.interfaces.CouponIdCreator;
 import radiata.service.coupon.core.implementation.interfaces.CouponReader;
 import radiata.service.coupon.core.implementation.interfaces.CouponSaver;
@@ -29,6 +30,7 @@ public class CouponServiceImplV1 implements CouponService {
     private final CouponIdCreator couponIdCreator;
     private final CouponSaver couponSaver;
     private final CouponReader couponReader;
+    private final CouponDeleter couponDeleter;
 
     @Override
     public CouponResponseDto createCoupon(CouponCreateRequestDto requestDto) {
@@ -90,12 +92,16 @@ public class CouponServiceImplV1 implements CouponService {
     }
 
     @Override
-    public CouponResponseDto deleteCoupon(String couponId) {
-        return null;
+    public void deleteCoupon(String couponId) {
+
+        Coupon coupon = couponReader.readCoupon(couponId);
+
+        couponDeleter.deleteCoupon(coupon);
     }
 
     @Override
     public CouponResponseDto updateCoupon(String couponId, CouponUpdateRequestDto requestDto) {
+
         return null;
     }
 }

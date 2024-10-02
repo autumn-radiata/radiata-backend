@@ -4,6 +4,6 @@ import radiata.common.domain.coupon.dto.response.CouponResponseDto;
 
 public interface CouponDeleteService {
 
-    CouponResponseDto deleteCoupon(String couponId);
+    void deleteCoupon(String couponId);
 
 }
