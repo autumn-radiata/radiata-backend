@@ -1,5 +1,0 @@
-spring:
-  config:
-    import: classpath:application-database.yml  # database 속성 가져오기
-  profiles:
-    default: dev
