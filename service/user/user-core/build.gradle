@@ -19,13 +19,30 @@ repositories {
 
 dependencies {
 
-    implementation 'com.github.ksuid:ksuid:1.1.2'
+    /* module */
 
     implementation project(':common')
     implementation project(':database')
 
+    /* library */
+
+    // spring security crypto
+    implementation 'org.springframework.security:spring-security-crypto'
+
+    // ksuid
+    implementation 'com.github.ksuid:ksuid:1.1.2'
+
+    // mapStruct
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+
+    /* test */
+
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
+
 }
 
 tasks.named('test') {
