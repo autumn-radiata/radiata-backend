@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLRestriction;
 import radiata.service.user.core.domain.model.constant.PointType;
 
@@ -42,12 +43,13 @@ public class PointHistory {
     @Enumerated(EnumType.STRING)
     private PointType pointType;
 
-    //todo :  baseEntity 추가후 @CreationTimestamp로 초기화
-    @Column
+    @Column(updatable = false)
+    @CreationTimestamp
     private LocalDateTime issueAt;
 
-    public static PointHistory of(User user, int rewardPoint, PointType pointType) {
+    public static PointHistory of(String id,User user, int rewardPoint, PointType pointType) {
         return PointHistory.builder()
+            .id(id)
             .user(user)
             .rewardPoint(rewardPoint)
             .pointType(pointType)

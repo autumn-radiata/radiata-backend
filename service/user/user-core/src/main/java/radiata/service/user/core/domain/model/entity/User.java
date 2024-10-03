@@ -18,6 +18,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
+import radiata.common.domain.user.dto.request.ModifyUserRequestDto;
+import radiata.common.domain.user.dto.request.UserCreateRequestDto;
+import radiata.database.model.BaseEntity;
 import radiata.service.user.core.domain.model.vo.Address;
 import radiata.service.user.core.domain.model.vo.Point;
 import radiata.service.user.core.domain.model.constant.UserRole;
@@ -29,10 +32,10 @@ import radiata.service.user.core.domain.model.constant.UserRole;
 @Builder
 @Table(name = "r_user")
 @SQLRestriction("deleted_at IS NULL")
-public class User{
+public class User extends BaseEntity {
 
     @Id
-    private String username;
+    private String userId;
 
     @Column(nullable = false)
     private String password;
@@ -57,41 +60,40 @@ public class User{
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Builder.Default
     private Set<PointHistory> pointHistories = new HashSet<>();
 
-    /**
-     * 사용자 생성
-     */
-    public static User of(String username, String password, String email, String nickname,
-        String phone, Address address,UserRole role) {
+    public static User of(UserCreateRequestDto dto,UserRole role) {
+        Address address = Address.of(dto.roadAddress(), dto.detailAddress(), dto.zipcode());
         return User.builder()
-            .username(username)
-            .password(password)
-            .email(email)
-            .nickname(nickname)
-            .phone(phone)
+            .userId(dto.username())
+            .password(dto.password())
+            .email(dto.email())
+            .nickname(dto.nickname())
+            .phone(dto.phone())
             .address(address)
-            .totalPoint(Point.builder().point(0).build())
+            .totalPoint(Point.of(0))
             .role(role)
             .build();
-
     }
 
-    /**
-     * 사용자 정보 수정
-     */
-    public void updateInfo(String nickname, String phone, Address address) {
-        this.nickname = nickname;
-        this.phone = phone;
+    public void updateInfo(ModifyUserRequestDto dto) {
+        Address address = Address.of(dto.roadAddress(), dto.detailAddress(), dto.zipcode());
+        this.nickname = dto.nickname();
+        this.phone = dto.phone();
         this.address = address;
     }
 
-    /**
-     * 적립금 내역 추가
-     */
+    //todo : 수정에 맞게 다시 작성
+    public void delete(String userId) {
+        deleteEntity();
+    }
+
+    public void encoder(String password) {
+        this.password = password;
+    }
+
     public void addPointHistory(PointHistory history) {
         this.pointHistories.add(history);
     }
