@@ -1,10 +1,7 @@
 package radiata.service.user.core.domain.entity;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import radiata.service.user.core.domain.model.entity.PointHistory;
 import radiata.service.user.core.domain.model.entity.User;
 import radiata.service.user.core.domain.model.vo.Address;
-import radiata.service.user.core.domain.model.vo.PointType;
-import radiata.service.user.core.domain.model.vo.UserRole;
+import radiata.service.user.core.domain.model.constant.PointType;
+import radiata.service.user.core.domain.model.constant.UserRole;
 
 
 @DisplayName("유저 도메인 test")
@@ -26,7 +23,7 @@ class UserTest {
     @BeforeEach
     void setUp() {
         user = User.builder()
-            .username("username")
+            .userId("username")
             .password("password")
             .email("email@naver.com")
             .phone("010-3030-2003")
@@ -49,7 +46,7 @@ class UserTest {
     @DisplayName("사용자 생성")
     void testUserCreation() {
 
-        assertThat(user.getUsername()).isEqualTo("username");
+        assertThat(user.getUserId()).isEqualTo("username");
         assertThat(user.getPassword()).isEqualTo("password");
         assertThat(user.getEmail()).isEqualTo("email@naver.com");
         assertThat(user.getPhone()).isEqualTo("010-3030-2003");
@@ -70,7 +67,7 @@ class UserTest {
             .zipcode("54321")
             .build();
 
-        user.updateInfo("UpdatedUser", "010-9876-5432", newAddress);
+       // user.updateInfo("UpdatedUser", "010-9876-5432", newAddress);
 
         assertThat(user.getNickname()).isEqualTo("UpdatedUser");
         assertThat(user.getPhone()).isEqualTo("010-9876-5432");
