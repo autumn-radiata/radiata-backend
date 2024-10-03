@@ -10,7 +10,6 @@ import radiata.service.order.core.domain.model.entity.Order;
 import radiata.service.order.core.implemetation.OrderIdCreator;
 import radiata.service.order.core.implemetation.OrderReader;
 import radiata.service.order.core.implemetation.OrderSaver;
-import radiata.service.order.core.implemetation.OrderUpdater;
 import radiata.service.order.core.service.mapper.OrderMapper;
 
 @Service
@@ -19,7 +18,6 @@ public class OrderService {
 
     private final OrderIdCreator orderIdCreator;
     private final OrderSaver orderSaver;
-    private final OrderUpdater orderUpdater;
     private final OrderMapper orderMapper;
     private final OrderReader orderReader;
 
@@ -34,13 +32,15 @@ public class OrderService {
         return orderMapper.toDto(order);
     }
 
+
+    // TODO 결제(대기중, 완료), 배송(중, 대기중, 완료) - 사용 예정
     // 주문 상태 변경
     @Transactional
     public OrderResponseDto updateOrderStatus(OrderStatus requestStatus, String orderId) {
         // 주문 조회
         Order order = orderReader.readOrder(orderId);
         // 주문 상태 변경
-        orderUpdater.updateOrderStatus(requestStatus, order);
+        order.updateOrderStatus(requestStatus);
         // 반환
         return orderMapper.toDto(order);
     }
