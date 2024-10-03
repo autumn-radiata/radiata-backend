@@ -6,6 +6,7 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import radiata.common.domain.user.dto.request.ModifyUserRequestDto;
 import radiata.service.user.core.domain.model.entity.PointHistory;
 import radiata.service.user.core.domain.model.entity.User;
 import radiata.service.user.core.domain.model.vo.Address;
@@ -18,7 +19,6 @@ class UserTest {
 
     private User user;
     private PointHistory pointHistory;
-
 
     @BeforeEach
     void setUp() {
@@ -33,6 +33,7 @@ class UserTest {
                 .zipcode("zipCode").build())
             .role(UserRole.CUSTOMER)
             .build();
+
 
         pointHistory = PointHistory.builder()
             .user(user)
@@ -54,7 +55,6 @@ class UserTest {
         assertThat(user.getAddress().getDetailAddress()).isEqualTo("detailAddress");
         assertThat(user.getAddress().getRoadAddress()).isEqualTo("roadAddress");
         assertThat(user.getAddress().getZipcode()).isEqualTo("zipCode");
-
         assertThat(user.getRole()).isEqualTo(UserRole.CUSTOMER);
     }
 
@@ -67,12 +67,15 @@ class UserTest {
             .zipcode("54321")
             .build();
 
-       // user.updateInfo("UpdatedUser", "010-9876-5432", newAddress);
+        ModifyUserRequestDto dto = new ModifyUserRequestDto("UpdatedUser", "010-9876-5432",
+            "202","456 광주","54321");
+
+        user.updateInfo(dto);
 
         assertThat(user.getNickname()).isEqualTo("UpdatedUser");
         assertThat(user.getPhone()).isEqualTo("010-9876-5432");
-        assertThat(user.getAddress().getRoadAddress()).isEqualTo("456 광주");
-        assertThat(user.getAddress().getDetailAddress()).isEqualTo("202");
+        assertThat(user.getAddress().getRoadAddress()).isEqualTo("202");
+        assertThat(user.getAddress().getDetailAddress()).isEqualTo("456 광주");
         assertThat(user.getAddress().getZipcode()).isEqualTo("54321");
     }
 

@@ -21,6 +21,9 @@ public class Point implements Serializable {
     private Integer totalPoint;
 
     @Builder
+    public Point(int point) {
+        this.totalPoint = point;
+    }
     public static Point of(int point) {
         return Point.builder().point(point).build();
     }
