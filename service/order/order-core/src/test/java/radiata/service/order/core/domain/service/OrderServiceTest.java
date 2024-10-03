@@ -72,13 +72,12 @@ class OrderServiceTest {
         assertThat(createdOrder.address()).isNotNull();
     }
 
-
     @Nested
     @DisplayName("주문 상태 변경 테스트")
     class OrderStatusTests {
 
         @Test
-        @DisplayName("결제 대기 중으로 상태 변경")
+        @DisplayName("결제 대기 중 - 성공")
         void testUpdateOrderStatusToPaymentPending() {
             // when
             OrderResponseDto updatedOrder = orderService.updateOrderStatus(
@@ -89,7 +88,7 @@ class OrderServiceTest {
         }
 
         @Test
-        @DisplayName("결제 완료로 상태 변경")
+        @DisplayName("결제 완료 - 성공")
         void testUpdateOrderStatusToPaymentCompleted() {
             // when
             OrderResponseDto updatedOrder = orderService.updateOrderStatus(
@@ -100,7 +99,7 @@ class OrderServiceTest {
         }
 
         @Test
-        @DisplayName("배송 대기 중으로 상태 변경")
+        @DisplayName("배송 대기 중 - 성공")
         void testUpdateOrderStatusToShippingPending() {
             // when
             OrderResponseDto updatedOrder = orderService.updateOrderStatus(
@@ -111,7 +110,7 @@ class OrderServiceTest {
         }
 
         @Test
-        @DisplayName("배송 중으로 상태 변경")
+        @DisplayName("배송 중 - 성공")
         void testUpdateOrderStatusToShippingInProgress() {
             // when
             OrderResponseDto updatedOrder = orderService.updateOrderStatus(
@@ -122,7 +121,7 @@ class OrderServiceTest {
         }
 
         @Test
-        @DisplayName("배송 완료로 상태 변경")
+        @DisplayName("배송 완료 - 성공")
         void testUpdateOrderStatusToShippingCompleted() {
             // when
             OrderResponseDto updatedOrder = orderService.updateOrderStatus(
