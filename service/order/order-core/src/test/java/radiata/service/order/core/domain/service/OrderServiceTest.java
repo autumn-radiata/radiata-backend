@@ -1,6 +1,6 @@
 package radiata.service.order.core.domain.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ class OrderServiceTest {
     OrderService orderService;
 
     OrderCreateRequestDto orderCreateRequestDto;
-    OrderResponseDto createdOrder; // createdOrder를 클래스 필드로 정의
+    OrderResponseDto createdOrder;
 
     @BeforeEach
     void setUp() {
@@ -64,12 +64,12 @@ class OrderServiceTest {
     @DisplayName("주문 생성")
     void testCreateOrderService() {
         // then
-        assertNotNull(createdOrder.orderId());
-        assertEquals("user-01", createdOrder.userId());
-        assertEquals(OrderStatus.PAYMENT_REQUESTED.toString(), createdOrder.status());
-        assertEquals(0, createdOrder.orderPrice());
-        assertFalse(createdOrder.isRefunded());
-        assertNotNull(createdOrder.address());
+        assertThat(createdOrder.orderId()).isNotNull();
+        assertThat(createdOrder.userId()).isEqualTo("user-01");
+        assertThat(createdOrder.status()).isEqualTo(OrderStatus.PAYMENT_REQUESTED.toString());
+        assertThat(createdOrder.orderPrice()).isEqualTo(0);
+        assertThat(createdOrder.isRefunded()).isFalse();
+        assertThat(createdOrder.address()).isNotNull();
     }
 
 
@@ -85,7 +85,7 @@ class OrderServiceTest {
                 OrderStatus.PAYMENT_PENDING, createdOrder.orderId());
 
             // then
-            assertEquals(OrderStatus.PAYMENT_PENDING.toString(), updatedOrder.status());
+            assertThat(updatedOrder.status()).isEqualTo(OrderStatus.PAYMENT_PENDING.toString());
         }
 
         @Test
@@ -96,7 +96,7 @@ class OrderServiceTest {
                 OrderStatus.PAYMENT_COMPLETED, createdOrder.orderId());
 
             // then
-            assertEquals(OrderStatus.PAYMENT_COMPLETED.toString(), updatedOrder.status());
+            assertThat(updatedOrder.status()).isEqualTo(OrderStatus.PAYMENT_COMPLETED.toString());
         }
 
         @Test
@@ -107,7 +107,7 @@ class OrderServiceTest {
                 OrderStatus.SHIPPING_PENDING, createdOrder.orderId());
 
             // then
-            assertEquals(OrderStatus.SHIPPING_PENDING.toString(), updatedOrder.status());
+            assertThat(updatedOrder.status()).isEqualTo(OrderStatus.SHIPPING_PENDING.toString());
         }
 
         @Test
@@ -118,7 +118,7 @@ class OrderServiceTest {
                 OrderStatus.SHIPPING_IN_PROGRESS, createdOrder.orderId());
 
             // then
-            assertEquals(OrderStatus.SHIPPING_IN_PROGRESS.toString(), updatedOrder.status());
+            assertThat(updatedOrder.status()).isEqualTo(OrderStatus.SHIPPING_IN_PROGRESS.toString());
         }
 
         @Test
@@ -129,7 +129,7 @@ class OrderServiceTest {
                 OrderStatus.SHIPPING_COMPLETED, createdOrder.orderId());
 
             // then
-            assertEquals(OrderStatus.SHIPPING_COMPLETED.toString(), updatedOrder.status());
+            assertThat(updatedOrder.status()).isEqualTo(OrderStatus.SHIPPING_COMPLETED.toString());
         }
     }
 }
