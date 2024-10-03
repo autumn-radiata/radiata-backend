@@ -119,7 +119,7 @@ class UserFacadeTest {
             "우편" );
 
         when(userService.findValidUser(userId)).thenReturn(user);
-        when(userMapper.toGetUserInfoResponseDto(user)).thenReturn(dto);
+        when(userMapper.userToGetUserInfoResponseDto(user)).thenReturn(dto);
 
         //when
         GetUserInfoResponseDto result = userFacade.getUserInfo(userId);
