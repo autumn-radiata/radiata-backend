@@ -3,6 +3,7 @@ package radiata.service.payment.core.implementation;
 import com.github.ksuid.KsuidGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 import radiata.common.annotation.Implementation;
 import radiata.service.payment.core.domain.model.entity.Payment;
 import radiata.service.payment.core.domain.model.vo.Money;
@@ -16,6 +17,7 @@ public class PaymentSaver {
 
     private final PaymentRepository paymentRepository;
 
+    @Transactional
     public Payment createTossPayment(String userId, String paymentKey, Long amount) {
         Payment payment = Payment.of(
             KsuidGenerator.generate(),

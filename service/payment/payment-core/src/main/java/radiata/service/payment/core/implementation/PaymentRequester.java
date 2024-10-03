@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import radiata.common.annotation.Implementation;
 import radiata.service.payment.core.domain.model.entity.Payment;
@@ -30,6 +31,7 @@ public class PaymentRequester {
     @Value("${toss-payment.confirm-url}")
     private String TOSS_PAYMENT_CONFIRM_API_URL;
 
+    @Transactional
     public void requestTossPayment(Payment payment, String orderId) {
 
         RequestEntity<TossPaymentConfirmRequestDto> requestEntity = createRequestEntity(orderId, payment);
