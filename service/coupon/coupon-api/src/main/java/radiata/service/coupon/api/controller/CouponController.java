@@ -1,13 +1,10 @@
 package radiata.service.coupon.api.controller;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
-import static org.springframework.data.domain.Sort.Direction.DESC;
-import static radiata.common.message.SuccessMessage.*;
 import static radiata.common.message.SuccessMessage.CREATE_COUPON;
 import static radiata.common.message.SuccessMessage.DELETE_COUPON;
 import static radiata.common.message.SuccessMessage.GET_COUPON;
 import static radiata.common.message.SuccessMessage.GET_COUPONS;
-import static radiata.common.message.SuccessMessage.ISSUE_COUPON;
 import static radiata.common.message.SuccessMessage.UPDATE_COUPON;
 import static radiata.common.response.SuccessResponse.success;
 
@@ -23,7 +20,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import radiata.common.domain.coupon.dto.condition.CouponSearchCondition;
