@@ -50,8 +50,6 @@ public class PaymentRequester {
 
     private RequestEntity<TossPaymentConfirmRequestDto> createRequestEntity(String orderId, Payment payment) {
 
-        HttpHeaders headers = createHeaders();
-
         TossPaymentConfirmRequestDto body = new TossPaymentConfirmRequestDto(
             orderId,
             payment.getTransactionId(),
@@ -59,7 +57,7 @@ public class PaymentRequester {
 
         return RequestEntity
             .post(URI.create(TOSS_PAYMENT_CONFIRM_API_URL))
-            .headers(headers)
+            .headers(createHeaders())
             .body(body);
     }
 
