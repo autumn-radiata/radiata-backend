@@ -57,11 +57,11 @@ public class PaymentRequester {
 
         return RequestEntity
             .post(URI.create(TOSS_PAYMENT_CONFIRM_API_URL))
-            .headers(createHeaders())
+            .headers(createJsonTypeHeaders())
             .body(body);
     }
 
-    private HttpHeaders createHeaders() {
+    private HttpHeaders createJsonTypeHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();
 
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
