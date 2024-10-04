@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum SuccessMessage {
 
+    /* 공통 */
+    OK(HttpStatus.OK, "0", "정상 처리 되었습니다."),
+
     ;
 
     private final HttpStatus httpStatus;
