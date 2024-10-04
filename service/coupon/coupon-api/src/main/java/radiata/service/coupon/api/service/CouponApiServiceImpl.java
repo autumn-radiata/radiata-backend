@@ -7,19 +7,14 @@ import org.springframework.stereotype.Service;
 import radiata.common.domain.coupon.dto.condition.CouponSearchCondition;
 import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
 import radiata.common.domain.coupon.dto.request.CouponUpdateRequestDto;
-import radiata.common.domain.coupon.dto.response.CouponIssueResponseDto;
 import radiata.common.domain.coupon.dto.response.CouponResponseDto;
-import radiata.service.coupon.core.component.DistributeLockExecutor;
 import radiata.service.coupon.core.service.interfaces.coupon.CouponService;
-import radiata.service.coupon.core.service.interfaces.coupon_issue.CouponIssueService;
 
 @Service
 @RequiredArgsConstructor
 public class CouponApiServiceImpl implements CouponApiService {
 
     private final CouponService couponService;
-    private final CouponIssueService couponIssueService;
-    private final DistributeLockExecutor distributeLockExecutor;
 
     @Override
     public CouponResponseDto createCoupon(CouponCreateRequestDto requestDto) {
@@ -49,37 +44,5 @@ public class CouponApiServiceImpl implements CouponApiService {
     public void deleteCoupon(String couponId) {
 
         couponService.deleteCoupon(couponId);
-    }
-
-    @Override
-    public void issueCoupon(String couponId, String userId) {
-
-        distributeLockExecutor.execute("lock_" + couponId, 10000, 10000, () -> {
-            couponIssueService.issue(couponId, userId);
-        });
-    }
-
-    @Override
-    public CouponIssueResponseDto useCouponIssue(String couponIssueId, String userId) {
-
-        return couponIssueService.useCouponIssue(couponIssueId, userId);
-    }
-
-    @Override
-    public CouponIssueResponseDto getCouponIssue(String couponIssueId, String userId) {
-
-        return couponIssueService.getCouponIssue(couponIssueId, userId);
-    }
-
-    @Override
-    public Page<CouponIssueResponseDto> getCouponIssues(String userId, Pageable pageable) {
-
-        return couponIssueService.getCouponIssues(userId, pageable);
-    }
-
-    @Override
-    public void deleteCouponIssue(String couponIssueId, String userId) {
-
-        couponIssueService.deleteCouponIssue(couponIssueId, userId);
     }
 }

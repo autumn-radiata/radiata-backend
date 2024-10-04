@@ -19,14 +19,4 @@ public interface CouponApiService {
     CouponResponseDto updateCoupon(String couponId, CouponUpdateRequestDto requestDto);
 
     void deleteCoupon(String couponId);
-
-    void issueCoupon(String couponId, String userId);
-
-    CouponIssueResponseDto useCouponIssue(String couponIssueId, String userId);
-
-    CouponIssueResponseDto getCouponIssue(String couponIssueId, String userId);
-
-    Page<CouponIssueResponseDto> getCouponIssues(String userId, Pageable pageable);
-
-    void deleteCouponIssue(String couponIssueId, String userId);
 }
