@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import radiata.common.domain.payment.dto.request.TossPaymentCreateRequestDto;
 import radiata.common.domain.payment.dto.response.TossPaymentCreateResponseDto;
+import radiata.common.message.SuccessMessage;
 import radiata.common.response.SuccessResponse;
 import radiata.service.payment.core.service.TossPaymentService;
 
@@ -26,6 +27,6 @@ public class PaymentController {
         boolean isPaymentSuccess = tossPaymentService.requestTossPayment(request);
         TossPaymentCreateResponseDto response = new TossPaymentCreateResponseDto(isPaymentSuccess);
 
-        return SuccessResponse.success("결제 성공", response);
+        return SuccessResponse.success(SuccessMessage.OK.getMessage(), response);
     }
 }
