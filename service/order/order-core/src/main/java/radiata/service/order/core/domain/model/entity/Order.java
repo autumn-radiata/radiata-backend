@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
+import radiata.database.model.BaseEntity;
 import radiata.service.order.core.domain.model.constant.OrderStatus;
 
 @Entity
@@ -24,7 +25,7 @@ import radiata.service.order.core.domain.model.constant.OrderStatus;
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Order {
+public class Order extends BaseEntity {
 
     @Id
     private String id;
