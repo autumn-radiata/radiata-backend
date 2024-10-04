@@ -37,6 +37,7 @@ public class CouponIssueServiceImplV1 implements CouponIssueService {
         saveCouponIssue(couponId, userId);
     }
 
+    @Override
     public CouponIssue saveCouponIssue(String couponId, String userId) {
 
         checkAlreadyIssuance(couponId, userId);
