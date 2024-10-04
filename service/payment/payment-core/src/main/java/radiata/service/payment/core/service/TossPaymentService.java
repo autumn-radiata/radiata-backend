@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.payment.dto.request.TossPaymentCreateRequestDto;
+import radiata.common.domain.payment.dto.response.TossPaymentCreateResponseDto;
 import radiata.service.payment.core.domain.model.entity.Payment;
 import radiata.service.payment.core.domain.model.vo.PaymentStatus;
 import radiata.service.payment.core.implementation.PaymentRequester;
@@ -19,12 +20,12 @@ public class TossPaymentService {
     private final PaymentRequester paymentRequester;
 
     @Transactional
-    public boolean requestTossPayment(TossPaymentCreateRequestDto request) {
+    public TossPaymentCreateResponseDto requestTossPayment(TossPaymentCreateRequestDto request) {
         // 결제 생성
         Payment payment = paymentSaver.createTossPayment(request.userId(), request.paymentKey(), request.amount());
         // 토스 결제 요청
         paymentRequester.requestTossPayment(payment, request.orderId());
 
-        return payment.getStatus().equals(PaymentStatus.APPROVED);
+        return new TossPaymentCreateResponseDto(payment.getStatus().equals(PaymentStatus.APPROVED));
     }
 }

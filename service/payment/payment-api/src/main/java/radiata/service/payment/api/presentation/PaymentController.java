@@ -24,9 +24,6 @@ public class PaymentController {
     public SuccessResponse<TossPaymentCreateResponseDto> requestTossPayment(
         @RequestBody TossPaymentCreateRequestDto request
     ) {
-        boolean isPaymentSuccess = tossPaymentService.requestTossPayment(request);
-        TossPaymentCreateResponseDto response = new TossPaymentCreateResponseDto(isPaymentSuccess);
-
-        return SuccessResponse.success(SuccessMessage.OK.getMessage(), response);
+        return SuccessResponse.success(SuccessMessage.OK.getMessage(), tossPaymentService.requestTossPayment(request));
     }
 }
