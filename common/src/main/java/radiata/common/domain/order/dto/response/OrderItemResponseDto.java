@@ -1,12 +1,33 @@
 package radiata.common.domain.order.dto.response;
 
-public record OrderItemResponseDto(
-    String productId,
-    String couponIssuedId,
-    String rewardPointId,
-    Integer quantity,
-    Integer unitPrice,
-    Integer paymentPrice
+import lombok.AccessLevel;
+import lombok.Builder;
+
+@Builder(access = AccessLevel.PRIVATE)
+public record OrderItemResponseDto(String orderItemId, String orderId, String productId, String couponIssuedId,
+                                   String rewardPointId, Integer quantity, Integer unitPrice, Integer paymentPrice
 ) {
 
+    public static OrderItemResponseDto of(
+        String orderItemId,
+        String orderId,
+        String productId,
+        String couponIssuedId,
+        String rewardPointId,
+        Integer quantity,
+        Integer unitPrice,
+        Integer paymentPrice
+    ) {
+
+        return OrderItemResponseDto.builder()
+            .orderItemId(orderItemId)
+            .orderId(orderId)
+            .productId(productId)
+            .couponIssuedId(couponIssuedId)
+            .rewardPointId(rewardPointId)
+            .quantity(quantity)
+            .unitPrice(unitPrice)
+            .paymentPrice(paymentPrice)
+            .build();
+    }
 }
