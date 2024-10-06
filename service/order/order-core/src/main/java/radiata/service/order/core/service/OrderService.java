@@ -110,19 +110,6 @@ public class OrderService {
         return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(orderItems));
     }
 
-
-    // TODO 결제(대기중, 완료), 배송(중, 대기중, 완료) - 사용 예정
-    // 주문 상태 변경
-    @Transactional
-    public OrderResponseDto updateOrderStatus(OrderStatus requestStatus, String orderId) {
-        // 주문 조회
-        Order order = orderReader.readOrder(orderId);
-        // 주문 상태 변경
-        order.updateOrderStatus(requestStatus);
-        // 반환
-        return orderMapper.toDto(order);
-    }
-
     // 주문 상세 조회
     @Transactional(readOnly = true)
     public OrderResponseDto getOrder(String orderId, String userId) {
