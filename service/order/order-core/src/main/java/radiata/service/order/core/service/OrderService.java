@@ -134,6 +134,7 @@ public class OrderService {
         return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
     }
 
+    // TODO -- 질문 여기서 결제 요청 보내야되나?
     // 주문 상태 변경 (결제 대기 중)
     @Transactional
     public OrderResponseDto updateStatusPendingPayment(String orderId) {
@@ -143,6 +144,23 @@ public class OrderService {
         orderValidator.checkStatusIsPaymentRequest(order.getStatus());
         // 주문 상태 업데이트
         order.updateOrderStatus(OrderStatus.PAYMENT_PENDING);
+        // 반환
+        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
+    }
+
+    // 주문 상태 변경 (결제 완료)
+    @Transactional
+    public OrderResponseDto updateStatusCompletedPayment(String orderId, String paymentId) {
+        // 주문 조회
+        Order order = orderReader.readOrder(orderId);
+        // 주문 상태 체크
+        orderValidator.checkStatusIsPaymentPending(order.getStatus());
+        // TODO 결제 완료 체크(FeignClient)
+
+        // paymentId 지정
+        order.setPaymentId(paymentId);
+        // 주문 상태 업데이트
+        order.updateOrderStatus(OrderStatus.PAYMENT_COMPLETED);
         // 반환
         return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
     }

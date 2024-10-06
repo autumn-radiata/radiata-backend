@@ -21,4 +21,11 @@ public class OrderValidator {
             throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
         }
     }
+
+    // "결제 대기 중" 인지 체크 - 결제 완료 후
+    public void checkStatusIsPaymentPending(OrderStatus status) {
+        if (!status.equals(OrderStatus.PAYMENT_PENDING)) {
+            throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
+        }
+    }
 }
