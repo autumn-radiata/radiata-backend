@@ -10,6 +10,17 @@ repositories {
 }
 
 dependencies {
+
+    /* module */
+
+    implementation project(':common')
+    api project(':service:payment:payment-core')
+
+    /* library */
+
+
+    /* test */
+
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
