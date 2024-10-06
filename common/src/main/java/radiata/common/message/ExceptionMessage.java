@@ -1,11 +1,13 @@
 package radiata.common.message;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.PAYMENT_REQUIRED;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 @Getter
 @RequiredArgsConstructor
@@ -32,7 +34,8 @@ public enum ExceptionMessage {
     POINT_ISSUE_LACK(BAD_REQUEST, "3001", "적립금이 부족합니다."),
 
 
-
+    /* 주문 5000번대 */
+    INVALID_ORDER_STATUS(CONFLICT, "5001", "현재 주문 상태에서는 요청하신 상태 변경이 불가합니다."),
 
     /* 쿠폰 6000번대 */
 
