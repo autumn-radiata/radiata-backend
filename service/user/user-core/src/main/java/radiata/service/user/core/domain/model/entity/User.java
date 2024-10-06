@@ -18,12 +18,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
-import radiata.common.domain.user.dto.request.ModifyUserRequestDto;
-import radiata.common.domain.user.dto.request.UserCreateRequestDto;
 import radiata.database.model.BaseEntity;
+import radiata.service.user.core.domain.model.constant.UserRole;
 import radiata.service.user.core.domain.model.vo.Address;
 import radiata.service.user.core.domain.model.vo.Point;
-import radiata.service.user.core.domain.model.constant.UserRole;
 
 @Entity
 @Getter
@@ -35,13 +33,13 @@ import radiata.service.user.core.domain.model.constant.UserRole;
 public class User extends BaseEntity {
 
     @Id
-    private String userId;
-
-    @Column(nullable = false)
-    private String password;
+    private String id;
 
     @Column(unique = true)
     private String email;
+
+    @Column(nullable = false)
+    private String password;
 
     @Column
     private String nickname;
@@ -64,34 +62,31 @@ public class User extends BaseEntity {
     @Builder.Default
     private Set<PointHistory> pointHistories = new HashSet<>();
 
-    public static User of(UserCreateRequestDto dto,UserRole role) {
-        Address address = Address.of(dto.roadAddress(), dto.detailAddress(), dto.zipcode());
+    public static User of(String id, String password, String email, String nickname, String phone,
+        String roadAddress, String detailAddress, String zipcode, UserRole role) {
+        Address address = Address.of(roadAddress, detailAddress, zipcode);
         return User.builder()
-            .userId(dto.username())
-            .password(dto.password())
-            .email(dto.email())
-            .nickname(dto.nickname())
-            .phone(dto.phone())
+            .id(id)
+            .password(password)
+            .email(email)
+            .nickname(nickname)
+            .phone(phone)
             .address(address)
-            .totalPoint(Point.of(0))
+            .totalPoint(Point.from(0))
             .role(role)
             .build();
     }
 
-    public void updateInfo(ModifyUserRequestDto dto) {
-        Address address = Address.of(dto.roadAddress(), dto.detailAddress(), dto.zipcode());
-        this.nickname = dto.nickname();
-        this.phone = dto.phone();
+    public void updateInfo(String nickname, String phone, String roadAddress, String detailAddress, String zipcode) {
+        Address address = Address.of(roadAddress, detailAddress, zipcode);
+        this.nickname = nickname;
+        this.phone = phone;
         this.address = address;
     }
 
     //todo : 수정에 맞게 다시 작성
     public void delete(String userId) {
         deleteEntity();
-    }
-
-    public void encoder(String password) {
-        this.password = password;
     }
 
     public void addPointHistory(PointHistory history) {

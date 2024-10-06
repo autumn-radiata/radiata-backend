@@ -24,7 +24,8 @@ public class Point implements Serializable {
     public Point(int point) {
         this.totalPoint = point;
     }
-    public static Point of(int point) {
+
+    public static Point from(int point) {
         return Point.builder().point(point).build();
     }
 
@@ -32,7 +33,7 @@ public class Point implements Serializable {
      * 적립금 지급
      */
     public Point addPoint(int addPoint) {
-        return of(this.totalPoint + addPoint);
+        return from(this.totalPoint + addPoint);
     }
 
     /**
@@ -40,18 +41,17 @@ public class Point implements Serializable {
      */
     public Point subPoint(int subPoint) {
         hasAvailablePoint(subPoint);
-        return of(this.totalPoint - subPoint);
+        return from(this.totalPoint - subPoint);
     }
 
     /**
      * 적립금 사용 가능 여부
      */
-    public void hasAvailablePoint(int requirePoint){
+    public void hasAvailablePoint(int requirePoint) {
         if (this.totalPoint < requirePoint) {
             throw new BusinessException(ExceptionMessage.POINT_ISSUE_LACK);
         }
     }
-
 
 
 }
