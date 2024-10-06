@@ -1,11 +1,11 @@
 package radiata.common.message;
 
-import static org.springframework.http.HttpStatus.*;
-
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.PAYMENT_REQUIRED;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 @Getter
 @RequiredArgsConstructor
@@ -27,17 +27,12 @@ public enum ExceptionMessage {
     // 잔액 부족 402
     INSUFFICIENT_BALANCE(PAYMENT_REQUIRED, "2001", "충전금이 부족합니다."),
 
-
-
-
     /* 유저 3000번대 */
 
     //적립금 부족
     POINT_ISSUE_LACK(BAD_REQUEST, "3001", "적립금이 부족합니다."),
     USER_DUPLICATE_EMAIL(BAD_REQUEST, "3002", "이메일이 중복 됩니다."),
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "3003", "사용자가 존재하지 않습니다."),
-
-
+    USER_NOT_FOUND(NOT_FOUND.httpStatus, "3003", "사용자가 존재하지 않습니다."),
 
 
     /* 쿠폰 6000번대 */
