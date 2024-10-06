@@ -19,10 +19,11 @@ repositories {
 
 dependencies {
 
+
     /* module */
 
-    implementation project(':common')
-    implementation project(':database')
+    api project(':common')
+    api project(':database')
 
     /* library */
 
@@ -36,8 +37,10 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
-
     /* test */
+
+    /* //h2
+     testRuntimeOnly 'com.h2database:h2'*/
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
