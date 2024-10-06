@@ -44,7 +44,7 @@ public class OrderController {
     // 주문 환불 요청 - POST("/{orderId}/refunded")
     // 주문 상태 변경(결제 대기 중)
     @PatchMapping("/{orderId}/payment-pending")
-    public SuccessResponse<OrderResponseDto> pendingPayment(@PathVariable("orderId") String orderId) {
+    public SuccessResponse<OrderResponseDto> pendPayment(@PathVariable("orderId") String orderId) {
 
         return SuccessResponse.success(" 주문 상태: [결제 대기 중] ", orderService.updateStatusPendingPayment(orderId));
     }
@@ -60,7 +60,7 @@ public class OrderController {
 
     // 주문 상태 변경(배송 대기 중) - PATCH
     @PatchMapping("/{orderId}/shipping-pending")
-    public SuccessResponse<OrderResponseDto> pendingShipping(@PathVariable("orderId") String orderId) {
+    public SuccessResponse<OrderResponseDto> pendShipping(@PathVariable("orderId") String orderId) {
 
         return SuccessResponse.success(" 주문 상태: [배송 대기 중] ", orderService.updateStatusPendingShipping(orderId));
     }
