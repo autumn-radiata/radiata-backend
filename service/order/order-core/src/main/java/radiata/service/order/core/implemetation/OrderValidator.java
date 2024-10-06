@@ -16,7 +16,7 @@ public class OrderValidator {
     }
 
     // "결제 요청 중" 만 -> "결제 대기 중" 로 수정 가능
-    public void checkStatusIsPaymentRequest(OrderStatus status) {
+    public void checkStatusIsPaymentRequested(OrderStatus status) {
         if (!status.equals(OrderStatus.PAYMENT_REQUESTED)) {
             throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
         }
@@ -30,7 +30,7 @@ public class OrderValidator {
     }
 
     // "결제 완료" 만 -> "배송 대기 중" 으로 가능
-    public void checkStatusIsPaymentCompeleted(OrderStatus status) {
+    public void checkStatusIsPaymentCompleted(OrderStatus status) {
         if (!status.equals(OrderStatus.PAYMENT_COMPLETED)) {
             throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
         }
