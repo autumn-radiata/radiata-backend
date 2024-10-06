@@ -2,6 +2,7 @@ package radiata.service.order.api.presentation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +42,12 @@ public class OrderController {
     // 주문 목록 조회 - GET
     // 주문 취소 요청 - POST ("/{orderId}/canceled")
     // 주문 환불 요청 - POST("/{orderId}/refunded")
-    // 주문 상태 변경(결제 대기 중) - PATCH("/{orderId}/payment-pending")
+    // 주문 상태 변경(결제 대기 중)
+    @PatchMapping("/{orderId}/payment-pending")
+    public SuccessResponse<OrderResponseDto> pendingPayment(@PathVariable("orderId") String orderId) {
+
+        return SuccessResponse.success(" 주문 상태: \"결제 대기 중\"", orderService.updateStatusPendingPayment(orderId));
+    }
     // 주문 상태 변경(결제 완료) - PATCH("/{orderId}/payment-completed")
     // 주문 상태 변경(배송 대기 중) - PATCH("/{orderId}/shipping-pending")
     // 주문 상태 변경(배송 중) - PATCH("/{orderId}/shipping-in-progress")

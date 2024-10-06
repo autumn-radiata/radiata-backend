@@ -123,6 +123,7 @@ public class OrderService {
         return orderMapper.toDto(order);
     }
 
+    // 주문 상세 조회
     @Transactional(readOnly = true)
     public OrderResponseDto getOrder(String orderId, String userId) {
         // 주문 조회
@@ -130,6 +131,19 @@ public class OrderService {
         // 사용자의 주문 내역인지 확인
         orderValidator.validateUserOwnsOrder(order.getUserId(), userId);
         // 주문 상품 목록 추가 & 반환
+        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
+    }
+
+    // 주문 상태 변경 (결제 대기 중)
+    @Transactional
+    public OrderResponseDto updateStatusPendingPayment(String orderId) {
+        // 주문 조회
+        Order order = orderReader.readOrder(orderId);
+        // 주문 상태 체크
+        orderValidator.checkStatusIsPaymentRequest(order.getStatus());
+        // 주문 상태 업데이트
+        order.updateOrderStatus(OrderStatus.PAYMENT_PENDING);
+        // 반환
         return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
     }
 }
