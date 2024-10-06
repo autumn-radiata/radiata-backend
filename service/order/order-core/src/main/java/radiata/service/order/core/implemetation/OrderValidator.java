@@ -35,4 +35,11 @@ public class OrderValidator {
             throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
         }
     }
+
+    // "배송 대기 중" 만 -> "배송 중" 으로 가능
+    public void checkStatusIsShippingPending(OrderStatus status) {
+        if (!status.equals(OrderStatus.SHIPPING_PENDING)) {
+            throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
+        }
+    }
 }

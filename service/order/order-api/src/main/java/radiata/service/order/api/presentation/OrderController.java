@@ -64,7 +64,13 @@ public class OrderController {
 
         return SuccessResponse.success(" 주문 상태: [배송 대기 중] ", orderService.updateStatusPendingShipping(orderId));
     }
-    // 주문 상태 변경(배송 중) - PATCH("/{orderId}/shipping-in-progress")
+
+    // 주문 상태 변경(배송 중) - PATCH
+    @PatchMapping("/{orderId}/shipping-in-progress")
+    public SuccessResponse<OrderResponseDto> shippingInProgress(@PathVariable("orderId") String orderId) {
+
+        return SuccessResponse.success(" 주문 상태: [배송 중] ", orderService.updateStatusShipping(orderId));
+    }
     // 주문 상태 변경(배송 완료) - PATCH("/{orderId}/shipping-completed")
     // 주문 내역 삭제
 

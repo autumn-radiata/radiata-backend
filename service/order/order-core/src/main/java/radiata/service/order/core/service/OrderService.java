@@ -141,7 +141,7 @@ public class OrderService {
         // 주문 조회
         Order order = orderReader.readOrder(orderId);
         // 주문 상태 체크
-        orderValidator.checkStatusIsPaymentRequest(order.getStatus());
+        orderValidator.checkStatusIsPaymentRequested(order.getStatus());
         // 주문 상태 업데이트
         order.updateOrderStatus(OrderStatus.PAYMENT_PENDING);
         // 반환
@@ -171,9 +171,22 @@ public class OrderService {
         // 주문 조회
         Order order = orderReader.readOrder(orderId);
         // 주문 상태 체크
-        orderValidator.checkStatusIsPaymentCompeleted(order.getStatus());
+        orderValidator.checkStatusIsPaymentCompleted(order.getStatus());
         // 주문 상태 업데이트
         order.updateOrderStatus(OrderStatus.SHIPPING_PENDING);
+        // 반환
+        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
+    }
+
+    // 주문 상태 변경 (배송 중)
+    @Transactional
+    public OrderResponseDto updateStatusShipping(String orderId) {
+        // 주문 조회
+        Order order = orderReader.readOrder(orderId);
+        // 주문 상태 체크
+        orderValidator.checkStatusIsShippingPending(order.getStatus());
+        // 주문 상태 업데이트
+        order.updateOrderStatus(OrderStatus.SHIPPING_IN_PROGRESS);
         // 반환
         return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
     }
