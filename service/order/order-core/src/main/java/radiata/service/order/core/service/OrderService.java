@@ -6,13 +6,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.order.dto.request.OrderCreateRequestDto;
 import radiata.common.domain.order.dto.request.OrderItemCreateRequestDto;
-import radiata.common.domain.order.dto.response.OrderItemResponseDto;
 import radiata.common.domain.order.dto.response.OrderResponseDto;
 import radiata.service.order.core.domain.model.constant.OrderStatus;
 import radiata.service.order.core.domain.model.entity.Order;
@@ -20,6 +18,7 @@ import radiata.service.order.core.domain.model.entity.OrderItem;
 import radiata.service.order.core.implemetation.OrderIdCreator;
 import radiata.service.order.core.implemetation.OrderReader;
 import radiata.service.order.core.implemetation.OrderSaver;
+import radiata.service.order.core.implemetation.OrderValidator;
 import radiata.service.order.core.service.mapper.OrderItemMapper;
 import radiata.service.order.core.service.mapper.OrderMapper;
 
@@ -32,6 +31,8 @@ public class OrderService {
     private final OrderReader orderReader;
     private final OrderMapper orderMapper;
     private final OrderItemMapper orderItemMapper;
+    private final OrderValidator orderValidator;
+    private final OrderItemService orderItemService;
 
 
     // 주문 생성
@@ -105,14 +106,8 @@ public class OrderService {
         order.setOrderItems(orderItems);
         // 결제 금액 지정 - setOrderPrice
         order.setOrderPrice(orderPrice.get()); // AtomicInteger에서 값 가져오기
-
-        // OrderResponseDto에 변환하여 itemList 추가
-        Set<OrderItemResponseDto> orderItemsResponseDto = orderItems.stream()
-            .map(orderItemMapper::toDto)
-            .collect(Collectors.toSet());
-
-        // 반환
-        return orderMapper.toDto(order).withItemList(orderItemsResponseDto);
+        // 주문 상품 목록 추가 & 반환
+        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(orderItems));
     }
 
 
@@ -133,7 +128,8 @@ public class OrderService {
         // 주문 조회
         Order order = orderReader.readOrder(orderId);
         // 사용자의 주문 내역인지 확인
-
-        return orderMapper.toDto(order);
+        orderValidator.validateUserOwnsOrder(order.getUserId(), userId);
+        // 주문 상품 목록 추가 & 반환
+        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
     }
 }
