@@ -46,8 +46,7 @@ public class OrderController {
     @PatchMapping("/{orderId}/payment-pending")
     public SuccessResponse<OrderResponseDto> pendingPayment(@PathVariable("orderId") String orderId) {
 
-        return SuccessResponse.success(" 주문 상태: [결제 대기 중] ",
-            orderService.updateStatusPendingPayment(orderId));
+        return SuccessResponse.success(" 주문 상태: [결제 대기 중] ", orderService.updateStatusPendingPayment(orderId));
     }
 
     // 주문 상태 변경(결제 완료) - PATCH
@@ -58,7 +57,13 @@ public class OrderController {
         return SuccessResponse.success(" 주문 상태: [결제 완료] ",
             orderService.updateStatusCompletedPayment(orderId, paymentId));
     }
-    // 주문 상태 변경(배송 대기 중) - PATCH("/{orderId}/shipping-pending")
+
+    // 주문 상태 변경(배송 대기 중) - PATCH
+    @PatchMapping("/{orderId}/shipping-pending")
+    public SuccessResponse<OrderResponseDto> pendingShipping(@PathVariable("orderId") String orderId) {
+
+        return SuccessResponse.success(" 주문 상태: [배송 대기 중] ", orderService.updateStatusPendingShipping(orderId));
+    }
     // 주문 상태 변경(배송 중) - PATCH("/{orderId}/shipping-in-progress")
     // 주문 상태 변경(배송 완료) - PATCH("/{orderId}/shipping-completed")
     // 주문 내역 삭제

@@ -15,16 +15,23 @@ public class OrderValidator {
         }
     }
 
-    // 주문 상태 "결제 요청 중" 인지 체크 - 주문 직 후 사용 될.
+    // "결제 요청 중" 만 -> "결제 대기 중" 로 수정 가능
     public void checkStatusIsPaymentRequest(OrderStatus status) {
         if (!status.equals(OrderStatus.PAYMENT_REQUESTED)) {
             throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
         }
     }
 
-    // "결제 대기 중" 인지 체크 - 결제 완료 후
+    // "결제 대기 중" 만 -> "결제 완료" 로 수정 가능
     public void checkStatusIsPaymentPending(OrderStatus status) {
         if (!status.equals(OrderStatus.PAYMENT_PENDING)) {
+            throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
+        }
+    }
+
+    // "결제 완료" 만 -> "배송 대기 중" 으로 가능
+    public void checkStatusIsPaymentCompeleted(OrderStatus status) {
+        if (!status.equals(OrderStatus.PAYMENT_COMPLETED)) {
             throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
         }
     }

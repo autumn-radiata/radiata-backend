@@ -164,4 +164,17 @@ public class OrderService {
         // 반환
         return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
     }
+
+    // 주문 상태 변경 (배송 대기 중)
+    @Transactional
+    public OrderResponseDto updateStatusPendingShipping(String orderId) {
+        // 주문 조회
+        Order order = orderReader.readOrder(orderId);
+        // 주문 상태 체크
+        orderValidator.checkStatusIsPaymentCompeleted(order.getStatus());
+        // 주문 상태 업데이트
+        order.updateOrderStatus(OrderStatus.SHIPPING_PENDING);
+        // 반환
+        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
+    }
 }
