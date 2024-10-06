@@ -42,4 +42,11 @@ public class OrderValidator {
             throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
         }
     }
+
+    // "배송 중" 만 -> "배송 완료" 으로 가능
+    public void checkStatusIsShippingInProgress(OrderStatus status) {
+        if (!status.equals(OrderStatus.SHIPPING_IN_PROGRESS)) {
+            throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
+        }
+    }
 }

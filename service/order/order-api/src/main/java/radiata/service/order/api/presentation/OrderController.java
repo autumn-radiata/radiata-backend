@@ -71,7 +71,13 @@ public class OrderController {
 
         return SuccessResponse.success(" 주문 상태: [배송 중] ", orderService.updateStatusShipping(orderId));
     }
-    // 주문 상태 변경(배송 완료) - PATCH("/{orderId}/shipping-completed")
+
+    // 주문 상태 변경(배송 완료) - PATCH
+    @PatchMapping("/{orderId}/shipping-completed")
+    public SuccessResponse<OrderResponseDto> completeShipping(@PathVariable("orderId") String orderId) {
+
+        return SuccessResponse.success(" 주문 상태: [배송 완료] ", orderService.updateStatusCompletedShipping(orderId));
+    }
     // 주문 내역 삭제
 
 }

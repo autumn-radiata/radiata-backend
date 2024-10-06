@@ -190,4 +190,17 @@ public class OrderService {
         // 반환
         return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
     }
+
+    // 주문 상태 변경 (배송 완료)
+    @Transactional
+    public OrderResponseDto updateStatusCompletedShipping(String orderId) {
+        // 주문 조회
+        Order order = orderReader.readOrder(orderId);
+        // 주문 상태 체크
+        orderValidator.checkStatusIsShippingInProgress(order.getStatus());
+        // 주문 상태 업데이트
+        order.updateOrderStatus(OrderStatus.SHIPPING_COMPLETED);
+        // 반환
+        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
+    }
 }
