@@ -1,4 +1,4 @@
-package radiata.service.user.core.service;
+package radiata.service.user.core.implement;
 
 import com.github.ksuid.Ksuid;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import radiata.service.user.core.domain.model.entity.User;
 
 @RequiredArgsConstructor
 @Component
-public class PointService {
+public class PointHandler {
 
     public void calculatePoint(User user,int pointAmount,PointType type) {
         if (type == PointType.SUBSCRIBE) {
