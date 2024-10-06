@@ -74,6 +74,9 @@ public class Order {
         this.orderPrice = orderPrice;
     }
 
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
 
     public void setOrderItems(Set<OrderItem> itemList) {
         this.itemList = itemList;
