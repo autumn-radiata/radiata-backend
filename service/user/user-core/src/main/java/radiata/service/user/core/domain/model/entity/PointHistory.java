@@ -16,8 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.SQLRestriction;
+import org.springframework.data.annotation.CreatedDate;
 import radiata.service.user.core.domain.model.constant.PointType;
 
 @Entity
@@ -25,7 +24,6 @@ import radiata.service.user.core.domain.model.constant.PointType;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
 @Builder
-@SQLRestriction("deleted_at IS NULL")
 @Table(name = "r_point_history")
 public class PointHistory {
 
@@ -33,7 +31,7 @@ public class PointHistory {
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(nullable = false)
@@ -44,10 +42,10 @@ public class PointHistory {
     private PointType pointType;
 
     @Column(updatable = false)
-    @CreationTimestamp
+    @CreatedDate
     private LocalDateTime issueAt;
 
-    public static PointHistory of(String id,User user, int rewardPoint, PointType pointType) {
+    public static PointHistory of(String id, User user, int rewardPoint, PointType pointType) {
         return PointHistory.builder()
             .id(id)
             .user(user)
