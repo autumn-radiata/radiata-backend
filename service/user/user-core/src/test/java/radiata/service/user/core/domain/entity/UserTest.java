@@ -1,17 +1,16 @@
 package radiata.service.user.core.domain.entity;
-import static org.assertj.core.api.Assertions.assertThat;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDateTime;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import radiata.common.domain.user.dto.request.ModifyUserRequestDto;
+import radiata.service.user.core.domain.model.constant.PointType;
+import radiata.service.user.core.domain.model.constant.UserRole;
 import radiata.service.user.core.domain.model.entity.PointHistory;
 import radiata.service.user.core.domain.model.entity.User;
 import radiata.service.user.core.domain.model.vo.Address;
-import radiata.service.user.core.domain.model.constant.PointType;
-import radiata.service.user.core.domain.model.constant.UserRole;
 
 
 @DisplayName("유저 도메인 test")
@@ -23,7 +22,7 @@ class UserTest {
     @BeforeEach
     void setUp() {
         user = User.builder()
-            .userId("username")
+            .id("username")
             .password("password")
             .email("email@naver.com")
             .phone("010-3030-2003")
@@ -33,7 +32,6 @@ class UserTest {
                 .zipcode("zipCode").build())
             .role(UserRole.CUSTOMER)
             .build();
-
 
         pointHistory = PointHistory.builder()
             .user(user)
@@ -47,7 +45,7 @@ class UserTest {
     @DisplayName("사용자 생성")
     void testUserCreation() {
 
-        assertThat(user.getUserId()).isEqualTo("username");
+        assertThat(user.getId()).isEqualTo("username");
         assertThat(user.getPassword()).isEqualTo("password");
         assertThat(user.getEmail()).isEqualTo("email@naver.com");
         assertThat(user.getPhone()).isEqualTo("010-3030-2003");
@@ -67,10 +65,7 @@ class UserTest {
             .zipcode("54321")
             .build();
 
-        ModifyUserRequestDto dto = new ModifyUserRequestDto("UpdatedUser", "010-9876-5432",
-            "202","456 광주","54321");
-
-        user.updateInfo(dto);
+        user.updateInfo("UpdatedUser", "010-9876-5432", "202", "456 광주", "54321");
 
         assertThat(user.getNickname()).isEqualTo("UpdatedUser");
         assertThat(user.getPhone()).isEqualTo("010-9876-5432");
@@ -95,7 +90,6 @@ class UserTest {
         assertThat(addedPointHistory.getRewardPoint()).isEqualTo(100);
         assertThat(addedPointHistory.getPointType()).isEqualTo(PointType.SUBSCRIBE);
     }
-
 
 
 }
