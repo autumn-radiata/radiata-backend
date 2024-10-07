@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import radiata.common.domain.timesale.dto.request.TimeSaleCreateRequestDto;
 import radiata.common.domain.timesale.dto.response.TimeSaleResponseDto;
+import radiata.service.timesale.core.implementation.interfaces.TimeSaleCreateRequestDtoValidator;
 import radiata.service.timesale.core.implementation.interfaces.TimeSaleIdCreator;
 import radiata.service.timesale.core.implementation.interfaces.TimeSaleSaver;
 import radiata.service.timesale.core.service.interfaces.TimeSaleService;
@@ -17,9 +18,12 @@ public class TimeSaleServiceImpl implements TimeSaleService {
     private final TimeSaleMapper timeSaleMapper;
     private final TimeSaleIdCreator timeSaleIdCreator;
     private final TimeSaleSaver timeSaleSaver;
+    private final TimeSaleCreateRequestDtoValidator timeSaleCreateRequestDtoValidator;
 
     @Override
     public TimeSaleResponseDto createTimeSale(TimeSaleCreateRequestDto requestDto) {
+
+        timeSaleCreateRequestDtoValidator.validate(requestDto);
 
         return timeSaleMapper.toDto(
             timeSaleSaver.save(timeSaleMapper.toEntity(requestDto, timeSaleIdCreator.create())));
