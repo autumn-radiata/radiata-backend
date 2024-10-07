@@ -38,6 +38,9 @@ public class TimeSaleProduct extends BaseEntity {
     @Column(nullable = false)
     private Integer discountRate;
 
+    @Column(nullable = false)
+    private Integer stock;
+
     @Column(name = "timesale_start_time", nullable = false)
     private LocalDateTime timeSaleStartTime;
 
