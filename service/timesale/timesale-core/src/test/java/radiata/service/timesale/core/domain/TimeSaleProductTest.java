@@ -14,7 +14,7 @@ class TimeSaleProductTest {
 
     @Nested
     @DisplayName("타임세일 상품 판매량 증가 테스트")
-    class UseCouponIssue {
+    class SaleTest {
 
         @Test
         @DisplayName("타임세일 상품에 문제가 없을 경우 판매량이 올라간다.")
