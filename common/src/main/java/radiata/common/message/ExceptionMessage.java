@@ -39,6 +39,8 @@ public enum ExceptionMessage {
     INVALID_ORDER_STATUS(CONFLICT, "5001", "현재 주문 상태에서는 요청하신 상태 변경이 불가합니다."),
     // 결제 요청 금액과 최종 주문 금액 값이 일치하지 않을 때
     NOT_EQUALS_PRICE(CONFLICT, "5002", "결제 요청 금액과 주문 금액이 일치하지 않습니다."),
+    // 주문 취소가 가능하지 않은 주문 상태일 때.
+    IMPOSSIBLE_CANCEL_ORDER_PAYMENT(CONFLICT, "5003", "주문 취소가 불가한 주문 상태입니다."),
 
     /* 쿠폰 6000번대 */
 
