@@ -26,6 +26,6 @@ public class TossPaymentService {
         // 토스 결제 요청
         paymentRequester.requestTossPayment(payment, request.orderId());
 
-        return new TossPaymentCreateResponseDto(payment.getStatus().equals(PaymentStatus.APPROVED));
+        return new TossPaymentCreateResponseDto(payment.getStatus().equals(PaymentStatus.APPROVED), payment.getId());
     }
 }
