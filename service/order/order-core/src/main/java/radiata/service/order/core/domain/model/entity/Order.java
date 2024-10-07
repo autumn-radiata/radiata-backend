@@ -46,7 +46,9 @@ public class Order {
 
     private String paymentId;
 
-//    private PaymentType paymentType;
+    //    private PaymentType paymentType;
+    // TODO - 사용 예정
+    private Integer usedPoint;
 
     private String comment;
 
