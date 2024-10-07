@@ -16,7 +16,6 @@ public class OrderItemMapper {
             order,
             requestDto.productId(),
             requestDto.couponIssuedId(),
-            requestDto.rewardPointId(),
             requestDto.quantity(),
             requestDto.unitPrice()
         );
@@ -29,7 +28,6 @@ public class OrderItemMapper {
             orderItem.getOrder().getId(),
             orderItem.getProductId(),
             orderItem.getCouponIssuedId(),
-            orderItem.getRewardPointId(),
             orderItem.getQuantity(),
             orderItem.getUnitPrice(),
             orderItem.getPaymentPrice()

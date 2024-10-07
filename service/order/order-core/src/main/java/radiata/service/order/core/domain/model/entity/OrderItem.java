@@ -33,8 +33,6 @@ public class OrderItem {
 
     private String couponIssuedId;
 
-    private String rewardPointId;
-
     @Column(nullable = false)
     private Integer quantity;
 
@@ -53,7 +51,6 @@ public class OrderItem {
         Order order,
         String productId,
         String couponIssuedId,
-        String rewardPointId,
         Integer quantity,
         Integer unitPrice) {
 
@@ -63,7 +60,6 @@ public class OrderItem {
             .order(order)
             .productId(productId)
             .couponIssuedId(couponIssuedId)
-            .rewardPointId(rewardPointId)
             .quantity(quantity)
             .unitPrice(unitPrice)
             .paymentPrice(unitPrice * quantity)

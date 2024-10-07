@@ -5,15 +5,13 @@ import lombok.Builder;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record OrderItemResponseDto(String orderItemId, String orderId, String productId, String couponIssuedId,
-                                   String rewardPointId, Integer quantity, Integer unitPrice, Integer paymentPrice
-) {
+                                   Integer quantity, Integer unitPrice, Integer paymentPrice) {
 
     public static OrderItemResponseDto of(
         String orderItemId,
         String orderId,
         String productId,
         String couponIssuedId,
-        String rewardPointId,
         Integer quantity,
         Integer unitPrice,
         Integer paymentPrice
@@ -24,7 +22,6 @@ public record OrderItemResponseDto(String orderItemId, String orderId, String pr
             .orderId(orderId)
             .productId(productId)
             .couponIssuedId(couponIssuedId)
-            .rewardPointId(rewardPointId)
             .quantity(quantity)
             .unitPrice(unitPrice)
             .paymentPrice(paymentPrice)
