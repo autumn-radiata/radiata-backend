@@ -39,11 +39,15 @@ public class TimeSaleProduct extends BaseEntity {
     private Integer discountRate;
 
     @Column(nullable = false)
-    private Integer stock;
+    private Integer saleQuantity;
+
+    @Column(nullable = false)
+    private Integer totalQuantity;
 
     @Column(name = "timesale_start_time", nullable = false)
     private LocalDateTime timeSaleStartTime;
 
     @Column(name = "timesale_end_time", nullable = false)
     private LocalDateTime timeSaleEndTime;
+
 }
