@@ -11,7 +11,7 @@ public class GatewayConfig {
     @Bean
     public RouteLocator customRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-            .route("user-service", r -> r.path("/auth/**")
+            .route("user-service", r -> r.path("/auth/**", "/user/**")
                 .filters(f -> f
                         .circuitBreaker(c -> c
                             .setName("user-service")
