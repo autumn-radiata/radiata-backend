@@ -57,4 +57,20 @@ public class OrderValidator {
             throw new BusinessException(ExceptionMessage.NOT_EQUALS_PRICE);
         }
     }
+
+    // 결제 취소 가능 여부 판단 -> "결제 단계" 만 취소 가능
+    public void checkStatusIsPaymentLevel(OrderStatus status) {
+        if (!status.equals(OrderStatus.PAYMENT_COMPLETED)
+            && !status.equals(OrderStatus.PAYMENT_PENDING)
+            && !status.equals(OrderStatus.PAYMENT_REQUESTED)) {
+            throw new BusinessException(ExceptionMessage.IMPOSSIBLE_CANCEL_ORDER_PAYMENT);
+        }
+    }
+
+    // "결제 취소 요청" 만 -> "결제 취소 완료" 가능
+    public void checkStatusIsPaymentCancelRequested(OrderStatus status) {
+        if (!status.equals(OrderStatus.PAYMENT_CANCEL_REQUESTED)) {
+            throw new BusinessException(ExceptionMessage.IMPOSSIBLE_CANCEL_ORDER_PAYMENT);
+        }
+    }
 }

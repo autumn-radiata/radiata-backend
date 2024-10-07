@@ -1,5 +1,6 @@
 package radiata.service.order.api.presentation;
 
+import static radiata.common.message.SuccessMessage.CANCEL_ORDER;
 import static radiata.common.message.SuccessMessage.COMPLETE_ORDER_PAYMENT;
 import static radiata.common.message.SuccessMessage.CREATE_ORDER;
 import static radiata.common.message.SuccessMessage.GET_ORDER;
@@ -45,9 +46,16 @@ public class OrderController {
     }
 
     // 주문 목록 조회 - GET
-    // 주문 취소 요청 - POST ("/{orderId}/canceled")
+    // 주문 취소 요청 - POST
+    @PostMapping("/{orderId}/canceled")
+    public SuccessResponse<OrderResponseDto> cancelOrder(@PathVariable("orderId") String orderId,
+        @RequestHeader("X-UserId") String userId) {
+
+        return SuccessResponse.success(CANCEL_ORDER.getMessage(), orderService.cancelOrder(orderId, userId));
+    }
+
     // 주문 환불 요청 - POST("/{orderId}/refunded")
-    // 주문 상태 변경(결제 대기 중)
+    // 주문 결제 승인 요청 및 완료
     @PostMapping("/{orderId}/payment-requested")
     public SuccessResponse<OrderResponseDto> completePayment(@PathVariable("orderId") String orderId,
         @RequestHeader("X-UserId") String userId,
