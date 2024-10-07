@@ -3,7 +3,7 @@ package radiata.common.domain.user.dto.response;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails.Address;
 
-public record GetUserInfoResponseDto(
+public record UserGetInfoResponseDto(
 
     String userId,
 
