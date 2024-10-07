@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
+import radiata.common.domain.timesale.dto.request.TimeSaleCreateRequestDto;
 
 @Entity
 @Getter
@@ -40,4 +41,14 @@ public class TimeSale extends BaseEntity {
 
     @OneToMany(mappedBy = "timeSale", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<TimeSaleProduct> timeSaleProducts;
+
+    public static TimeSale of(String id, String title, LocalDateTime timeSaleStartDate, LocalDateTime timeSaleEndDate) {
+
+        return TimeSale.builder()
+            .id(id)
+            .title(title)
+            .timeSaleStartDate(timeSaleStartDate)
+            .timeSaleEndDate(timeSaleEndDate)
+            .build();
+    }
 }
