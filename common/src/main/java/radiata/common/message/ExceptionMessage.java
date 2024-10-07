@@ -57,7 +57,14 @@ public enum ExceptionMessage {
 
     DUPLICATED_COUPON_ISSUE(BAD_REQUEST, "6009", "이미 발급 된 쿠폰입니다."),
 
-    COUPON_CAN_NOT_USE(BAD_REQUEST, "6010", "해당 쿠폰을 사용할 수 없습니다.");
+    COUPON_CAN_NOT_USE(BAD_REQUEST, "6010", "해당 쿠폰을 사용할 수 없습니다."),
+
+
+    /* 타임세일 7000번대 */
+
+    TIME_SALE_PRODUCT_LIMITED_SALE(BAD_REQUEST, "7000", "재고가 소진되어 더 이상 할인 가격으로 구매할 수 없습니다."),
+
+    TIME_SALE_PRODUCT_PERIOD(BAD_REQUEST, "7001", "타임세일 일자가 아닙니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

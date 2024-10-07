@@ -15,6 +15,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
+import radiata.common.exception.BusinessException;
+import radiata.common.message.ExceptionMessage;
 
 @Entity
 @Getter
@@ -50,4 +52,28 @@ public class TimeSaleProduct extends BaseEntity {
     @Column(name = "timesale_end_time", nullable = false)
     private LocalDateTime timeSaleEndTime;
 
+    public void sale() {
+
+        if (!availableSaleTime()) {
+            throw new BusinessException(ExceptionMessage.TIME_SALE_PRODUCT_PERIOD);
+        }
+
+        if (!availableSaleQuantity()) {
+            throw new BusinessException(ExceptionMessage.TIME_SALE_PRODUCT_LIMITED_SALE);
+        }
+
+        this.saleQuantity++;
+    }
+
+    public boolean availableSaleTime() {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        return (now.isAfter(timeSaleStartTime) || now.isEqual(timeSaleStartTime)) && now.isBefore(timeSaleEndTime);
+    }
+
+    public boolean availableSaleQuantity() {
+
+        return saleQuantity < totalQuantity;
+    }
 }
