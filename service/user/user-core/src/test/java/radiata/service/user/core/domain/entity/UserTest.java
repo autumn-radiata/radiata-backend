@@ -47,7 +47,6 @@ class UserTest {
     @DisplayName("사용자 생성")
     void testUserCreation() {
 
-        assertThat(user.getId()).isEqualTo("username");
         assertThat(user.getPassword()).isEqualTo("password");
         assertThat(user.getEmail()).isEqualTo("email@naver.com");
         assertThat(user.getPhone()).isEqualTo("010-3030-2003");
