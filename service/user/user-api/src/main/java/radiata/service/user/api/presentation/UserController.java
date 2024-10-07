@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import radiata.common.domain.user.dto.request.ModifyUserRequestDto;
+import radiata.common.domain.user.dto.request.UserModifyRequestDto;
 import radiata.common.message.SuccessMessage;
 import radiata.common.response.CommonResponse;
 import radiata.common.response.SuccessResponse;
@@ -49,7 +49,7 @@ public class UserController {
      * 사용자 정보 수정
      */
     @PatchMapping
-    public CommonResponse patchUser(String userId, @RequestBody ModifyUserRequestDto request) {
+    public CommonResponse patchUser(String userId, @RequestBody UserModifyRequestDto request) {
         userCommandService.updateUserInfo(userId, request);
         return SuccessResponse.success(SuccessMessage.OK.getMessage());
     }
