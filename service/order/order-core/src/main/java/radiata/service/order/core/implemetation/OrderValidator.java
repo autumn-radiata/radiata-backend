@@ -1,5 +1,6 @@
 package radiata.service.order.core.implemetation;
 
+import java.util.Objects;
 import radiata.common.annotation.Implementation;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
@@ -47,6 +48,13 @@ public class OrderValidator {
     public void checkStatusIsShippingInProgress(OrderStatus status) {
         if (!status.equals(OrderStatus.SHIPPING_IN_PROGRESS)) {
             throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
+        }
+    }
+
+    // 결제 요청 금액 == 주문 금액 체크
+    public void IsEqualsOrderPrice(Integer amount, Integer orderPrice) {
+        if (!Objects.equals(amount, orderPrice)) {
+            throw new BusinessException(ExceptionMessage.NOT_EQUALS_PRICE);
         }
     }
 }

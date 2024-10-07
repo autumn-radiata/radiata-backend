@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.order.dto.request.OrderCreateRequestDto;
 import radiata.common.domain.order.dto.request.OrderItemCreateRequestDto;
+import radiata.common.domain.order.dto.request.OrderPaymentRequestDto;
 import radiata.common.domain.order.dto.response.OrderResponseDto;
 import radiata.service.order.core.domain.model.constant.OrderStatus;
 import radiata.service.order.core.domain.model.entity.Order;
@@ -121,32 +122,31 @@ public class OrderService {
         return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
     }
 
-    // TODO -- 질문 여기서 결제 요청 보내야되나?
-    // 주문 상태 변경 (결제 대기 중)
+    // 결제 요청 -> 주문 상태 (결제 요청 중 -> 결제 대기 중 -> 결제 완료)
     @Transactional
-    public OrderResponseDto updateStatusPendingPayment(String orderId) {
+    public OrderResponseDto sendPaymentRequest(String orderId, String userId, OrderPaymentRequestDto requestDto) {
         // 주문 조회
         Order order = orderReader.readOrder(orderId);
+        // 유저의 주문인지 체크
+        orderValidator.validateUserOwnsOrder(order.getUserId(), userId);
         // 주문 상태 체크
         orderValidator.checkStatusIsPaymentRequested(order.getStatus());
-        // 주문 상태 업데이트
+        // 주문 상태 업데이트 - 결제 대기 중
         order.updateOrderStatus(OrderStatus.PAYMENT_PENDING);
-        // 반환
-        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
-    }
+        // 주문 금액 일치 확인
+        orderValidator.IsEqualsOrderPrice(requestDto.amount(), order.getOrderPrice());
 
-    // 주문 상태 변경 (결제 완료)
-    @Transactional
-    public OrderResponseDto updateStatusCompletedPayment(String orderId, String paymentId) {
-        // 주문 조회
-        Order order = orderReader.readOrder(orderId);
-        // 주문 상태 체크
-        orderValidator.checkStatusIsPaymentPending(order.getStatus());
-        // TODO 결제 완료 체크(FeignClient)
+        /* TODO - 결제 승인 요청 (openFeign) orderId, tossPaymentId, amount - Merge 후
+            1) 성공 - 다음
+            2) 실패 시 (FeignException - 결제 실패)
+            - 주문 취소 처리 - 보상 트랜잭션(롤백)
+         */
 
         // paymentId 지정
-        order.setPaymentId(paymentId);
-        // 주문 상태 업데이트
+//        order.setPaymentId(paymentId);
+        // 주문 상태 체크
+        orderValidator.checkStatusIsPaymentPending(order.getStatus());
+        // 주문 상태 업데이트 - 결제 완료
         order.updateOrderStatus(OrderStatus.PAYMENT_COMPLETED);
         // 반환
         return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));

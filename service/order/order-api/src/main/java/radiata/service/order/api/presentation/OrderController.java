@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import radiata.common.domain.order.dto.request.OrderCreateRequestDto;
+import radiata.common.domain.order.dto.request.OrderPaymentRequestDto;
 import radiata.common.domain.order.dto.response.OrderResponseDto;
 import radiata.common.response.SuccessResponse;
 import radiata.service.order.core.service.OrderService;
@@ -43,20 +44,13 @@ public class OrderController {
     // 주문 취소 요청 - POST ("/{orderId}/canceled")
     // 주문 환불 요청 - POST("/{orderId}/refunded")
     // 주문 상태 변경(결제 대기 중)
-    @PatchMapping("/{orderId}/payment-pending")
-    public SuccessResponse<OrderResponseDto> pendPayment(@PathVariable("orderId") String orderId) {
-
-        return SuccessResponse.success(" 주문 상태: [결제 대기 중] ",
-            orderService.updateStatusPendingPayment(orderId));
-    }
-
-    // 주문 상태 변경(결제 완료) - PATCH
-    @PatchMapping("/{orderId}/payment-completed")
+    @PostMapping("/{orderId}/payment-requested")
     public SuccessResponse<OrderResponseDto> completePayment(@PathVariable("orderId") String orderId,
-        String paymentId) {
+        @RequestHeader("X-UserId") String userId,
+        @RequestBody OrderPaymentRequestDto requestDto) {
 
         return SuccessResponse.success(" 주문 상태: [결제 완료] ",
-            orderService.updateStatusCompletedPayment(orderId, paymentId));
+            orderService.sendPaymentRequest(orderId, userId, requestDto));
     }
 
     // 주문 상태 변경(배송 대기 중) - PATCH
