@@ -2,7 +2,7 @@ package radiata.common.domain.user.dto.request;
 
 import jakarta.validation.constraints.Pattern;
 
-public record ModifyUserRequestDto(
+public record UserModifyRequestDto(
     String nickname, //닉네임
 
     @Pattern(regexp = "^010-\\d{3,4}-\\d{4}$",

@@ -3,7 +3,7 @@ package radiata.service.user.core.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import radiata.common.domain.user.dto.request.ModifyUserRequestDto;
+import radiata.common.domain.user.dto.request.UserModifyRequestDto;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
 import radiata.service.user.core.domain.model.constant.PointType;
@@ -22,7 +22,7 @@ public class UserCommandService {
     /**
      * 회원 정보 수정
      */
-    public void updateUserInfo(String userId, ModifyUserRequestDto dto) {
+    public void updateUserInfo(String userId, UserModifyRequestDto dto) {
         User user = findValidUser(userId);
         user.updateInfo(
             dto.nickname(),
