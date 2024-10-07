@@ -1,6 +1,7 @@
 package radiata.service.user.core.domain.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import com.github.ksuid.Ksuid;
 import java.time.LocalDateTime;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +22,9 @@ class UserTest {
 
     @BeforeEach
     void setUp() {
+
         user = User.builder()
-            .id("username")
+            .id(Ksuid.newKsuid().toString())
             .password("password")
             .email("email@naver.com")
             .phone("010-3030-2003")
