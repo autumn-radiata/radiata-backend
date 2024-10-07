@@ -35,7 +35,10 @@ public enum ExceptionMessage {
 
 
     /* 주문 5000번대 */
+    // 현재 주문 상태에서 바뀔 수 없는 주문 상태로 변경하려 할 때
     INVALID_ORDER_STATUS(CONFLICT, "5001", "현재 주문 상태에서는 요청하신 상태 변경이 불가합니다."),
+    // 결제 요청 금액과 최종 주문 금액 값이 일치하지 않을 때
+    NOT_EQUALS_PRICE(CONFLICT, "5002", "결제 요청 금액과 주문 금액이 일치하지 않습니다."),
 
     /* 쿠폰 6000번대 */
 
