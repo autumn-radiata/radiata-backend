@@ -68,11 +68,11 @@ class OrderServiceTest {
         assertThat(createdOrder.orderPrice()).isEqualTo(300000);
         assertThat(createdOrder.isRefunded()).isFalse();
         assertThat(createdOrder.address()).isNotNull();
-        for (int i = 1; i <= createdOrder.itemList().size(); i++) {
+        for (int i = 1; i <= createdOrder.orderItems().size(); i++) {
             String expectedCoupon = "couponIssued-0" + i;
 
             // Set에서 해당 쿠폰이 있는지 확인
-            boolean isCouponFound = createdOrder.itemList().stream()
+            boolean isCouponFound = createdOrder.orderItems().stream()
                 .anyMatch(item -> expectedCoupon.equals(item.couponIssuedId()));
 
             assertThat(isCouponFound).isTrue();

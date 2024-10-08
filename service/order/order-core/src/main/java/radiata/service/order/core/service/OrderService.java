@@ -90,7 +90,7 @@ public class OrderService {
         // 결제 금액 지정 - setOrderPrice
         order.setOrderPrice(orderPrice);
         // 주문 상품 목록 추가 & 반환
-        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
+        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getOrderItems()));
     }
 
     // 주문 상세 조회
@@ -101,7 +101,7 @@ public class OrderService {
         // 사용자의 주문 내역인지 확인
         orderValidator.validateUserOwnsOrder(order.getUserId(), userId);
         // 주문 상품 목록 추가 & 반환
-        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
+        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getOrderItems()));
     }
 
     // 결제 요청 -> 주문 상태 (결제 요청 중 -> 결제 대기 중 -> 결제 완료)
@@ -131,7 +131,7 @@ public class OrderService {
         // 주문 상태 업데이트 - 결제 완료
         order.updateOrderStatus(OrderStatus.PAYMENT_COMPLETED);
         // 반환
-        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
+        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getOrderItems()));
     }
 
     // 주문 상태 변경 (배송 대기 중)
@@ -144,7 +144,7 @@ public class OrderService {
         // 주문 상태 업데이트
         order.updateOrderStatus(OrderStatus.SHIPPING_PENDING);
         // 반환
-        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
+        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getOrderItems()));
     }
 
     // 주문 상태 변경 (배송 중)
@@ -157,7 +157,7 @@ public class OrderService {
         // 주문 상태 업데이트
         order.updateOrderStatus(OrderStatus.SHIPPING_IN_PROGRESS);
         // 반환
-        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
+        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getOrderItems()));
     }
 
     // 주문 상태 변경 (배송 완료)
@@ -170,7 +170,7 @@ public class OrderService {
         // 주문 상태 업데이트
         order.updateOrderStatus(OrderStatus.SHIPPING_COMPLETED);
         // 반환
-        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
+        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getOrderItems()));
     }
 
 
@@ -186,7 +186,7 @@ public class OrderService {
         // 주문 상태 업데이트 - 주문 취소 요청
         order.updateOrderStatus(OrderStatus.PAYMENT_CANCEL_REQUESTED);
         // TODO - PaymentClient로 결제 취소 요청. & 롤백 (주문 상품 목록 재고 ++ & 쿠폰 이슈 복구 & 주문 상태 이전으로? - 스케줄러)
-        for (OrderItem orderItem : order.getItemList()) {
+        for (OrderItem orderItem : order.getOrderItems()) {
             /*
             try - 1) 재고 증감
              */
@@ -200,6 +200,6 @@ public class OrderService {
         // 주문 상태 업데이트 - 주문 취소 완료
         order.updateOrderStatus(OrderStatus.PAYMENT_CANCEL_COMPLETED);
         // 반환
-        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getItemList()));
+        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getOrderItems()));
     }
 }

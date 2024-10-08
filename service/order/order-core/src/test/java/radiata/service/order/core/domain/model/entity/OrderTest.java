@@ -75,7 +75,7 @@ class OrderTest {
         order.setOrderItems(orderItems);
 
         // then
-        for (OrderItem orderItem2 : order.getItemList()) {
+        for (OrderItem orderItem2 : order.getOrderItems()) {
             assertThat(orderItem2.getId()).isEqualTo(orderItem.getId());
             assertThat(orderItem2.getProductId()).isEqualTo(orderItem.getProductId());
             assertThat(orderItem2.getCouponIssuedId()).isEqualTo(orderItem.getCouponIssuedId());

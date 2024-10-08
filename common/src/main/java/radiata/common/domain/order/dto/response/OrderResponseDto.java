@@ -6,7 +6,7 @@ import lombok.Builder;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record OrderResponseDto(String orderId, String userId, String status, Integer orderPrice, Boolean isRefunded,
-                               String address, String paymentId, String comment, Set<OrderItemResponseDto> itemList) {
+                               String address, String paymentId, String comment, Set<OrderItemResponseDto> orderItems) {
 
     public static OrderResponseDto of(
         String orderId,
@@ -31,7 +31,7 @@ public record OrderResponseDto(String orderId, String userId, String status, Int
             .build();
     }
 
-    public OrderResponseDto withItemList(Set<OrderItemResponseDto> itemList) {
+    public OrderResponseDto withItemList(Set<OrderItemResponseDto> orderItems) {
         return OrderResponseDto.builder()
             .orderId(orderId)
             .userId(userId)
@@ -41,7 +41,7 @@ public record OrderResponseDto(String orderId, String userId, String status, Int
             .address(address)
             .paymentId(paymentId)
             .comment(comment)
-            .itemList(itemList)
+            .orderItems(orderItems)
             .build();
     }
 }
