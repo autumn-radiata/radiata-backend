@@ -2,7 +2,6 @@ package radiata.service.order.core.domain.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -14,7 +13,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import radiata.database.model.BaseEntity;
 
 @Entity
@@ -22,7 +20,6 @@ import radiata.database.model.BaseEntity;
 @Getter
 @Builder // 테스트 용
 @SQLRestriction("deleted_at IS NULL")
-@EntityListeners(value = {AuditingEntityListener.class})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OrderItem extends BaseEntity {
