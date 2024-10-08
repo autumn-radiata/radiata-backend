@@ -4,7 +4,6 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.PAYMENT_REQUIRED;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,10 +30,14 @@ public enum ExceptionMessage {
 
     /* 유저 3000번대 */
 
+    //적립금 부족
     POINT_ISSUE_LACK(BAD_REQUEST, "3001", "적립금이 부족합니다."),
+    USER_DUPLICATE_EMAIL(BAD_REQUEST, "3002", "이메일이 중복 됩니다."),
+    USER_NOT_FOUND(NOT_FOUND.httpStatus, "3003", "사용자가 존재하지 않습니다."),
 
-
+  
     /* 주문 5000번대 */
+  
     // 현재 주문 상태에서 바뀔 수 없는 주문 상태로 변경하려 할 때
     INVALID_ORDER_STATUS(CONFLICT, "5001", "현재 주문 상태에서는 요청하신 상태 변경이 불가합니다."),
     // 결제 요청 금액과 최종 주문 금액 값이 일치하지 않을 때
