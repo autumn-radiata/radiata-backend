@@ -12,7 +12,7 @@ public enum SuccessMessage {
     /* 공통 */
     OK(HttpStatus.OK, "0", "정상 처리 되었습니다."),
 
-      /* 주문 */
+    /* 주문 */
     CREATE_ORDER(HttpStatus.OK, "0", "주문 생성 완료"),
     GET_ORDERS(HttpStatus.OK, "0", "주문 목록 조회 완료"),
     GET_ORDER(HttpStatus.OK, "0", "주문 내역 조회 완료"),
@@ -21,8 +21,6 @@ public enum SuccessMessage {
     DELETE_ORDER(HttpStatus.OK, "0", "주문 내역 삭제 완료"),
     CANCEL_ORDER(HttpStatus.OK, "0", "주문 취소 완료"),
     REFUND_ORDER(HttpStatus.OK, "0", "주문 환불 완료"),
-    ;
-
 
     /* 쿠폰 */
     CREATE_COUPON(HttpStatus.OK, "0", "쿠폰이 생성 되었습니다."),
