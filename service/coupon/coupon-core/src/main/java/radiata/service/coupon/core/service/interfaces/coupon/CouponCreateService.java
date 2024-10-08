@@ -1,4 +1,4 @@
-package radiata.service.coupon.core.service.interfaces;
+package radiata.service.coupon.core.service.interfaces.coupon;
 
 import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
 import radiata.common.domain.coupon.dto.response.CouponResponseDto;
