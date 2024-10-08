@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -48,12 +49,14 @@ public class Order extends BaseEntity {
 
     private String paymentId;
 
-//    private PaymentType paymentType;
+    //    private PaymentType paymentType;
+    // TODO - 사용 예정
+    private Integer usedPoint;
 
     private String comment;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private Set<OrderItem> itemList;
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<OrderItem> orderItems;
 
     // 주문 생성
     public static Order of(
@@ -77,9 +80,12 @@ public class Order extends BaseEntity {
         this.orderPrice = orderPrice;
     }
 
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
 
-    public void setOrderItems(Set<OrderItem> itemList) {
-        this.itemList = itemList;
+    public void setOrderItems(Set<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 
     // 주문 상태 변경

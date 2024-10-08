@@ -29,6 +29,6 @@ public class OrderMapper {
             order.getAddress(),
             order.getPaymentId(),
             order.getComment()
-            );
+        );
     }
 }

@@ -4,7 +4,7 @@ public record OrderItemCreateRequestDto(
     String productId,
     String timesaleProductId,
     String couponIssuedId,
-    String rewardPointId,
-    Integer quantity) {
+    Integer quantity,
+    Integer unitPrice) {
 
 }

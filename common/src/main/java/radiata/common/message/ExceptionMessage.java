@@ -1,6 +1,7 @@
 package radiata.common.message;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.PAYMENT_REQUIRED;
 import lombok.Getter;
@@ -34,6 +35,15 @@ public enum ExceptionMessage {
     USER_DUPLICATE_EMAIL(BAD_REQUEST, "3002", "이메일이 중복 됩니다."),
     USER_NOT_FOUND(NOT_FOUND.httpStatus, "3003", "사용자가 존재하지 않습니다."),
 
+  
+    /* 주문 5000번대 */
+  
+    // 현재 주문 상태에서 바뀔 수 없는 주문 상태로 변경하려 할 때
+    INVALID_ORDER_STATUS(CONFLICT, "5001", "현재 주문 상태에서는 요청하신 상태 변경이 불가합니다."),
+    // 결제 요청 금액과 최종 주문 금액 값이 일치하지 않을 때
+    NOT_EQUALS_PRICE(CONFLICT, "5002", "결제 요청 금액과 주문 금액이 일치하지 않습니다."),
+    // 주문 취소가 가능하지 않은 주문 상태일 때.
+    IMPOSSIBLE_CANCEL_ORDER_PAYMENT(CONFLICT, "5003", "주문 취소가 불가한 주문 상태입니다."),
 
     /* 쿠폰 6000번대 */
 
