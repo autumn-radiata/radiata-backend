@@ -5,8 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
+import lombok.Builder;
 import org.hibernate.validator.constraints.Range;
 
+@Builder // 테스트 용
 public record CouponCreateRequestDto(
 
     @NotBlank(message = "쿠폰명을 입력해주세요.")
@@ -31,6 +33,9 @@ public record CouponCreateRequestDto(
 
     @Positive(message = "최소 사용 금액은 음수가 될 수 없습니다.")
     Integer minAvailableAmount, // 최소 사용 금액
+
+    @Positive(message = "최대 사용 금액은 음수가 될 수 없습니다.")
+    Integer maxAvailableAmount, // 최소 사용 금액
 
     @NotNull(message = "발급 시작일을 입력해주세요.")
     LocalDateTime issueStartDate, // 발급 시작일

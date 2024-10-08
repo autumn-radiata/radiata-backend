@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
+import radiata.database.model.BaseEntity;
 import radiata.service.payment.core.domain.model.vo.Money;
 import radiata.service.payment.core.domain.model.vo.PaymentStatus;
 import radiata.service.payment.core.domain.model.vo.PaymentType;
@@ -24,7 +25,7 @@ import radiata.service.payment.core.domain.model.vo.PaymentType;
 @Builder // 빌더 패턴은 테스트 용도로만 사용
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA 객체는 기본 생성자를 필요로 함
-public class Payment {
+public class Payment extends BaseEntity {
 
     @Id
     private String id;
@@ -47,6 +48,8 @@ public class Payment {
     private PaymentType type;
 
     private LocalDateTime approvedAt;
+
+    private LocalDateTime settledAt;
 
     public static Payment of(
         String id,
@@ -85,5 +88,6 @@ public class Payment {
      */
     public void settle() {
         this.status = PaymentStatus.SETTLED;
+        this.settledAt = LocalDateTime.now();
     }
 }
