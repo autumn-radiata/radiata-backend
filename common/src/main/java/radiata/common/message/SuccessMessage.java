@@ -17,7 +17,8 @@ public enum SuccessMessage {
     UPDATE_ORDER(HttpStatus.OK, "0", "주문 상태 수정 완료"),
     DELETE_ORDER(HttpStatus.OK, "0", "주문 내역 삭제 완료"),
     CANCEL_ORDER(HttpStatus.OK, "0", "주문 취소 완료"),
-    REFUND_ORDER(HttpStatus.OK, "0", "주문 환불 완료");
+    REFUND_ORDER(HttpStatus.OK, "0", "주문 환불 완료"),
+    ;
 
     private final HttpStatus httpStatus;
     private final String code;
