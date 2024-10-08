@@ -1,0 +1,13 @@
+### 회원가입
+POST http://localhost:8083/auth/sign-up
+Content-Type: application/json
+
+{
+  "username": "username",
+  "password": "password",
+  "email": "email@email.com",
+  "phone": "phone",
+  "roadAddress": "roadAddress",
+  "detailAddress": "detailAddress",
+  "zipcode": "zipcode"
+}

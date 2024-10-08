@@ -18,18 +18,22 @@ import radiata.common.message.ExceptionMessage;
 public class Point implements Serializable {
 
     @Column
-    private Integer point;
+    private Integer totalPoint;
 
     @Builder
     public Point(int point) {
-        this.point = point;
+        this.totalPoint = point;
+    }
+
+    public static Point from(int point) {
+        return Point.builder().point(point).build();
     }
 
     /**
      * 적립금 지급
      */
     public Point addPoint(int addPoint) {
-        return new Point(this.point + addPoint);
+        return from(this.totalPoint + addPoint);
     }
 
     /**
@@ -37,18 +41,17 @@ public class Point implements Serializable {
      */
     public Point subPoint(int subPoint) {
         hasAvailablePoint(subPoint);
-        return new Point(this.point - subPoint);
+        return from(this.totalPoint - subPoint);
     }
 
     /**
      * 적립금 사용 가능 여부
      */
-    public void hasAvailablePoint(int requirePoint){
-        if (this.point < requirePoint) {
+    public void hasAvailablePoint(int requirePoint) {
+        if (this.totalPoint < requirePoint) {
             throw new BusinessException(ExceptionMessage.POINT_ISSUE_LACK);
         }
     }
-
 
 
 }

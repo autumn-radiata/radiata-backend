@@ -26,7 +26,7 @@ class PointTest {
     void testAddPoint() {
         Point updatedPoint = point.addPoint(500);
 
-        assertThat(updatedPoint.getPoint()).isEqualTo(1500);
+        assertThat(updatedPoint.getTotalPoint()).isEqualTo(1500);
     }
 
     @Test
@@ -34,7 +34,7 @@ class PointTest {
     void testSubPoint() {
         Point updatedPoint = point.subPoint(300);
 
-        assertThat(updatedPoint.getPoint()).isEqualTo(700);
+        assertThat(updatedPoint.getTotalPoint()).isEqualTo(700);
     }
 
     @Test
