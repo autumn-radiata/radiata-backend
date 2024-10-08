@@ -1,6 +1,7 @@
 package radiata.service.user.api.presentation;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import radiata.service.user.core.service.AuthService;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/auth")
 public class AuthController {
 
@@ -23,6 +25,7 @@ public class AuthController {
      */
     @PostMapping("/sign-up")
     public CommonResponse createUser(@RequestBody UserCreateRequestDto request) {
+        log.info("sign-up");
         authService.registerUser(request);
         return SuccessResponse.success(SuccessMessage.OK.getMessage());
     }

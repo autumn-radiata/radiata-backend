@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import radiata.common.domain.user.dto.response.GetUserInfoResponseDto;
 import radiata.common.domain.user.dto.response.PointHistoryGetResponseDto;
+import radiata.common.domain.user.dto.response.UserGetInfoResponseDto;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
 import radiata.service.user.core.domain.model.entity.User;
@@ -26,9 +26,9 @@ public class UserQueryService {
      * 회원 정보 조회
      */
     @Transactional(readOnly = true)
-    public GetUserInfoResponseDto getUserInfo(String userId) {
+    public UserGetInfoResponseDto getUserInfo(String userId) {
         var user = findValidUser(userId);
-        return userMapper.userToGetUserInfoResponseDto(user);
+        return userMapper.userToUserGetInfoResponseDto(user);
     }
 
     /**

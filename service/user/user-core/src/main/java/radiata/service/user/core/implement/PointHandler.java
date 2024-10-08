@@ -11,13 +11,13 @@ import radiata.service.user.core.domain.model.entity.User;
 @Component
 public class PointHandler {
 
-    public void calculatePoint(User user,int pointAmount,PointType type) {
+    public void calculatePoint(User user, int pointAmount, PointType type) {
         if (type == PointType.SUBSCRIBE) {
             decreadPoint(user, pointAmount);
-        }else{
-            increadPoint(user,pointAmount,type);
+        } else {
+            increadPoint(user, pointAmount, type);
         }
-        recordPointHistory(user,pointAmount,type);
+        recordPointHistory(user, pointAmount, type);
     }
 
     //todo : 카프카 batch로 변경 후 수정

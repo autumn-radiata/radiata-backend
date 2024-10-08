@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: order-service
+  config:
+    import: classpath:application-database.yml
+
+server:
+  port: 8085

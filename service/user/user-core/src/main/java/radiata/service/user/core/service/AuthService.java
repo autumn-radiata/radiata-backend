@@ -23,7 +23,7 @@ public class AuthService {
      */
     public void registerUser(UserCreateRequestDto dto) {
         validEmailUnique(dto.email());
-        String encodedPassword = EncodePassword(dto.password());
+        String encodedPassword = encodePassword(dto.password());
         createUser(dto, encodedPassword);
     }
 
@@ -49,7 +49,7 @@ public class AuthService {
         }
     }
 
-    private String EncodePassword(String password) {
+    private String encodePassword(String password) {
         return passwordEncoder.encode(password);
     }
 
