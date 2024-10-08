@@ -3,7 +3,6 @@ package radiata.service.order.core.domain.model.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -17,7 +16,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import radiata.database.model.BaseEntity;
 import radiata.service.order.core.domain.model.constant.OrderStatus;
 
@@ -26,7 +24,6 @@ import radiata.service.order.core.domain.model.constant.OrderStatus;
 @Getter
 @Builder // 테스트 용
 @SQLRestriction("deleted_at IS NULL")
-@EntityListeners(value = {AuditingEntityListener.class})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Order extends BaseEntity {
@@ -59,7 +56,7 @@ public class Order extends BaseEntity {
     private String comment;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<OrderItem> itemList;
+    private Set<OrderItem> orderItems;
 
     // 주문 생성
     public static Order of(
@@ -87,8 +84,8 @@ public class Order extends BaseEntity {
         this.paymentId = paymentId;
     }
 
-    public void setOrderItems(Set<OrderItem> itemList) {
-        this.itemList = itemList;
+    public void setOrderItems(Set<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 
     // 주문 상태 변경
