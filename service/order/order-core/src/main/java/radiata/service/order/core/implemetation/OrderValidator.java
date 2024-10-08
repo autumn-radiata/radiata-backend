@@ -5,6 +5,7 @@ import radiata.common.annotation.Implementation;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
 import radiata.service.order.core.domain.model.constant.OrderStatus;
+import radiata.service.order.core.domain.model.entity.Order;
 
 @Implementation
 public class OrderValidator {
@@ -13,41 +14,6 @@ public class OrderValidator {
     public void validateUserOwnsOrder(String orderUserId, String userId) {
         if (!orderUserId.equals(userId)) {
             throw new BusinessException(ExceptionMessage.NOT_AUTHORIZED);
-        }
-    }
-
-    // "결제 요청 중" 만 -> "결제 대기 중" 로 수정 가능
-    public void checkStatusIsPaymentRequested(OrderStatus status) {
-        if (!status.equals(OrderStatus.PAYMENT_REQUESTED)) {
-            throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
-        }
-    }
-
-    // "결제 대기 중" 만 -> "결제 완료" 로 수정 가능
-    public void checkStatusIsPaymentPending(OrderStatus status) {
-        if (!status.equals(OrderStatus.PAYMENT_PENDING)) {
-            throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
-        }
-    }
-
-    // "결제 완료" 만 -> "배송 대기 중" 으로 가능
-    public void checkStatusIsPaymentCompleted(OrderStatus status) {
-        if (!status.equals(OrderStatus.PAYMENT_COMPLETED)) {
-            throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
-        }
-    }
-
-    // "배송 대기 중" 만 -> "배송 중" 으로 가능
-    public void checkStatusIsShippingPending(OrderStatus status) {
-        if (!status.equals(OrderStatus.SHIPPING_PENDING)) {
-            throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
-        }
-    }
-
-    // "배송 중" 만 -> "배송 완료" 으로 가능
-    public void checkStatusIsShippingInProgress(OrderStatus status) {
-        if (!status.equals(OrderStatus.SHIPPING_IN_PROGRESS)) {
-            throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
         }
     }
 
@@ -72,5 +38,15 @@ public class OrderValidator {
         if (!status.equals(OrderStatus.PAYMENT_CANCEL_REQUESTED)) {
             throw new BusinessException(ExceptionMessage.IMPOSSIBLE_CANCEL_ORDER_PAYMENT);
         }
+    }
+
+    //
+    public void checkCanMoveToNextStatus(Order order, OrderStatus nextStatus) {
+        OrderStatus currentStatus = order.getStatus();
+        // 주문 상태 변경이 가능한 상태인지 확인
+        if (!currentStatus.canMoveToNextStatus(nextStatus)) {
+            throw new BusinessException(ExceptionMessage.INVALID_ORDER_STATUS);
+        }
+        order.updateOrderStatus(nextStatus);
     }
 }
