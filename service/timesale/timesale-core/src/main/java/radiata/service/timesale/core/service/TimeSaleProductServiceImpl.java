@@ -2,6 +2,7 @@ package radiata.service.timesale.core.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductCreateRequestDto;
 import radiata.service.timesale.core.domain.TimeSale;
 import radiata.service.timesale.core.domain.TimeSaleProduct;
@@ -12,6 +13,7 @@ import radiata.service.timesale.core.service.interfaces.TimeSaleProductService;
 import radiata.service.timesale.core.service.mapper.TimeSaleProductMapper;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class TimeSaleProductServiceImpl implements TimeSaleProductService {
 
