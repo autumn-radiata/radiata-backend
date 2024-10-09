@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import org.hibernate.validator.constraints.Range;
 
-public record TimeSaleProductCreateDto(
+public record TimeSaleProductCreateRequestDto(
 
     @NotBlank(message = "상품 ID 를 입력해 주세요.")
     String productId,
