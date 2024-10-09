@@ -7,6 +7,7 @@ import radiata.common.domain.timesale.dto.response.TimeSaleProductCreateRequestD
 import radiata.service.timesale.core.domain.TimeSale;
 import radiata.service.timesale.core.domain.TimeSaleProduct;
 import radiata.service.timesale.core.implementation.interfaces.TimeSaleProductIdCreator;
+import radiata.service.timesale.core.implementation.interfaces.TimeSaleProductReader;
 import radiata.service.timesale.core.implementation.interfaces.TimeSaleProductSaver;
 import radiata.service.timesale.core.implementation.interfaces.TimeSaleReader;
 import radiata.service.timesale.core.service.interfaces.TimeSaleProductService;
@@ -21,6 +22,7 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     private final TimeSaleProductIdCreator timeSaleProductIdCreator;
     private final TimeSaleProductMapper timeSaleProductMapper;
     private final TimeSaleProductSaver timeSaleProductSaver;
+    private final TimeSaleProductReader timeSaleProductReader;
 
     @Override
     public void createTimeSaleProduct(TimeSaleProductCreateRequestDto request) {
@@ -35,5 +37,13 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
         timeSale.addTimeSaleProduct(timeSaleProduct);
 
         timeSaleProductSaver.save(timeSaleProduct);
+    }
+
+    @Override
+    public void sale(String timeSaleProductId) {
+
+        TimeSaleProduct timeSaleProduct = timeSaleProductReader.read(timeSaleProductId);
+
+        timeSaleProduct.sale();
     }
 }
