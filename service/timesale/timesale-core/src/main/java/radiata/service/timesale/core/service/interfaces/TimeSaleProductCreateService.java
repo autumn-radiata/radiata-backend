@@ -1,9 +1,10 @@
 package radiata.service.timesale.core.service.interfaces;
 
 import radiata.common.domain.timesale.dto.response.TimeSaleProductCreateRequestDto;
+import radiata.common.domain.timesale.dto.response.TimeSaleProductResponseDto;
 
 public interface TimeSaleProductCreateService {
 
-    void createTimeSaleProduct(TimeSaleProductCreateRequestDto timeSaleProduct);
+    TimeSaleProductResponseDto createTimeSaleProduct(TimeSaleProductCreateRequestDto timeSaleProduct);
 
 }

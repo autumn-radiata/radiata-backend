@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductCreateRequestDto;
+import radiata.common.domain.timesale.dto.response.TimeSaleProductResponseDto;
 import radiata.service.timesale.core.domain.TimeSale;
 import radiata.service.timesale.core.domain.TimeSaleProduct;
 import radiata.service.timesale.core.implementation.interfaces.TimeSaleProductIdCreator;
@@ -25,7 +26,7 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     private final TimeSaleProductReader timeSaleProductReader;
 
     @Override
-    public void createTimeSaleProduct(TimeSaleProductCreateRequestDto request) {
+    public TimeSaleProductResponseDto createTimeSaleProduct(TimeSaleProductCreateRequestDto request) {
 
         TimeSale timeSale = timeSaleReader.read(request.timeSaleId());
 
@@ -33,10 +34,9 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
 
         String id = timeSaleProductIdCreator.create();
         TimeSaleProduct timeSaleProduct = timeSaleProductMapper.toEntity(request, id);
-
         timeSale.addTimeSaleProduct(timeSaleProduct);
 
-        timeSaleProductSaver.save(timeSaleProduct);
+        return timeSaleProductMapper.toDto(timeSaleProduct);
     }
 
     @Override
