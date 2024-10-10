@@ -65,14 +65,14 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("주문 상품목록 지정 Test")
+    @DisplayName("주문 - 총 금액 & 상품 목록 지정 Test")
     void testSetOrderItems() {
         // given
         Set<OrderItem> orderItems = new HashSet<>();
         orderItems.add(orderItem);
 
         // when
-        order.setOrderItems(orderItems);
+        order.setOrderPriceAndItems(0, orderItems);
 
         // then
         for (OrderItem orderItem2 : order.getOrderItems()) {
