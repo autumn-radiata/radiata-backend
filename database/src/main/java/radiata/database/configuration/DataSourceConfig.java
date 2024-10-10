@@ -21,6 +21,9 @@ public class DataSourceConfig {
     private final MainDataSourceProperty mainDataSourceProperty;
     private final BatchDataSourceProperty batchDataSourceProperty;
 
+    /**
+     * 메인 DB 데이터소스
+     */
     @Bean("dataSource")
     @Primary
     public DataSource mainDataSource() {
@@ -35,6 +38,9 @@ public class DataSourceConfig {
         return new LazyConnectionDataSourceProxy(dataSource); // 트랜잭션 진입 하더라도 커넥션 가져오지 않음
     }
 
+    /**
+     * 배치 메타데이터 저장용 데이터소스
+     */
     @Bean("batchDataSource")
     public DataSource batchDataSource() {
         HikariDataSource dataSource = DataSourceBuilder.create()
