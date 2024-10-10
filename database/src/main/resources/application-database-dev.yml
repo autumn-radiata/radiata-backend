@@ -1,9 +1,16 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:54321/radiata-dev-postgres-total
-    username: radiata
-    password: 1234
-    driver-class-name: org.postgresql.Driver
+    hikari:
+      main:
+        url: jdbc:postgresql://localhost:54321/radiata-dev-postgres-total
+        username: radiata
+        password: 1234
+        driver-class-name: org.postgresql.Driver
+      batch:
+        url: jdbc:postgresql://localhost:54322/radiata-dev-postgres-batch
+        username: radiata
+        password: 1234
+        driver-class-name: org.postgresql.Driver
 
   data:
     redis:

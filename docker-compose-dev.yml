@@ -21,3 +21,14 @@ services:
       - TZ=Asia/Seoul
     volumes:
       - ./postgresql/init:/docker-entrypoint-initdb.d
+  batch:
+    container_name: radiata-dev-postgres-batch
+    image: postgres:latest
+    command: postgres -c 'max_connections=200' # 기본 설정은 100 이나, 동시 연결 수 제한을 200 까지 풀기 위함
+    ports:
+      - "54322:5432"
+    environment:
+      - POSTGRES_DB=radiata-dev-postgres-batch
+      - POSTGRES_USER=radiata
+      - POSTGRES_PASSWORD=1234
+      - TZ=Asia/Seoul
