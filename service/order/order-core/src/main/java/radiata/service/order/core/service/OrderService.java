@@ -61,15 +61,20 @@ public class OrderService {
 
         for (OrderItemCreateRequestDto itemCreateDto : requestDto.itemList()) {
             try {
-//                // 1️⃣ 재고 확인 및 차감
+                // TODO - 코드 줄이기
+//                // 1️⃣ 타임세일 제품 확인
+//                if (itemCreateDto.timesaleProductId() != null) {
+//                    // 타임세일 상품 여부 확인 및 적용?
+//                }
+//                // 2️⃣ 재고 확인 및 차감
 //                String productId = itemCreateDto.productId();
-//                productClient.getProductInfo(productId);  // 상품 조회
-////                productClient.deductStock(productId);     // 재고 차감
+//                productClient.getProductInfo(productId);  // 재고 확인 및 차감
 //                deductedProducts.add(productId);          // 재고 차감 목록 추가
 //
-//                // 2️⃣ 쿠폰 사용 여부 체크
+//                // 3️⃣ 쿠폰 사용 여부 체크
 //                String couponIssuedId = itemCreateDto.couponIssuedId();
 //                if (couponIssuedId != null) {
+//                    // 아래 둘 중 하나에서 쿠폰 할인율 or 할인 금액을 가져와야함.
 //                    couponIssueClient.getCouponIssue(couponIssuedId, userId).getBody();  // 쿠폰 조회
 //                    couponIssueClient.useCouponIssue(couponIssuedId, userId).getBody();  // 쿠폰 사용
 //                    usedCoupons.add(couponIssuedId);                                     // 사용된 쿠폰 목록 추가
@@ -79,7 +84,7 @@ public class OrderService {
                 String orderItemId = orderIdCreator.create();
                 OrderItem orderItem = orderItemMapper.toEntity(itemCreateDto, orderItemId, order);
                 orderItems.add(orderItem);
-                // 주문 금액 추가
+                // 주문 금액 추가 - 할인율 or 할인금액 적용
                 orderPrice += (orderItem.getUnitPrice() * orderItem.getQuantity());
 
             } catch (FeignException e) {
@@ -89,22 +94,17 @@ public class OrderService {
             }
         }
 
-        /* 적립금 사용 여부 체크
-            1) 미사용 - Null
-            👉 다음 단계
+        // 적립금 사용 시
+        try {
 
-            2) 사용 - NotNull
-            👉 적립금 차감 시도
-                1) 성공 - 적립금 차감 -> 다음
-                2) 실패 -
-                    쿠폰 상태 USED -> ISSUED 로 요청(보상2)
-                    재고 차감 -> 증감 요청(보상1)
-         */
+        } catch (FeignException e) {
+            // 실패 시 SAGA 보상 트랜잭션 처리 (Kafka 사용)
+            orderItemService.rollbackTransaction(deductedProducts, usedCoupons);
+            throw new BusinessException(ExceptionMessage.ORDER_CREATION_FAILED);
+        }
 
-        // 주문에 상품목록 지정 - setOrderItems
-        order.setOrderItems(orderItems);
-        // 결제 금액 지정 - setOrderPrice
-        order.setOrderPrice(orderPrice);
+        // 주문 - 금액 & 상품 목록 지정
+        order.setOrderPriceAndItems(orderPrice, orderItems);
         // 주문 상품 목록 추가 & 반환
         return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getOrderItems()));
     }
