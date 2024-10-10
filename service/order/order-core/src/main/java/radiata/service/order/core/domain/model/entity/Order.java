@@ -76,17 +76,16 @@ public class Order extends BaseEntity {
             .build();
     }
 
-    public void setOrderPrice(Integer orderPrice) {
+    public void setOrderPriceAndItems(Integer orderPrice, Set<OrderItem> orderItems) {
         this.orderPrice = orderPrice;
-    }
-
-    public void setPaymentId(String paymentId) {
-        this.paymentId = paymentId;
-    }
-
-    public void setOrderItems(Set<OrderItem> orderItems) {
         this.orderItems = orderItems;
     }
+
+//    public void setPaymentIdAndType(String paymentId, PaymentType paymentType) {
+//        this.paymentId = paymentId;
+//        this.paymentType = paymentType;
+//    }
+
 
     // 주문 상태 변경
     public void updateOrderStatus(
