@@ -45,6 +45,8 @@ public class DataSourceConfig {
             .password(batchDataSourceProperty.password())
             .build();
 
+        dataSource.setMaximumPoolSize(1);
+
         return new LazyConnectionDataSourceProxy(dataSource); // 트랜잭션 진입 하더라도 커넥션 가져오지 않음
     }
 
