@@ -52,6 +52,20 @@ public class TimeSaleProduct extends BaseEntity {
     @Column(name = "timesale_end_time", nullable = false)
     private LocalDateTime timeSaleEndTime;
 
+    public static TimeSaleProduct of(String id, String productId, Integer discountRate, Integer saleQuantity,
+        Integer totalQuantity, LocalDateTime timeSaleStartTime, LocalDateTime timeSaleEndTime) {
+
+        return TimeSaleProduct.builder()
+            .id(id)
+            .productId(productId)
+            .discountRate(discountRate)
+            .saleQuantity(saleQuantity)
+            .totalQuantity(totalQuantity)
+            .timeSaleStartTime(timeSaleStartTime)
+            .timeSaleEndTime(timeSaleEndTime)
+            .build();
+    }
+
     public void sale() {
 
         if (!availableSaleTime()) {
@@ -75,5 +89,9 @@ public class TimeSaleProduct extends BaseEntity {
     public boolean availableSaleQuantity() {
 
         return saleQuantity < totalQuantity;
+    }
+
+    public void addTimeSale(TimeSale timeSale) {
+        this.timeSale = timeSale;
     }
 }
