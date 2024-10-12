@@ -9,7 +9,7 @@ import radiata.common.response.SuccessResponse;
 public interface ProductClient {
 
     @GetMapping("/products/{productId}")
-        // TODO - 타입 변경 예정(String -> ProductResponseDto?)
-    SuccessResponse<String> getProductInfo(@PathVariable("productId") String productId);
+        // TODO - 타입 변경 예정(String -> ProductResponseDto?) + 매개변수 변경 (사이즈, 갯수 같이 요청)
+    SuccessResponse<String> checkAndDeductStock(@PathVariable("productId") String productId);
 
 }
