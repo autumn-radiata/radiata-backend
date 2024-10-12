@@ -7,18 +7,18 @@ spring:
   main:
     web-application-type: reactive  # Spring ??????? ???? ? ???????? ???
   cloud:
+    discovery:
+      locator:
+        enabled: true
     gateway:
       filter:
         circuit-breaker:
           enabled:
-      httpclient:
-        connect-timeout: 1000
-        response-timeout: 5s
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/  # Eureka ??? URL? ??
+      defaultZone: http://localhost:19090/eureka/
 
 
 

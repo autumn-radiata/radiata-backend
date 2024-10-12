@@ -1,4 +1,4 @@
-package radiata.service.gateway.core.config;
+package radiata.service.gateway.core.presentation;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
