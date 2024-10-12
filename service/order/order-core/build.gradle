@@ -17,6 +17,8 @@ dependencies {
     /* 모듈 */
     implementation project(':common')
     implementation project(':database')
+    implementation project(':service:payment:payment-core')
+    implementation project(':service:coupon:coupon-core')
 
     /* 라이브러리 */
     implementation 'com.github.ksuid:ksuid:1.1.2'
