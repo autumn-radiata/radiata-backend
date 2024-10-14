@@ -18,17 +18,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import radiata.common.domain.timesale.dto.condition.TimeSaleSearchCondition;
-import radiata.service.timesale.core.domain.QTimeSaleProduct;
 import radiata.service.timesale.core.domain.TimeSale;
 import radiata.service.timesale.core.domain.repository.TimeSaleQueryRepository;
 
 @Repository
-public class TImeSaleQueryRepositoryImpl implements TimeSaleQueryRepository {
+public class TimeSaleQueryRepositoryImpl implements TimeSaleQueryRepository {
 
     private final EntityManager em;
     private final JPAQueryFactory queryFactory;
 
-    public TImeSaleQueryRepositoryImpl(EntityManager em) {
+    public TimeSaleQueryRepositoryImpl(EntityManager em) {
         this.em = em;
         this.queryFactory = new JPAQueryFactory(em);
     }
