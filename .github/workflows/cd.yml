@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [ eureka-core, gateway-core, user-api, brand-api, order-api, payment-api, coupon-api, timesale-api ]
+        service: [ service/eureka-core, service/gateway-core, service/user/user-api, service/brand/brand-api, service/order/order-api, service/payment/payment-api, service/coupon/coupon-api, service/timesale/timesale-api ]
 
     steps:
       - uses: actions/checkout@v4
