@@ -20,12 +20,16 @@ repositories {
 ext {
     set('springCloudVersion', "2023.0.3")
 }
+
+bootJar.enabled = true
+jar.enabled = false
+
 dependencies {
 
     /* module */
     implementation project(':service:user:user-core')
 
-    
+
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
 
