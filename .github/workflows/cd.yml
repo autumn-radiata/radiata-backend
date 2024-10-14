@@ -45,8 +45,24 @@ jobs:
           password: ${{ env.DOCKER_HUB_TOKEN }}
 
       # Docker 이미지 빌드
-      - name: Build Docker image
-        run: docker compose -f ./docker-compose-deploy.yml up -d
+      - name: Build Docker images
+        run: |
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-user-server:latest \
+            --build-arg FILE_DIRECTORY=service/user/user-api -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-payment-server:latest \
+            --build-arg FILE_DIRECTORY=service/payment/payment-api -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-order-server:latest \
+            --build-arg FILE_DIRECTORY=service/order/order-api -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-brand-server:latest \
+            --build-arg FILE_DIRECTORY=service/brand/brand-api -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-server:latest \
+            --build-arg FILE_DIRECTORY=service/coupon/coupon-api -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-timesale-server:latest \
+            --build-arg FILE_DIRECTORY=service/timesale/timesale-api -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-gateway-server:latest \
+            --build-arg FILE_DIRECTORY=service/gateway/gateway-core -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-eureka-server:latest \
+            --build-arg FILE_DIRECTORY=service/eureka/eureka-core -f ./Dockerfile .
 
       # Docker Hub에 이미지 푸시
       - name: Push Docker image to Docker Hub
