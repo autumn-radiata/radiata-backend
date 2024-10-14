@@ -1,24 +1,33 @@
 package radiata.service.order.core.domain.model.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
+import radiata.database.model.BaseEntity;
 
 @Entity
 @Table(name = "r_order_item")
 @Getter
 @Builder // 테스트 용
+@SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class OrderItem {
+public class OrderItem extends BaseEntity {
 
     @Id
     private String id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
@@ -26,8 +35,6 @@ public class OrderItem {
     private String productId;
 
     private String couponIssuedId;
-
-    private String rewardPointId;
 
     @Column(nullable = false)
     private Integer quantity;
@@ -47,7 +54,6 @@ public class OrderItem {
         Order order,
         String productId,
         String couponIssuedId,
-        String rewardPointId,
         Integer quantity,
         Integer unitPrice) {
 
@@ -57,7 +63,6 @@ public class OrderItem {
             .order(order)
             .productId(productId)
             .couponIssuedId(couponIssuedId)
-            .rewardPointId(rewardPointId)
             .quantity(quantity)
             .unitPrice(unitPrice)
             .paymentPrice(unitPrice * quantity)

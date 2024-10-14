@@ -10,10 +10,12 @@ repositories {
 }
 
 dependencies {
-    // 모듈
+    /* 모듈 */
     implementation project(':common')
-    api project(':service:order:order-core')
+    implementation project(':database')
+    implementation project(':service:order:order-core')
 
+    /* 테스트 */
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }

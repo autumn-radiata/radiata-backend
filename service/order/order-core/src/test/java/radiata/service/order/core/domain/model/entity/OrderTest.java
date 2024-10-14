@@ -24,14 +24,13 @@ class OrderTest {
             "userId-01",
             "Test-Address-01",
             "Test-comment-01"
-            );
+        );
 
         orderItem = OrderItem.of(
             KsuidGenerator.generate(),
             order,
             "productId-01",
             "couponIssuedId-01",
-            "rewardPointId-01",
             5,
             10000
         );
@@ -40,7 +39,7 @@ class OrderTest {
 
     @Test
     @DisplayName("주문 생성 Test")
-    void testCreateOrder(){
+    void testCreateOrder() {
         // then
         assertThat(order.getId()).isNotBlank();
         assertThat(order.getUserId()).isEqualTo("userId-01");
@@ -54,13 +53,12 @@ class OrderTest {
 
     @Test
     @DisplayName("주문 상품 생성 Test")
-    void testCreateOrderItem(){
+    void testCreateOrderItem() {
         // then
         assertThat(orderItem.getId()).isNotBlank();
         assertThat(orderItem.getOrder().getId()).isEqualTo(order.getId());
         assertThat(orderItem.getProductId()).isEqualTo("productId-01");
         assertThat(orderItem.getCouponIssuedId()).isEqualTo("couponIssuedId-01");
-        assertThat(orderItem.getRewardPointId()).isEqualTo("rewardPointId-01");
         assertThat(orderItem.getQuantity()).isEqualTo(5);
         assertThat(orderItem.getUnitPrice()).isEqualTo(10000);
         assertThat(orderItem.getPaymentPrice()).isEqualTo(50000);
@@ -68,7 +66,7 @@ class OrderTest {
 
     @Test
     @DisplayName("주문 상품목록 지정 Test")
-    void testSetOrderItems(){
+    void testSetOrderItems() {
         // given
         Set<OrderItem> orderItems = new HashSet<>();
         orderItems.add(orderItem);
@@ -77,11 +75,10 @@ class OrderTest {
         order.setOrderItems(orderItems);
 
         // then
-        for (OrderItem orderItem2 : order.getItemList()) {
+        for (OrderItem orderItem2 : order.getOrderItems()) {
             assertThat(orderItem2.getId()).isEqualTo(orderItem.getId());
             assertThat(orderItem2.getProductId()).isEqualTo(orderItem.getProductId());
             assertThat(orderItem2.getCouponIssuedId()).isEqualTo(orderItem.getCouponIssuedId());
-            assertThat(orderItem2.getRewardPointId()).isEqualTo(orderItem.getRewardPointId());
             assertThat(orderItem2.getQuantity()).isEqualTo(orderItem.getQuantity());
             assertThat(orderItem2.getUnitPrice()).isEqualTo(orderItem.getUnitPrice());
             assertThat(orderItem2.getPaymentPrice()).isEqualTo(orderItem.getPaymentPrice());
@@ -90,7 +87,7 @@ class OrderTest {
 
     @Test
     @DisplayName("주문 상태 변경 Test")
-    void updateOrderStatus(){
+    void updateOrderStatus() {
         // when
         order.updateOrderStatus(OrderStatus.PAYMENT_PENDING);
 

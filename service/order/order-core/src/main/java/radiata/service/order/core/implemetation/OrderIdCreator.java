@@ -6,7 +6,7 @@ import radiata.common.annotation.Implementation;
 @Implementation
 public class OrderIdCreator {
 
-    public String createOrderId() {
+    public String create() {
         return KsuidGenerator.generate();
     }
 }

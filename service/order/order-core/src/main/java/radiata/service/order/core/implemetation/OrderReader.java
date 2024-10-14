@@ -16,9 +16,9 @@ public class OrderReader {
     private final OrderRepository orderRepository;
 
     @Transactional(readOnly = true)
-    public Order readOrder(String orderId){
+    public Order readOrder(String orderId) {
 
         return orderRepository.findById(orderId)
-            .orElseThrow(()-> new BusinessException(NOT_FOUND));
+            .orElseThrow(() -> new BusinessException(NOT_FOUND));
     }
 }
