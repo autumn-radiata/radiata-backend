@@ -14,6 +14,10 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      actions: write
     #    strategy:
     #      matrix:
     #        service: [ service/eureka/eureka-core, service/gateway/gateway-core, service/user/user-api, service/brand/brand-api, service/order/order-api, service/payment/payment-api, service/coupon/coupon-api, service/timesale/timesale-api ]
@@ -79,6 +83,10 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      actions: write
 
     steps:
       - name: Deploy to EC2
