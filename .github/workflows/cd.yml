@@ -77,7 +77,7 @@ jobs:
           username: ${{ env.AWS_EC2_USERNAME }}
           key: ${{ env.AWS_EC2_SSH_KEY }}
           script: |
-            echo ${{ env.DOCKER_HUB_TOKEN }} | docker login -u ${{ env.DOCKER_USERNAME }} --password-stdin
+            echo ${{ env.DOCKER_HUB_TOKEN }} | docker login -u ${{ env.DOCKER_HUB_USERNAME }} --password-stdin
             docker compose -f ./docker-compose-deploy.yml down
             docker rm -f autumn-user-server
             docker rm -f autumn-coupon-server
@@ -87,12 +87,12 @@ jobs:
             docker rm -f autumn-payment-server
             docker rm -f autumn-gateway-server
             docker rm -f autumn-eureka-server
-            docker pull ${{ env.DOCKER_USERNAME }}/autumn-user-server:latest
-            docker pull ${{ env.DOCKER_USERNAME }}/autumn-coupon-server:latest
-            docker pull ${{ env.DOCKER_USERNAME }}/autumn-timesale-server:latest
-            docker pull ${{ env.DOCKER_USERNAME }}/autumn-order-server:latest
-            docker pull ${{ env.DOCKER_USERNAME }}/autumn-brand-server:latest
-            docker pull ${{ env.DOCKER_USERNAME }}/autumn-payment-server:latest
-            docker pull ${{ env.DOCKER_USERNAME }}/autumn-gateway-server:latest
-            docker pull ${{ env.DOCKER_USERNAME }}/autumn-eureka-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-user-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-timesale-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-order-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-brand-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-payment-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-gateway-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-eureka-server:latest
             docker compose -f ./docker-compose-deploy.yml up -d
