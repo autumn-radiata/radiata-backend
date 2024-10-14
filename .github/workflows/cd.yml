@@ -51,14 +51,14 @@ jobs:
       # Docker Hub에 이미지 푸시
       - name: Push Docker image to Docker Hub
         run: |
-          docker push ${{ env.DOCKER_USERNAME }}/autumn-user-server:latest
-          docker push ${{ env.DOCKER_USERNAME }}/autumn-coupon-server:latest
-          docker push ${{ env.DOCKER_USERNAME }}/autumn-timesale-server:latest
-          docker push ${{ env.DOCKER_USERNAME }}/autumn-order-server:latest
-          docker push ${{ env.DOCKER_USERNAME }}/autumn-brand-server:latest
-          docker push ${{ env.DOCKER_USERNAME }}/autumn-payment-server:latest
-          docker push ${{ env.DOCKER_USERNAME }}/autumn-gateway-server:latest
-          docker push ${{ env.DOCKER_USERNAME }}/autumn-eureka-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-user-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-timesale-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-order-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-brand-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-payment-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-gateway-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-eureka-server:latest
 
   deploy:
     needs: build
