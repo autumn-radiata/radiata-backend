@@ -46,6 +46,11 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
 
 //하위 추가
 def generated = 'src/main/generated'
@@ -58,11 +63,7 @@ sourceSets {
 clean {
     delete file(generated)
 }
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-    }
-}
+
 
 tasks.named('test') {
     useJUnitPlatform()
