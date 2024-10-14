@@ -1,8 +1,8 @@
 package radiata.service.gateway.core.filter;
 
 import io.jsonwebtoken.Claims;
-import java.util.logging.Logger;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -14,19 +14,19 @@ import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class PreFilter implements GlobalFilter, Ordered {
 
-    private static final Logger logger = Logger.getLogger(PreFilter.class.getName());
     private final JwtUtil jwtUtil;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
-        logger.info("Pre filter :Request URI is" + path);
+        log.info("Pre filter :Request URI is" + path);
 
         //회원가입과 로그인 시 토큰 검증 하지 않음.
         if (path.startsWith("/auth")) {
-            logger.info("token issue: " + jwtUtil.createToken("username", UserRole.CUSTOMER));
+            log.info("token issue: " + jwtUtil.createToken("username", UserRole.CUSTOMER));
             return chain.filter(exchange);
         }
         //토큰 추출
