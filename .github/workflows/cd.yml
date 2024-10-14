@@ -36,12 +36,6 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew clean build -x test --project-dir ${{ matrix.service }} --warning-mode=all
 
-  docker:
-    name: Build Docker image and push to Docker Hub
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -69,7 +63,7 @@ jobs:
           docker push ${{ env.DOCKER_USERNAME }}/autumn-eureka-server:latest
 
   deploy:
-    needs: docker
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
