@@ -3,6 +3,7 @@ package radiata.service.gateway.core.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
@@ -21,16 +22,19 @@ public class JwtUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
     public static final int ACCESS_EXPIRATION = 60 * 60;
-    private final SecretKey secretKey;
+    private SecretKey secretKey;
+
     @Value("${spring.application.name}")
     private String issuer;
 
+    @Value("${jwt.secret-key}")
+    private String key;
 
-    public JwtUtil() {
-        this.secretKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(
-            "401b09eab3c013d4ca54922bb802bec8fd5318192b0a75f201d8b3727429080fb337591abd3e44453b954555b7a0812e1081c39b740293f765eae731f5a65ed1"));
+
+    @PostConstruct
+    public void init() {
+        this.secretKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(key));
     }
-
 
     public String createToken(String username, UserRole role) {
         return BEARER_PREFIX + Jwts.builder()
