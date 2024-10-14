@@ -35,6 +35,7 @@ public enum ExceptionMessage {
     USER_DUPLICATE_EMAIL(BAD_REQUEST, "3002", "이메일이 중복 됩니다."),
     USER_NOT_FOUND(NOT_FOUND.httpStatus, "3003", "사용자가 존재하지 않습니다."),
 
+
     /* 브랜드 4000번대 */
     BRAND_NOT_FOUND(HttpStatus.NOT_FOUND, "4001", "해당 브랜드를 찾을 수 없습니다."),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "4002", "해당 카테고리를 찾을 수 없습니다."),
@@ -43,6 +44,7 @@ public enum ExceptionMessage {
 
 
     /* 주문 5000번대 */
+
 
     // 현재 주문 상태에서 바뀔 수 없는 주문 상태로 변경하려 할 때
     INVALID_ORDER_STATUS(CONFLICT, "5001", "현재 주문 상태에서는 요청하신 상태 변경이 불가합니다."),
@@ -87,7 +89,7 @@ public enum ExceptionMessage {
 
     TIME_SALE_START_DATE_IS_AFTER_END_DATE(BAD_REQUEST, "7003", "타임세일 시작일은 종료일보다 이전 일 수 없습니다."),
 
-    TIME_SALE_START_DATE_IS_EQUALS_END_DATE(BAD_REQUEST, "7004", "타임세일 시작일은 종료일과 같을 수 없습니다."),
+    TIME_SALE_START_DATE_IS_EQUALS_END_DATE(BAD_REQUEST, "7004", "타임세일 시작일은 종료일과 같을 수 없습니다.");
 
     /* 게이트웨이 8000번대 */
     GATEWAY_INVALID_CONNECTED(SERVICE_UNAVAILABLE, "8001", "서비스에 접속할 수 없습니다. 잠시 후 다시 접속해주세요");

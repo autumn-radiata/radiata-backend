@@ -10,13 +10,14 @@ repositories {
 }
 
 dependencies {
-    // 모듈
+    /* 모듈 */
     implementation project(':common')
     implementation project(':database')
 
+    /* 라이브러리 */
     implementation 'com.github.ksuid:ksuid:1.1.2'
 
-    // Test
+    /* 테스트 */
     testImplementation 'com.h2database:h2:2.1.214'
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
