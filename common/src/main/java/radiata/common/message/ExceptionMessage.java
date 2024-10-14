@@ -89,7 +89,7 @@ public enum ExceptionMessage {
 
     TIME_SALE_START_DATE_IS_AFTER_END_DATE(BAD_REQUEST, "7003", "타임세일 시작일은 종료일보다 이전 일 수 없습니다."),
 
-    TIME_SALE_START_DATE_IS_EQUALS_END_DATE(BAD_REQUEST, "7004", "타임세일 시작일은 종료일과 같을 수 없습니다.");
+    TIME_SALE_START_DATE_IS_EQUALS_END_DATE(BAD_REQUEST, "7004", "타임세일 시작일은 종료일과 같을 수 없습니다."),
 
 
     /* 게이트웨이 8000번대 */
