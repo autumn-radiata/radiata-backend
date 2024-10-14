@@ -89,6 +89,7 @@ public enum ExceptionMessage {
 
     TIME_SALE_START_DATE_IS_EQUALS_END_DATE(BAD_REQUEST, "7004", "타임세일 시작일은 종료일과 같을 수 없습니다."),
 
+
     /* 게이트웨이 8000번대 */
     GATEWAY_INVALID_CONNECTED(SERVICE_UNAVAILABLE, "8001", "서비스에 접속할 수 없습니다. 잠시 후 다시 접속해주세요");
     private final HttpStatus httpStatus;
