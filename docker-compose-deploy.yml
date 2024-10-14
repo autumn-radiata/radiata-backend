@@ -1,0 +1,156 @@
+services:
+  redis:
+    container_name: radiata-prod-redis-total
+    image: redis:7.4-alpine
+    labels:
+      - "name=redis"
+      - "mode=standalone"
+    ports:
+      - "63801:6379"
+    volumes:
+      - redis_volume:/data
+
+  postgres:
+    container_name: radiata-prod-postgres-total
+    image: postgres:16.4
+    command: postgres -c 'max_connections=200' # 기본 설정은 100 이나, 동시 연결 수 제한을 200 까지 풀기 위함
+    ports:
+      - "54321:5432"
+    environment:
+      - POSTGRES_DB=radiata-dev-postgres-total
+      - POSTGRES_USER=radiata
+      - POSTGRES_PASSWORD=1234
+      - TZ=Asia/Seoul
+    volumes:
+      - postgres_main_volume:/var/lib/postgresql/data
+
+  batch:
+    container_name: radiata-prod-postgres-batch
+    image: postgres:16.4
+    command: postgres -c 'max_connections=200' # 기본 설정은 100 이나, 동시 연결 수 제한을 200 까지 풀기 위함
+    ports:
+      - "54322:5432"
+    environment:
+      - POSTGRES_DB=radiata-prod-postgres-batch
+      - POSTGRES_USER=radiata
+      - POSTGRES_PASSWORD=1234
+      - TZ=Asia/Seoul
+    volumes:
+      - postgres_batch_volume:/var/lib/postgresql/data
+
+  payment-server:
+    build:
+      dockerfile: Dockerfile
+      args:
+        - FILE_DIRECTORY=service/payment/payment-api
+    ports:
+      - "8080:8080"
+    network_mode: host
+    depends_on:
+      - postgres
+      - batch
+      - redis
+      - eureka-server
+
+  order-server:
+    build:
+      dockerfile: Dockerfile
+      args:
+        - FILE_DIRECTORY=service/order/order-api
+    ports:
+      - "8085:8085"
+    network_mode: host
+    depends_on:
+      - postgres
+      - batch
+      - redis
+      - eureka-server
+
+  brand-server:
+    build:
+      dockerfile: Dockerfile
+      args:
+        - FILE_DIRECTORY=service/brand/brand-api
+    ports:
+      - "8086:8086"
+    network_mode: host
+    depends_on:
+      - postgres
+      - batch
+      - redis
+      - eureka-server
+
+  coupon-server:
+    build:
+      dockerfile: Dockerfile
+      args:
+        - FILE_DIRECTORY=service/coupon/coupon-api
+    ports:
+      - "8081:8081"
+    network_mode: host
+    depends_on:
+      - postgres
+      - batch
+      - redis
+      - eureka-server
+
+  timesale-server:
+    build:
+      dockerfile: Dockerfile
+      args:
+        - FILE_DIRECTORY=service/timesale/timesale-api
+    ports:
+      - "8082:8082"
+    network_mode: host
+    depends_on:
+      - postgres
+      - batch
+      - redis
+      - eureka-server
+
+  user-server:
+    build:
+      dockerfile: Dockerfile
+      args:
+        - FILE_DIRECTORY=service/user/user-api
+    ports:
+      - "8083:8083"
+    network_mode: host
+    depends_on:
+      - postgres
+      - batch
+      - redis
+      - eureka-server
+
+  gateway-server:
+    build:
+      dockerfile: Dockerfile
+      args:
+        - FILE_DIRECTORY=service/gateway/gateway-core
+    ports:
+      - "19091:19091"
+    network_mode: host
+    depends_on:
+      - postgres
+      - batch
+      - redis
+      - eureka-server
+
+  eureka-server:
+    build:
+      dockerfile: Dockerfile
+      args:
+        - FILE_DIRECTORY=service/eureka/eureka-core
+    ports:
+      - "19090:19090"
+    network_mode: host
+    depends_on:
+      - postgres
+      - batch
+      - redis
+
+volumes:
+  postgres_main_volume:
+  postgres_batch_volume:
+  redis_volume:
+
