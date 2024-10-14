@@ -9,5 +9,5 @@ public interface UserClient {
 
     // TODO - uri 뒤에 /{userId} 붙이는게 RestFul 원칙?
     @GetMapping("/users")
-    CommonResponse getUserInfo(String userId);
+    CommonResponse checkAndUseRewardPoint(String userId);
 }
