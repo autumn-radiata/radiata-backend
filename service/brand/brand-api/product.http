@@ -1,0 +1,41 @@
+###상품 생성
+
+POST http://localhost:8484/products
+Content-Type: application/json
+
+{
+  "brandId": "2nPu0lYoyIODhyKorBDrHPA719B",
+  "categoryId": "2nPu7N93dV8DTm7hTrGVhI10obA",
+  "name": "Example Product",
+  "price": 10000,
+  "discountAmount": 500,
+  "stock": 50,
+  "gender": "ALL",
+  "color": "RED",
+  "size": "MEDIUM"
+}
+
+### 브랜드 생성
+POST http://localhost:8484/brands
+Content-Type: application/json
+
+### 카테고리 생성
+POST http://localhost:8484/category
+Content-Type: application/json
+
+### 단일 상품 조회
+GET http://localhost:8484/products/2nPv5xtreP4hyCNUTkHwsOt2X5p
+
+Accept: application/json
+
+### 상품 재고 차감
+POST http://localhost:8484/products/deduct
+Content-Type: application/json
+
+{
+  "productId": "2nPv5xtreP4hyCNUTkHwsOt2X5p",
+  "quantity": 3
+}
+
+### 상품 삭제
+DELETE http://localhost:8484/products/2nPwGWKzSMik5kyuylbsV16XgMy
