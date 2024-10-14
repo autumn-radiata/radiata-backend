@@ -1,4 +1,4 @@
-package radiata.service.coupon.core.component;
+package radiata.service.timesale.core.component;
 
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;

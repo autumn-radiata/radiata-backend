@@ -51,4 +51,9 @@ public class TimeSale extends BaseEntity {
             .timeSaleEndDate(timeSaleEndDate)
             .build();
     }
+
+    public void addTimeSaleProduct(TimeSaleProduct timeSaleProduct) {
+        this.timeSaleProducts.add(timeSaleProduct);
+        timeSaleProduct.addTimeSale(this);
+    }
 }
