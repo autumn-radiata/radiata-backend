@@ -1,13 +1,18 @@
 plugins {
     id 'java'
 }
-
-group = 'radiata.service.brand'
+group = 'radiata.service.order'
 version = '0.0.1-SNAPSHOT'
-
 repositories {
     mavenCentral()
 }
+
+ext {
+    set('springCloudVersion', "2023.0.3")
+}
+
+bootJar.enabled = true
+jar.enabled = false
 
 dependencies {
 
@@ -15,6 +20,12 @@ dependencies {
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
 
 test {
