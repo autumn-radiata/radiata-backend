@@ -78,13 +78,17 @@ public class Order extends BaseEntity {
     }
 
     public void setOrderPriceAndItems(Integer orderPrice, Set<OrderItem> orderItems) {
-        this.orderPrice = orderPrice;
+        this.orderPrice = orderPrice; // TODO- this.usedPoint 빼야할 걸?
         this.orderItems = orderItems;
     }
 
     public void setPaymentIdAndType(String paymentId, PaymentType paymentType) {
         this.paymentId = paymentId;
         this.paymentType = paymentType;
+    }
+
+    public void usePoint(Integer usedPoint) {
+        this.usedPoint = usedPoint;
     }
 
 
