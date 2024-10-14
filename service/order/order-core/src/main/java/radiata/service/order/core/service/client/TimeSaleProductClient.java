@@ -11,5 +11,5 @@ public interface TimeSaleProductClient {
 
     // TODO - 수정 가능성 O (미확정)
     @GetMapping("/timesale-products/{timeSaleProductId}")
-    ResponseEntity<? extends CommonResponse> getTimeSaleProduct(@PathVariable String timeSaleProductId);
+    ResponseEntity<? extends CommonResponse> checkAndDeductTimeSaleProduct(@PathVariable String timeSaleProductId);
 }
