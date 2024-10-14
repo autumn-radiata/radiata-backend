@@ -14,9 +14,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: [ service/eureka/eureka-core, service/gateway/gateway-core, service/user/user-api, service/brand/brand-api, service/order/order-api, service/payment/payment-api, service/coupon/coupon-api, service/timesale/timesale-api ]
+    #    strategy:
+    #      matrix:
+    #        service: [ service/eureka/eureka-core, service/gateway/gateway-core, service/user/user-api, service/brand/brand-api, service/order/order-api, service/payment/payment-api, service/coupon/coupon-api, service/timesale/timesale-api ]
 
     steps:
       - uses: actions/checkout@v4
@@ -34,10 +34,8 @@ jobs:
       - run: ls -al
 
       - name: Build with Gradle Wrapper
-        run: ./gradlew clean build -x test --project-dir ${{ matrix.service }} --warning-mode=all
-
-      - name: Checkout
-        uses: actions/checkout@v4
+        #        run: ./gradlew clean build -x test --project-dir ${{ matrix.service }} --warning-mode=all
+        run: ./gradlew clean build -x test --warning-mode=all
 
       # Docker 로그인
       - name: Log in to Docker Hub
