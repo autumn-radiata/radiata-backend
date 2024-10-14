@@ -30,7 +30,6 @@ public class DistributeLockExecutor {
                 lock.unlock();
             }
         }
-        logic.run();
     }
 
 }

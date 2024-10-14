@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.PAYMENT_REQUIRED;
+import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +32,16 @@ public enum ExceptionMessage {
 
     /* 유저 3000번대 */
 
-    //적립금 부족
     POINT_ISSUE_LACK(BAD_REQUEST, "3001", "적립금이 부족합니다."),
     USER_DUPLICATE_EMAIL(BAD_REQUEST, "3002", "이메일이 중복 됩니다."),
     USER_NOT_FOUND(NOT_FOUND.httpStatus, "3003", "사용자가 존재하지 않습니다."),
+
+
+    /* 브랜드 4000번대 */
+    BRAND_NOT_FOUND(HttpStatus.NOT_FOUND, "4001", "해당 브랜드를 찾을 수 없습니다."),
+    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "4002", "해당 카테고리를 찾을 수 없습니다."),
+    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "4003", "해당 상품을 찾을 수 없습니다."),
+    PRODUCT_INVENTORY_ISSUE_LACK(BAD_REQUEST, "4004", "재고가 부족합니다."),
 
 
     /* 주문 5000번대 */
@@ -72,8 +79,24 @@ public enum ExceptionMessage {
 
     DUPLICATED_COUPON_ISSUE(BAD_REQUEST, "6009", "이미 발급 된 쿠폰입니다."),
 
-    COUPON_CAN_NOT_USE(BAD_REQUEST, "6010", "해당 쿠폰을 사용할 수 없습니다.");
+    COUPON_CAN_NOT_USE(BAD_REQUEST, "6010", "해당 쿠폰을 사용할 수 없습니다."),
 
+
+    /* 타임세일 7000번대 */
+
+    TIME_SALE_PRODUCT_LIMITED_SALE(BAD_REQUEST, "7000", "재고가 소진되어 더 이상 할인 가격으로 구매할 수 없습니다."),
+
+    TIME_SALE_PRODUCT_PERIOD(BAD_REQUEST, "7001", "타임세일 일자가 아닙니다."),
+
+    TIME_SALE_END_DATE_IS_BEFORE_NOW(BAD_REQUEST, "7002", "타임세일 종료일은 현재 시간보다 이전 일 수 없습니다."),
+
+    TIME_SALE_START_DATE_IS_AFTER_END_DATE(BAD_REQUEST, "7003", "타임세일 시작일은 종료일보다 이전 일 수 없습니다."),
+
+    TIME_SALE_START_DATE_IS_EQUALS_END_DATE(BAD_REQUEST, "7004", "타임세일 시작일은 종료일과 같을 수 없습니다."),
+
+
+    /* 게이트웨이 8000번대 */
+    GATEWAY_INVALID_CONNECTED(SERVICE_UNAVAILABLE, "8001", "서비스에 접속할 수 없습니다. 잠시 후 다시 접속해주세요");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;
