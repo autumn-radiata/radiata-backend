@@ -34,7 +34,7 @@ jobs:
       - run: ls -al
 
       - name: Build with Gradle Wrapper
-        run: ./gradlew clean build -x test --project-dir ${{ matrix.service }}
+        run: ./gradlew clean build -x test --project-dir ${{ matrix.service }} --warning-mode=all --stacktrace
 
   docker:
     name: Build Docker image and push to Docker Hub
