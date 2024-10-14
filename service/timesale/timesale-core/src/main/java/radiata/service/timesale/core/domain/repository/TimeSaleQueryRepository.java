@@ -8,4 +8,6 @@ import radiata.service.timesale.core.domain.TimeSale;
 public interface TimeSaleQueryRepository {
 
     Page<TimeSale> findTimeSalesByCondition(TimeSaleSearchCondition condition, Pageable pageable);
+
+    TimeSale findTimeSaleWithMaxDiscountTimeSaleProduct(String productId);
 }

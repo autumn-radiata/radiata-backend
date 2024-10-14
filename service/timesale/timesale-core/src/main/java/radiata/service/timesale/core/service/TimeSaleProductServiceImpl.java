@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductCreateRequestDto;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductResponseDto;
+import radiata.common.exception.BusinessException;
+import radiata.common.message.ExceptionMessage;
 import radiata.service.timesale.core.domain.TimeSale;
 import radiata.service.timesale.core.domain.TimeSaleProduct;
 import radiata.service.timesale.core.implementation.interfaces.TimeSaleProductIdCreator;
@@ -24,7 +26,8 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     private final TimeSaleProductReader timeSaleProductReader;
 
     @Override
-    public TimeSaleProductResponseDto createTimeSaleProduct(TimeSaleProductCreateRequestDto request) {
+    public TimeSaleProductResponseDto createTimeSaleProduct(
+            TimeSaleProductCreateRequestDto request) {
 
         TimeSale timeSale = timeSaleReader.read(request.timeSaleId());
 
@@ -43,5 +46,15 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
         TimeSaleProduct timeSaleProduct = timeSaleProductReader.read(timeSaleProductId);
 
         timeSaleProduct.sale();
+    }
+
+    @Override
+    public TimeSaleProductResponseDto getMaxDiscountTimeSaleProduct(String productId) {
+
+        return timeSaleProductMapper.toDto(
+                timeSaleReader.readTimeSaleWithMaxDiscountTimeSaleProduct(productId)
+                        .getTimeSaleProducts().stream().findFirst().orElseThrow(
+                                () -> new BusinessException(ExceptionMessage.NOT_FOUND)
+                        ));
     }
 }

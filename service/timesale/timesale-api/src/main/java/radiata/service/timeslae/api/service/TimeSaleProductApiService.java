@@ -8,4 +8,6 @@ public interface TimeSaleProductApiService {
     TimeSaleProductResponseDto createTimeSaleProduct(TimeSaleProductCreateRequestDto requestDto);
 
     void saleTimeSaleProduct(String timeSaleProductId);
+
+    TimeSaleProductResponseDto getMaxDiscountTimeSaleProduct(String productId);
 }

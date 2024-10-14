@@ -1,6 +1,7 @@
 package radiata.service.timesale.core.infrastructure.repository;
 
 import static radiata.service.timesale.core.domain.QTimeSale.timeSale;
+import static radiata.service.timesale.core.domain.QTimeSaleProduct.*;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -8,6 +9,7 @@ import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import radiata.common.domain.timesale.dto.condition.TimeSaleSearchCondition;
+import radiata.service.timesale.core.domain.QTimeSaleProduct;
 import radiata.service.timesale.core.domain.TimeSale;
 import radiata.service.timesale.core.domain.repository.TimeSaleQueryRepository;
 
@@ -30,20 +33,36 @@ public class TImeSaleQueryRepositoryImpl implements TimeSaleQueryRepository {
     }
 
     @Override
-    public Page<TimeSale> findTimeSalesByCondition(TimeSaleSearchCondition condition, Pageable pageable) {
+    public Page<TimeSale> findTimeSalesByCondition(TimeSaleSearchCondition condition,
+            Pageable pageable) {
 
         List<TimeSale> content = queryFactory.selectFrom(timeSale)
-            .where(titleEq(condition.title()))
-            .orderBy(getOrderSpecifiers(pageable.getSort()).toArray(OrderSpecifier[]::new))
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetch();
+                .where(titleEq(condition.title()))
+                .orderBy(getOrderSpecifiers(pageable.getSort()).toArray(OrderSpecifier[]::new))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
 
         JPAQuery<Long> total = queryFactory.select(timeSale.count())
-            .from(timeSale)
-            .where(titleEq(condition.title()));
+                .from(timeSale)
+                .where(titleEq(condition.title()));
 
         return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
+    }
+
+    @Override
+    public TimeSale findTimeSaleWithMaxDiscountTimeSaleProduct(String productId) {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        return queryFactory.select(timeSale)
+                .from(timeSale)
+                .leftJoin(timeSaleProduct).on(timeSaleProduct.timeSale.id.eq(timeSale.id))
+                .where(timeSaleProduct.productId.eq(productId),
+                        timeSaleProduct.timeSaleStartTime.before(now),
+                        timeSaleProduct.timeSaleEndTime.after(now))
+                .orderBy(timeSaleProduct.discountRate.desc())
+                .fetchOne();
     }
 
     private BooleanExpression titleEq(String title) {
@@ -55,8 +74,8 @@ public class TImeSaleQueryRepositoryImpl implements TimeSaleQueryRepository {
 
         List<OrderSpecifier> orders = sort.stream().map(o -> {
             com.querydsl.core.types.Order direction =
-                o.isAscending() ? com.querydsl.core.types.Order.ASC
-                    : com.querydsl.core.types.Order.DESC;
+                    o.isAscending() ? com.querydsl.core.types.Order.ASC
+                            : com.querydsl.core.types.Order.DESC;
             String property = o.getProperty();
             PathBuilder<TimeSale> orderByExpression = new PathBuilder<>(TimeSale.class, "timeSale");
             return new OrderSpecifier(direction, orderByExpression.get(property));

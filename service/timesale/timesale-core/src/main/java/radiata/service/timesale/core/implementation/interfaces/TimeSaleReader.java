@@ -10,4 +10,6 @@ public interface TimeSaleReader {
     TimeSale read(String timeSaleId);
 
     Page<TimeSale> readByCondition(TimeSaleSearchCondition condition, Pageable pageable);
+
+    TimeSale readTimeSaleWithMaxDiscountTimeSaleProduct(String productId);
 }

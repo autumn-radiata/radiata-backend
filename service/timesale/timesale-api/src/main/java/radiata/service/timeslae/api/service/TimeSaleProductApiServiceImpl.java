@@ -27,4 +27,10 @@ public class TimeSaleProductApiServiceImpl implements TimeSaleProductApiService 
             timeSaleProductService.sale(timeSaleProductId);
         });
     }
+
+    @Override
+    public TimeSaleProductResponseDto getMaxDiscountTimeSaleProduct(String productId) {
+
+        return timeSaleProductService.getMaxDiscountTimeSaleProduct(productId);
+    }
 }

@@ -33,4 +33,10 @@ public class TimeSaleReaderImpl implements TimeSaleReader {
 
         return timeSaleQueryRepository.findTimeSalesByCondition(condition, pageable);
     }
+
+    @Override
+    public TimeSale readTimeSaleWithMaxDiscountTimeSaleProduct(String productId) {
+
+        return timeSaleQueryRepository.findTimeSaleWithMaxDiscountTimeSaleProduct(productId);
+    }
 }
