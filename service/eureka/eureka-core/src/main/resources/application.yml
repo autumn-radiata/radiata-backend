@@ -1,16 +1,13 @@
 spring:
   application:
-    name: user-service
-  config:
-    import: classpath:application-database.yml
-
+    name: eureka-server
 server:
-  port: 8083
-
+  port: 19090
 eureka:
   client:
+    register-with-eureka: false
+    fetch-registry: false
     service-url:
       defaultZone: http://localhost:19090/eureka/
   instance:
     hostname: localhost
-
