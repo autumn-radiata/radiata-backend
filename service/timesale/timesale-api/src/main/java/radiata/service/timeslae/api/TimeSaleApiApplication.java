@@ -11,7 +11,7 @@ import radiata.service.timeslae.api.service.TimeSaleProductApiService;
 @SpringBootApplication(
         scanBasePackages = {
                 "radiata.service.timesale",
-//                "radiata.common",
+                "radiata.common",
                 "radiata.database"
         },
         scanBasePackageClasses = {
