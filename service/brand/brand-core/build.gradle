@@ -16,11 +16,52 @@ java {
 repositories {
     mavenCentral()
 }
-
+ext {
+    set('springCloudVersion', "2023.0.3")
+}
 dependencies {
+    //ksuid
+    implementation 'com.github.ksuid:ksuid:1.1.2'
+
+    // mapStruct
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+    //redisson
+    implementation 'org.redisson:redisson-spring-boot-starter:3.27.0'
+
+    //openFeign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    //QueryDsl
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    api project(':common')
+    api project(':database')
+
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+//하위 추가
+def generated = 'src/main/generated'
+tasks.withType(JavaCompile) {
+    options.getGeneratedSourceOutputDirectory().set(file(generated))
+}
+sourceSets {
+    main.java.srcDirs += [generated]
+}
+clean {
+    delete file(generated)
+}
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
 
 tasks.named('test') {
