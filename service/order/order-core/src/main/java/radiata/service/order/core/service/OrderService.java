@@ -1,19 +1,11 @@
 package radiata.service.order.core.service;
 
-import feign.FeignException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.order.dto.request.OrderCreateRequestDto;
-import radiata.common.domain.order.dto.request.OrderItemCreateRequestDto;
 import radiata.common.domain.order.dto.request.OrderPaymentRequestDto;
 import radiata.common.domain.order.dto.response.OrderResponseDto;
-import radiata.common.exception.BusinessException;
-import radiata.common.message.ExceptionMessage;
 import radiata.service.order.core.domain.model.constant.OrderStatus;
 import radiata.service.order.core.domain.model.entity.Order;
 import radiata.service.order.core.domain.model.entity.OrderItem;
@@ -21,10 +13,6 @@ import radiata.service.order.core.implemetation.OrderIdCreator;
 import radiata.service.order.core.implemetation.OrderReader;
 import radiata.service.order.core.implemetation.OrderSaver;
 import radiata.service.order.core.implemetation.OrderValidator;
-import radiata.service.order.core.service.client.CouponIssueClient;
-import radiata.service.order.core.service.client.ProductClient;
-import radiata.service.order.core.service.client.UserClient;
-import radiata.service.order.core.service.mapper.OrderItemMapper;
 import radiata.service.order.core.service.mapper.OrderMapper;
 
 @Service
@@ -35,12 +23,8 @@ public class OrderService {
     private final OrderSaver orderSaver;
     private final OrderReader orderReader;
     private final OrderMapper orderMapper;
-    private final OrderItemMapper orderItemMapper;
     private final OrderValidator orderValidator;
     private final OrderItemService orderItemService;
-    private final ProductClient productClient;
-    private final CouponIssueClient couponIssueClient;
-    private final UserClient userClient;
 
 
     // 주문 생성
@@ -50,61 +34,8 @@ public class OrderService {
         String orderId = orderIdCreator.create();
         // 초기 주문 생성
         Order order = orderSaver.save(orderMapper.toEntity(requestDto, orderId, userId));
-        // 주문 상품 목록 - set
-        Set<OrderItem> orderItems = new HashSet<>();
-        // 총 주문 금액 - set
-        int orderPrice = 0;
-        // 보상 트랜잭션 관리 변수
-        // TODO - 타입 클래스를 따로 만들어 줘야할 거 같음 - 사이즈, 갯수, 아이디
-        List<String> deductedProducts = new ArrayList<>();  // 재고 차감 목록
-        List<String> usedCoupons = new ArrayList<>();       // 사용된 쿠폰 목록
-
-        for (OrderItemCreateRequestDto itemCreateDto : requestDto.itemList()) {
-            try {
-                // TODO - 코드 줄이기
-//                // 1️⃣ 타임세일 제품 확인
-//                if (itemCreateDto.timesaleProductId() != null) {
-//                    // 타임세일 상품 여부 확인 및 적용?
-//                }
-//                // 2️⃣ 재고 확인 및 차감
-//                String productId = itemCreateDto.productId();
-//                productClient.getProductInfo(productId);  // 재고 확인 및 차감
-//                deductedProducts.add(productId);          // 재고 차감 목록 추가
-//
-//                // 3️⃣ 쿠폰 사용 여부 체크
-//                String couponIssuedId = itemCreateDto.couponIssuedId();
-//                if (couponIssuedId != null) {
-//                    // 아래 둘 중 하나에서 쿠폰 할인율 or 할인 금액을 가져와야함.
-//                    couponIssueClient.getCouponIssue(couponIssuedId, userId).getBody();  // 쿠폰 조회
-//                    couponIssueClient.useCouponIssue(couponIssuedId, userId).getBody();  // 쿠폰 사용
-//                    usedCoupons.add(couponIssuedId);                                     // 사용된 쿠폰 목록 추가
-//                }
-
-                // 주문 상품 ID 생성 및 주문 상품 목록에 추가
-                String orderItemId = orderIdCreator.create();
-                OrderItem orderItem = orderItemMapper.toEntity(itemCreateDto, orderItemId, order);
-                orderItems.add(orderItem);
-                // 주문 금액 추가 - 할인율 or 할인금액 적용
-                orderPrice += (orderItem.getUnitPrice() * orderItem.getQuantity());
-
-            } catch (FeignException e) {
-                // 실패 시 SAGA 보상 트랜잭션 처리 (Kafka 사용)
-                orderItemService.rollbackTransaction(deductedProducts, usedCoupons);
-                throw new BusinessException(ExceptionMessage.ORDER_CREATION_FAILED);
-            }
-        }
-
-        // 적립금 사용 시
-        try {
-
-        } catch (FeignException e) {
-            // 실패 시 SAGA 보상 트랜잭션 처리 (Kafka 사용)
-            orderItemService.rollbackTransaction(deductedProducts, usedCoupons);
-            throw new BusinessException(ExceptionMessage.ORDER_CREATION_FAILED);
-        }
-
-        // 주문 - 금액 & 상품 목록 지정
-        order.setOrderPriceAndItems(orderPrice, orderItems);
+        // 주문 상품 목록 처리
+        orderItemService.processOrderItems(requestDto, order, userId);
         // 주문 상품 목록 추가 & 반환
         return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getOrderItems()));
     }
@@ -139,7 +70,7 @@ public class OrderService {
          */
 
         // paymentId 지정
-//        order.setPaymentId(paymentId);
+//        order.setPaymentIdAndType(paymentId, type);
         // 주문 상태 체크 & 변경(결제 완료)
         orderValidator.checkCanMoveToNextStatus(order, OrderStatus.PAYMENT_COMPLETED);
         // 반환
