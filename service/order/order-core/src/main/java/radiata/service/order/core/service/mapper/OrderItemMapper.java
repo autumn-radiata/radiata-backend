@@ -15,6 +15,7 @@ public class OrderItemMapper {
             orderItemId,
             order,
             requestDto.productId(),
+            requestDto.timeSaleProductId(),
             requestDto.couponIssuedId(),
             requestDto.quantity(),
             requestDto.unitPrice()
@@ -27,6 +28,7 @@ public class OrderItemMapper {
             orderItem.getId(),
             orderItem.getOrder().getId(),
             orderItem.getProductId(),
+            orderItem.getTimeSaleProductId(),
             orderItem.getCouponIssuedId(),
             orderItem.getQuantity(),
             orderItem.getUnitPrice(),

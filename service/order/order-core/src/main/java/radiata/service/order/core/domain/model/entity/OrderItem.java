@@ -34,6 +34,8 @@ public class OrderItem extends BaseEntity {
     @Column(nullable = false)
     private String productId;
 
+    private String timeSaleProductId;
+
     private String couponIssuedId;
 
     @Column(nullable = false)
@@ -53,6 +55,7 @@ public class OrderItem extends BaseEntity {
         String id,
         Order order,
         String productId,
+        String timeSaleProductId,
         String couponIssuedId,
         Integer quantity,
         Integer unitPrice) {
@@ -62,6 +65,7 @@ public class OrderItem extends BaseEntity {
             .id(id)
             .order(order)
             .productId(productId)
+            .timeSaleProductId(timeSaleProductId)
             .couponIssuedId(couponIssuedId)
             .quantity(quantity)
             .unitPrice(unitPrice)
