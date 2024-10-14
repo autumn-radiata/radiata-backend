@@ -9,7 +9,6 @@ import radiata.service.timesale.core.domain.TimeSale;
 import radiata.service.timesale.core.domain.TimeSaleProduct;
 import radiata.service.timesale.core.implementation.interfaces.TimeSaleProductIdCreator;
 import radiata.service.timesale.core.implementation.interfaces.TimeSaleProductReader;
-import radiata.service.timesale.core.implementation.interfaces.TimeSaleProductSaver;
 import radiata.service.timesale.core.implementation.interfaces.TimeSaleReader;
 import radiata.service.timesale.core.service.interfaces.TimeSaleProductService;
 import radiata.service.timesale.core.service.mapper.TimeSaleProductMapper;
@@ -22,7 +21,6 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     private final TimeSaleReader timeSaleReader;
     private final TimeSaleProductIdCreator timeSaleProductIdCreator;
     private final TimeSaleProductMapper timeSaleProductMapper;
-    private final TimeSaleProductSaver timeSaleProductSaver;
     private final TimeSaleProductReader timeSaleProductReader;
 
     @Override
