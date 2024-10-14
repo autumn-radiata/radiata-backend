@@ -11,6 +11,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -51,18 +52,38 @@ public class TImeSaleQueryRepositoryImpl implements TimeSaleQueryRepository {
     }
 
     @Override
-    public TimeSale findTimeSaleWithMaxDiscountTimeSaleProduct(String productId) {
+    public Optional<TimeSale> findTimeSaleWithMaxDiscountTimeSaleProduct(String productId) {
 
         LocalDateTime now = LocalDateTime.now();
 
-        return queryFactory.select(timeSale)
+        return Optional.ofNullable(queryFactory.select(timeSale)
                 .from(timeSale)
                 .leftJoin(timeSaleProduct).on(timeSaleProduct.timeSale.id.eq(timeSale.id))
-                .where(timeSaleProduct.productId.eq(productId),
+                .where(
+                        timeSaleProduct.productId.eq(productId),
                         timeSaleProduct.timeSaleStartTime.before(now),
-                        timeSaleProduct.timeSaleEndTime.after(now))
+                        timeSaleProduct.timeSaleEndTime.after(now)
+                )
                 .orderBy(timeSaleProduct.discountRate.desc())
-                .fetchOne();
+                .fetchOne());
+    }
+
+    @Override
+    public Optional<TimeSale> findTimeSaleWithMaxDiscountTimeSaleProductHasStock(String productId) {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        return Optional.ofNullable(queryFactory.select(timeSale)
+                .from(timeSale)
+                .leftJoin(timeSaleProduct).on(timeSaleProduct.timeSale.id.eq(timeSale.id))
+                .where(
+                        timeSaleProduct.productId.eq(productId),
+                        timeSaleProduct.timeSaleStartTime.before(now),
+                        timeSaleProduct.timeSaleEndTime.after(now),
+                        timeSaleProduct.saleQuantity.lt(timeSaleProduct.totalQuantity)
+                )
+                .orderBy(timeSaleProduct.discountRate.desc())
+                .fetchOne());
     }
 
     private BooleanExpression titleEq(String title) {

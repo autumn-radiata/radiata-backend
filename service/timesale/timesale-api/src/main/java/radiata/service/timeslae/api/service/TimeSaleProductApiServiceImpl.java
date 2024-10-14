@@ -33,4 +33,10 @@ public class TimeSaleProductApiServiceImpl implements TimeSaleProductApiService 
 
         return timeSaleProductService.getMaxDiscountTimeSaleProduct(productId);
     }
+
+    @Override
+    public TimeSaleProductResponseDto getMaxDiscountTimeSaleProductHasStock(String productId) {
+
+        return timeSaleProductService.getMaxDiscountTimeSaleProductHasStock(productId);
+    }
 }

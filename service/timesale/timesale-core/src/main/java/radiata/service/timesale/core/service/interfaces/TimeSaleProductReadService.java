@@ -5,4 +5,6 @@ import radiata.common.domain.timesale.dto.response.TimeSaleProductResponseDto;
 public interface TimeSaleProductReadService {
 
     TimeSaleProductResponseDto getMaxDiscountTimeSaleProduct(String productId);
+
+    TimeSaleProductResponseDto getMaxDiscountTimeSaleProductHasStock(String productId);
 }

@@ -57,4 +57,14 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
                                 () -> new BusinessException(ExceptionMessage.NOT_FOUND)
                         ));
     }
+
+    @Override
+    public TimeSaleProductResponseDto getMaxDiscountTimeSaleProductHasStock(String productId) {
+
+        return timeSaleProductMapper.toDto(
+                timeSaleReader.readTimeSaleWithMaxDiscountTimeSaleProductHasStock(productId)
+                        .getTimeSaleProducts().stream().findFirst().orElseThrow(
+                                () -> new BusinessException(ExceptionMessage.NOT_FOUND)
+                        ));
+    }
 }

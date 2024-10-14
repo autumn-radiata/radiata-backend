@@ -10,4 +10,6 @@ public interface TimeSaleProductApiService {
     void saleTimeSaleProduct(String timeSaleProductId);
 
     TimeSaleProductResponseDto getMaxDiscountTimeSaleProduct(String productId);
+
+    TimeSaleProductResponseDto getMaxDiscountTimeSaleProductHasStock(String productId);
 }

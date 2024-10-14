@@ -58,4 +58,15 @@ public class TimeSaleProductController {
                 .body(success(GET_MAX_DISCOUNT_TIME_SALE_PRODUCT.getMessage(),
                         timeSaleProductApiService.getMaxDiscountTimeSaleProduct(productId)));
     }
+
+    @GetMapping("/products/{productId}/timesale-products/max-discount-has-stock")
+    public ResponseEntity<? extends CommonResponse> getMaxDiscountTimeSaleProductHasStock(
+            @PathVariable
+            String productId
+    ) {
+
+        return ResponseEntity.status(GET_MAX_DISCOUNT_TIME_SALE_PRODUCT.getHttpStatus())
+                .body(success(GET_MAX_DISCOUNT_TIME_SALE_PRODUCT.getMessage(),
+                        timeSaleProductApiService.getMaxDiscountTimeSaleProductHasStock(productId)));
+    }
 }
