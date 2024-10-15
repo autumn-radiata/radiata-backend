@@ -1,12 +1,13 @@
 ###상품 생성
 
-POST http://localhost:8484/products
+POST http://localhost:19091/goods
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyblRvaW5zdG1UejZnVElsUTJtWEFqMzdSaHgiLCJyb2xlIjoiQlJBTkRfT1dORVIiLCJpc3MiOiJ1c2VyLXNlcnZpY2UiLCJpYXQiOjE3MjkwMjYxOTcsImV4cCI6MTcyOTAyOTc5N30.wCfgP_sFXZc-7PU1bGOlPfw_JvMD83cqJhyW_V8XMYqnWMXVRUlhXHTvWQKeiRenE9mioVLPSPrQYkTUcFCJiA
 
 {
   "brandId": "2nPu0lYoyIODhyKorBDrHPA719B",
   "categoryId": "2nPu7N93dV8DTm7hTrGVhI10obA",
-  "name": "Example Product",
+  "name": "사탕",
   "price": 10000,
   "discountAmount": 500,
   "stock": 50,
@@ -23,9 +24,16 @@ Content-Type: application/json
 POST http://localhost:8484/category
 Content-Type: application/json
 
-### 단일 상품 조회
-GET http://localhost:8484/products/2nPv5xtreP4hyCNUTkHwsOt2X5p
+### 타임 세일 단일 상품 조회
+GET http://localhost:19091/goods/2nUVCqoq4foptQLdcq8pMBWbaSO
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyblRvaW5zdG1UejZnVElsUTJtWEFqMzdSaHgiLCJyb2xlIjoiQlJBTkRfT1dORVIiLCJpc3MiOiJ1c2VyLXNlcnZpY2UiLCJpYXQiOjE3MjkwMjYxOTcsImV4cCI6MTcyOTAyOTc5N30.wCfgP_sFXZc-7PU1bGOlPfw_JvMD83cqJhyW_V8XMYqnWMXVRUlhXHTvWQKeiRenE9mioVLPSPrQYkTUcFCJiA
 
+
+
+
+### 단일 상품 조회
+GET http://localhost:8484/products/2nUVCqoq4foptQLdcq8pMBWbaSO
 Accept: application/json
 
 ### 상품 재고 차감
@@ -33,7 +41,7 @@ POST http://localhost:8484/products/deduct
 Content-Type: application/json
 
 {
-  "productId": "2nPv5xtreP4hyCNUTkHwsOt2X5p",
+  "productId": "2nTJZmAj8PhwwcepsDucSJmsQ7E",
   "quantity": 3
 }
 
