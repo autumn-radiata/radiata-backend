@@ -18,9 +18,6 @@ jobs:
       contents: read
       packages: write
       actions: write
-    #    strategy:
-    #      matrix:
-    #        service: [ service/eureka/eureka-core, service/gateway/gateway-core, service/user/user-api, service/brand/brand-api, service/order/order-api, service/payment/payment-api, service/coupon/coupon-api, service/timesale/timesale-api ]
 
     steps:
       - uses: actions/checkout@v4
@@ -38,7 +35,6 @@ jobs:
       - run: ls -al
 
       - name: Build with Gradle Wrapper
-        #        run: ./gradlew clean build -x test --project-dir ${{ matrix.service }} --warning-mode=all
         run: ./gradlew clean build -x test --warning-mode=all
 
       # Docker 로그인
@@ -106,6 +102,9 @@ jobs:
             docker rm -f autumn-payment-server
             docker rm -f autumn-gateway-server
             docker rm -f autumn-eureka-server
+            docker rm -f radiata-prod-postgres-total
+            docker rm -f radiata-prod-postgres-batch
+            docker rm -f radiata-prod-redis-total
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-user-server:latest
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-server:latest
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-timesale-server:latest
