@@ -17,6 +17,7 @@ public interface UserMapper {
     @Mapping(source = "id", target = "userId")
     UserGetInfoResponseDto userToUserGetInfoResponseDto(User user);
 
-    @Mapping(source = "id", target = "PointHistoryId")
+    @Mapping(source = "history.id", target = "pointHistoryId")
+    @Mapping(source = "history.pointType", target = "pointType")
     PointHistoryGetResponseDto userToPointHistoriesGetResponseDto(PointHistory history);
 }

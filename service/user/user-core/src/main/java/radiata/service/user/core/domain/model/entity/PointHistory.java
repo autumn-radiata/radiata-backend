@@ -4,6 +4,7 @@ import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -17,6 +18,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import radiata.service.user.core.domain.model.constant.PointType;
 
 @Entity
@@ -25,6 +27,7 @@ import radiata.service.user.core.domain.model.constant.PointType;
 @AllArgsConstructor(access = PRIVATE)
 @Builder
 @Table(name = "r_point_history")
+@EntityListeners(AuditingEntityListener.class)
 public class PointHistory {
 
     @Id
