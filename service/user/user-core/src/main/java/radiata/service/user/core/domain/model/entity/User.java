@@ -18,8 +18,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
-import radiata.database.model.BaseEntity;
-import radiata.service.user.core.domain.model.constant.UserRole;
+import radiata.common.domain.user.constant.UserRole;
 import radiata.service.user.core.domain.model.vo.Address;
 import radiata.service.user.core.domain.model.vo.Point;
 
@@ -72,7 +71,7 @@ public class User extends BaseEntity {
             .nickname(nickname)
             .phone(phone)
             .address(address)
-            .totalPoint(Point.from(0))
+            .totalPoint(radiata.service.user.core.domain.model.vo.Point.from(0))
             .role(role)
             .build();
     }
@@ -86,13 +85,16 @@ public class User extends BaseEntity {
 
     //todo : 수정에 맞게 다시 작성
     public void delete(String userId) {
-        deleteEntity();
+        deleteEntity(userId);
     }
 
     public void addPointHistory(PointHistory history) {
         this.pointHistories.add(history);
     }
 
+    public void deductPoint(int requirePoint) {
+        this.totalPoint = this.totalPoint.subPoint(requirePoint);
+    }
 
 }
 
