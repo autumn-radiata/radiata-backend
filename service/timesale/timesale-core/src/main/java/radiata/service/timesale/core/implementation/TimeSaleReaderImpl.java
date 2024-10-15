@@ -35,16 +35,9 @@ public class TimeSaleReaderImpl implements TimeSaleReader {
     }
 
     @Override
-    public TimeSale readTimeSaleWithMaxDiscountTimeSaleProduct(String productId) {
+    public TimeSale readByProductId(String productId) {
 
-        return timeSaleQueryRepository.findTimeSaleWithMaxDiscountTimeSaleProduct(productId).orElseThrow(
-                () -> new BusinessException(NOT_FOUND)
-        );
-    }
-
-    public TimeSale readTimeSaleWithMaxDiscountTimeSaleProductHasStock(String productId) {
-
-        return timeSaleQueryRepository.findTimeSaleWithMaxDiscountTimeSaleProductHasStock(productId).orElseThrow(
+        return timeSaleQueryRepository.findByProductId(productId).orElseThrow(
                 () -> new BusinessException(NOT_FOUND)
         );
     }

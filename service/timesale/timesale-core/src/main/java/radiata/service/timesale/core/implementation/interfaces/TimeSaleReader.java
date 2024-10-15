@@ -11,7 +11,5 @@ public interface TimeSaleReader {
 
     Page<TimeSale> readByCondition(TimeSaleSearchCondition condition, Pageable pageable);
 
-    TimeSale readTimeSaleWithMaxDiscountTimeSaleProduct(String productId);
-
-    TimeSale readTimeSaleWithMaxDiscountTimeSaleProductHasStock(String productId);
+    TimeSale readByProductId(String productId);
 }

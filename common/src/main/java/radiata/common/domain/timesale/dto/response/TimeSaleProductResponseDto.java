@@ -1,5 +1,6 @@
 package radiata.common.domain.timesale.dto.response;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.Builder;
 
@@ -12,6 +13,6 @@ public record TimeSaleProductResponseDto(
     Integer totalQuantity,
     LocalDateTime timeSaleStartTime,
     LocalDateTime timeSaleEndTime
-) {
+) implements Serializable {
 
 }

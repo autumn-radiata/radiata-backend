@@ -51,7 +51,7 @@ public class TimeSaleQueryRepositoryImpl implements TimeSaleQueryRepository {
     }
 
     @Override
-    public Optional<TimeSale> findTimeSaleWithMaxDiscountTimeSaleProduct(String productId) {
+    public Optional<TimeSale> findByProductId(String productId) {
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -63,25 +63,6 @@ public class TimeSaleQueryRepositoryImpl implements TimeSaleQueryRepository {
                         timeSaleProduct.timeSaleStartTime.before(now),
                         timeSaleProduct.timeSaleEndTime.after(now)
                 )
-                .orderBy(timeSaleProduct.discountRate.desc())
-                .fetchOne());
-    }
-
-    @Override
-    public Optional<TimeSale> findTimeSaleWithMaxDiscountTimeSaleProductHasStock(String productId) {
-
-        LocalDateTime now = LocalDateTime.now();
-
-        return Optional.ofNullable(queryFactory.select(timeSale)
-                .from(timeSale)
-                .leftJoin(timeSaleProduct).on(timeSaleProduct.timeSale.id.eq(timeSale.id))
-                .where(
-                        timeSaleProduct.productId.eq(productId),
-                        timeSaleProduct.timeSaleStartTime.before(now),
-                        timeSaleProduct.timeSaleEndTime.after(now),
-                        timeSaleProduct.saleQuantity.lt(timeSaleProduct.totalQuantity)
-                )
-                .orderBy(timeSaleProduct.discountRate.desc())
                 .fetchOne());
     }
 

@@ -10,7 +10,5 @@ public interface TimeSaleQueryRepository {
 
     Page<TimeSale> findTimeSalesByCondition(TimeSaleSearchCondition condition, Pageable pageable);
 
-    Optional<TimeSale> findTimeSaleWithMaxDiscountTimeSaleProduct(String productId);
-
-    Optional<TimeSale> findTimeSaleWithMaxDiscountTimeSaleProductHasStock(String productId);
+    Optional<TimeSale> findByProductId(String productId);
 }
