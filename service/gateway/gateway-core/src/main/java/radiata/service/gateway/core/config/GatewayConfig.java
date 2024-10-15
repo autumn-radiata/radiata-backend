@@ -14,9 +14,17 @@ public class GatewayConfig {
     @Bean
     public RouteLocator customRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-            .route("user-service", r -> r.path("/auth/**", "users/**")
+            .route("user-service", r -> r.path("/auth/**", "/users/**")
                 .filters(f -> applyCommonFilters(f, "user-service"))
                 .uri("lb://user-service"))
+            .route("brand-service", r -> r.path("/goods/**", "/brands/**", "/categories/**")
+                .filters(f -> applyCommonFilters(f, "brand-service"))
+                .uri("lb://brand-service"))
+            //todo : /products 경로 겹침 >>products 변경 부탁드려용
+            .route("timesale-service", r -> r.path("/timesales/**", "/timesale-products/**", "/products/**")
+                .filters(f -> applyCommonFilters(f, "timesale-service"))
+                .uri("lb://timesale-service"))
+
             .build();
     }
 
