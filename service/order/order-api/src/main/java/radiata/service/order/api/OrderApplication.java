@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {"radiata.service.order"})
-public class OrderApiApplication {
+public class OrderApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OrderApiApplication.class, args);
+        SpringApplication.run(OrderApplication.class, args);
     }
 }

@@ -52,7 +52,7 @@ class OrderServiceTest {
             itemList.add(itemListRequestDto);
         }
 
-        orderCreateRequestDto = new OrderCreateRequestDto("address-01", "comment-01", itemList);
+        orderCreateRequestDto = new OrderCreateRequestDto("address-01", "comment-01", 20000, itemList);
 
         // 주문 생성
         createdOrder = orderService.createOrder(orderCreateRequestDto, "user-01");

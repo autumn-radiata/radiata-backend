@@ -37,6 +37,9 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
+    //jwt
+    implementation 'io.jsonwebtoken:jjwt:0.12.6'
+
     /* test */
 
     /* //h2

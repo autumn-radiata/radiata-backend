@@ -9,15 +9,37 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    set('springCloudVersion', "2023.0.3")
+}
+
+bootJar.enabled = true
+jar.enabled = false
+
+
 dependencies {
     /* 모듈 */
     implementation project(':common')
     implementation project(':database')
     implementation project(':service:order:order-core')
 
+    /* 라이브러리 */
+
+    // eureka client
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+    // swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
     /* 테스트 */
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
 
 test {

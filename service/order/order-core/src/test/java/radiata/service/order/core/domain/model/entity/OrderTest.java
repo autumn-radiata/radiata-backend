@@ -30,6 +30,7 @@ class OrderTest {
             KsuidGenerator.generate(),
             order,
             "productId-01",
+            "timeSaleId-01",
             "couponIssuedId-01",
             5,
             10000
@@ -58,6 +59,7 @@ class OrderTest {
         assertThat(orderItem.getId()).isNotBlank();
         assertThat(orderItem.getOrder().getId()).isEqualTo(order.getId());
         assertThat(orderItem.getProductId()).isEqualTo("productId-01");
+        assertThat(orderItem.getTimeSaleProductId()).isEqualTo("timeSaleId-01");
         assertThat(orderItem.getCouponIssuedId()).isEqualTo("couponIssuedId-01");
         assertThat(orderItem.getQuantity()).isEqualTo(5);
         assertThat(orderItem.getUnitPrice()).isEqualTo(10000);
@@ -65,14 +67,14 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("주문 상품목록 지정 Test")
+    @DisplayName("주문 - 총 금액 & 상품 목록 지정 Test")
     void testSetOrderItems() {
         // given
         Set<OrderItem> orderItems = new HashSet<>();
         orderItems.add(orderItem);
 
         // when
-        order.setOrderItems(orderItems);
+        order.setOrderPriceAndItems(0, orderItems);
 
         // then
         for (OrderItem orderItem2 : order.getOrderItems()) {

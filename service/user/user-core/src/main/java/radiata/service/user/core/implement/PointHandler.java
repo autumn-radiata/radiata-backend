@@ -20,7 +20,6 @@ public class PointHandler {
         recordPointHistory(user, pointAmount, type);
     }
 
-    //todo : 카프카 batch로 변경 후 수정
     private void increadPoint(User user, int addPoint, PointType type) {
         user.getTotalPoint().addPoint(addPoint);
     }
@@ -29,7 +28,7 @@ public class PointHandler {
         user.getTotalPoint().subPoint(subPoint);
     }
 
-    private void recordPointHistory(User user, int pointAmount, PointType type) {
+    public void recordPointHistory(User user, int pointAmount, PointType type) {
         PointHistory newPointHistory = PointHistory.of(
             Ksuid.newKsuid().toString(),
             user,

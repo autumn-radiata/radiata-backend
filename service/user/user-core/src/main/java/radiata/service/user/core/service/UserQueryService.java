@@ -37,7 +37,7 @@ public class UserQueryService {
     @Transactional(readOnly = true)
     public Page<PointHistoryGetResponseDto> getPointHistories(String userId, Pageable pageable) {
         User user = findValidUser(userId);
-        var pointHistories = pointHistoryRepository.findAllById(user.getId(), pageable);
+        var pointHistories = pointHistoryRepository.findAllByUser(user, pageable);
         return pointHistories.map(userMapper::userToPointHistoriesGetResponseDto);
 
     }
