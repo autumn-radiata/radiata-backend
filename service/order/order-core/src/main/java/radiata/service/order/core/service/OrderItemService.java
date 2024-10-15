@@ -159,7 +159,7 @@ public class OrderItemService {
             int point = requestDto.point();
 //            if (point > 0) {
 //                // 적립금 조회 및 차감 요청
-//                userClient.checkAndUseRewardPoint(userId);
+//                userClient.checkAndUseRewardPoint(new PointModifyRequestDto(userId, point));
 //                order.usePoint(point);
 //            }
 
