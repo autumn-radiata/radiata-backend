@@ -102,9 +102,6 @@ jobs:
             docker rm -f autumn-payment-server
             docker rm -f autumn-gateway-server
             docker rm -f autumn-eureka-server
-            docker rm -f radiata-prod-postgres-total
-            docker rm -f radiata-prod-postgres-batch
-            docker rm -f radiata-prod-redis-total
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-user-server:latest
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-server:latest
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-timesale-server:latest
