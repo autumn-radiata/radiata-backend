@@ -1,17 +1,9 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.3.4'
-    id 'io.spring.dependency-management' version '1.1.6'
 }
 
-group = 'radiata.service.user.api'
+group = 'radiata.service.payment'
 version = '0.0.1-SNAPSHOT'
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
 
 repositories {
     mavenCentral()
@@ -25,7 +17,7 @@ dependencies {
     /* module */
     implementation project(':service:user:user-core')
 
-    
+    //eureka client
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
 
