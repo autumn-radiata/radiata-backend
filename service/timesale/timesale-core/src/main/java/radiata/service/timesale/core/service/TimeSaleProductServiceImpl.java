@@ -2,6 +2,8 @@ package radiata.service.timesale.core.service;
 
 import java.util.Comparator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductCreateRequestDto;
@@ -29,6 +31,7 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     private final TimeSaleProductResponseRedisRepository timeSaleProductResponseRedisRepository;
 
     @Override
+    @CacheEvict(value = "cacheProductTimeSales", key = "#request.productId()")
     public TimeSaleProductResponseDto createTimeSaleProduct(
             TimeSaleProductCreateRequestDto request) {
 
@@ -40,8 +43,6 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
         TimeSaleProduct timeSaleProduct = timeSaleProductMapper.toEntity(request, id);
         timeSale.addTimeSaleProduct(timeSaleProduct);
 
-        timeSaleProductResponseRedisRepository.delete(request.productId());
-
         return timeSaleProductMapper.toDto(timeSaleProduct);
     }
 
@@ -49,8 +50,9 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     public void sale(String timeSaleProductId) {
 
         TimeSaleProduct timeSaleProduct = timeSaleProductReader.read(timeSaleProductId);
-
         timeSaleProduct.sale();
+
+        timeSaleProductResponseRedisRepository.delete(timeSaleProduct.getProductId());
     }
 
     @Override
@@ -59,23 +61,24 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
         return timeSaleProductMapper.toDto(
                 timeSaleReader.readByProductId(productId)
                         .getTimeSaleProducts().stream()
+                        .sorted(Comparator.comparing(TimeSaleProduct::getId))
                         .max(Comparator.comparing(TimeSaleProduct::getDiscountRate)).orElseThrow(
                                 () -> new BusinessException(ExceptionMessage.NOT_FOUND)
                         ));
     }
 
     @Override
+    @Cacheable(value = "cacheProductTimeSales", key = "#productId")
     public TimeSaleProductResponseDto getMaxDiscountTimeSaleProductHasStock(String productId) {
 
         TimeSaleProductResponseDto responseDto = timeSaleProductMapper.toDto(
                 timeSaleReader.readByProductId(productId)
                         .getTimeSaleProducts().stream()
                         .filter(a -> a.getSaleQuantity() < a.getTotalQuantity())
+                        .sorted(Comparator.comparing(TimeSaleProduct::getId))
                         .max(Comparator.comparing(TimeSaleProduct::getDiscountRate)).orElseThrow(
                                 () -> new BusinessException(ExceptionMessage.NOT_FOUND)
                         ));
-
-        timeSaleProductResponseRedisRepository.save(responseDto, productId);
 
         return responseDto;
     }
