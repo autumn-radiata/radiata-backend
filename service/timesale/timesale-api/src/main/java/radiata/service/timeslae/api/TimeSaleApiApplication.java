@@ -3,7 +3,9 @@ package radiata.service.timeslae.api;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import radiata.service.timeslae.api.controller.TimeSaleController;
+import radiata.service.timeslae.api.controller.TimeSaleProductController;
 import radiata.service.timeslae.api.service.TimeSaleApiService;
+import radiata.service.timeslae.api.service.TimeSaleProductApiService;
 
 @SpringBootApplication(
     scanBasePackages = {
@@ -11,7 +13,9 @@ import radiata.service.timeslae.api.service.TimeSaleApiService;
     },
     scanBasePackageClasses = {
         TimeSaleController.class,
-        TimeSaleApiService.class
+        TimeSaleApiService.class,
+        TimeSaleProductController.class,
+        TimeSaleProductApiService.class
     }
 )
 public class TimeSaleApiApplication {

@@ -9,6 +9,9 @@ repositories {
     mavenCentral()
 }
 
+bootJar.enabled = true
+jar.enabled = false
+
 dependencies {
 
     implementation project(":service:timesale:timesale-core")
