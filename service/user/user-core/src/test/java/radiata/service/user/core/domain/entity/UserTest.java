@@ -7,8 +7,8 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import radiata.common.domain.user.constant.UserRole;
 import radiata.service.user.core.domain.model.constant.PointType;
-import radiata.service.user.core.domain.model.constant.UserRole;
 import radiata.service.user.core.domain.model.entity.PointHistory;
 import radiata.service.user.core.domain.model.entity.User;
 import radiata.service.user.core.domain.model.vo.Address;
@@ -60,11 +60,6 @@ class UserTest {
     @Test
     @DisplayName("사용자 정보 수정 ")
     void testUpdateInfo() {
-        Address newAddress = Address.builder()
-            .detailAddress("202")
-            .roadAddress("456 광주")
-            .zipcode("54321")
-            .build();
 
         user.updateInfo("UpdatedUser", "010-9876-5432", "202", "456 광주", "54321");
 
