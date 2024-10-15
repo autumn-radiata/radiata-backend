@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: brand-service
+  config:
+    import: classpath:application-database.yml
+
+server:
+  port: 8484
+
+

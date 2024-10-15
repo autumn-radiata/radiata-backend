@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 import radiata.database.model.BaseEntity;
 import radiata.service.order.core.domain.model.constant.OrderStatus;
+import radiata.service.payment.core.domain.model.vo.PaymentType;
 
 @Entity
 @Table(name = "r_order")
@@ -49,7 +50,7 @@ public class Order extends BaseEntity {
 
     private String paymentId;
 
-    //    private PaymentType paymentType;
+    private PaymentType paymentType;
     // TODO - 사용 예정
     private Integer usedPoint;
 
@@ -76,17 +77,20 @@ public class Order extends BaseEntity {
             .build();
     }
 
-    public void setOrderPrice(Integer orderPrice) {
-        this.orderPrice = orderPrice;
-    }
-
-    public void setPaymentId(String paymentId) {
-        this.paymentId = paymentId;
-    }
-
-    public void setOrderItems(Set<OrderItem> orderItems) {
+    public void setOrderPriceAndItems(Integer orderPrice, Set<OrderItem> orderItems) {
+        this.orderPrice = orderPrice; // TODO- this.usedPoint 빼야할 걸?
         this.orderItems = orderItems;
     }
+
+    public void setPaymentIdAndType(String paymentId, PaymentType paymentType) {
+        this.paymentId = paymentId;
+        this.paymentType = paymentType;
+    }
+
+    public void usePoint(Integer usedPoint) {
+        this.usedPoint = usedPoint;
+    }
+
 
     // 주문 상태 변경
     public void updateOrderStatus(

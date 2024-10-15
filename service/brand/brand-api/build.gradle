@@ -1,12 +1,14 @@
 plugins {
     id 'java'
 }
-
 group = 'radiata.service.brand'
 version = '0.0.1-SNAPSHOT'
-
 repositories {
     mavenCentral()
+}
+
+ext {
+    set('springCloudVersion', "2023.0.3")
 }
 
 bootJar.enabled = true
@@ -15,6 +17,8 @@ jar.enabled = false
 dependencies {
 
     /* module */
+    
+    implementation project(':service:brand:brand-core')
 
     /* library */
 
