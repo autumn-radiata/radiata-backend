@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.timesale.dto.condition.TimeSaleSearchCondition;
 import radiata.common.domain.timesale.dto.request.TimeSaleCreateRequestDto;
 import radiata.common.domain.timesale.dto.response.TimeSaleResponseDto;
@@ -16,6 +17,7 @@ import radiata.service.timesale.core.service.mapper.TimeSaleMapper;
 
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class TimeSaleServiceImpl implements TimeSaleService {
 
@@ -35,12 +37,14 @@ public class TimeSaleServiceImpl implements TimeSaleService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TimeSaleResponseDto getTimeSale(String timeSaleId) {
 
         return timeSaleMapper.toDto(timeSaleReader.read(timeSaleId));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<TimeSaleResponseDto> getTimeSales(TimeSaleSearchCondition timeSaleSearchCondition, Pageable pageable) {
 
         return timeSaleReader.readByCondition(timeSaleSearchCondition, pageable).map(timeSaleMapper::toDto);
