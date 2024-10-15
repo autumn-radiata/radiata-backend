@@ -5,6 +5,10 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.6' apply(false)
 }
 
+ext {
+    set('springCloudVersion', "2023.0.3")
+}
+
 allprojects {
     group = 'radiata'
     version = '0.0.1-SNAPSHOT'
@@ -33,7 +37,7 @@ allprojects {
             extendsFrom annotationProcessor
         }
     }
-    
+
     // jacoco report 설정
     jacocoTestReport {
         reports {

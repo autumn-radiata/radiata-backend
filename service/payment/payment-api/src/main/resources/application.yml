@@ -1,5 +1,14 @@
 spring:
+  application:
+    name: payment-service
   config:
     import: classpath:application-database.yml # database 속성 가져오기용
   profiles:
     default: dev
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:19090/eureka/
+  instance:
+    hostname: localhost

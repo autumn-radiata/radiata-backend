@@ -23,6 +23,14 @@ dependencies {
     implementation project(':database')
     implementation project(':service:order:order-core')
 
+    /* 라이브러리 */
+
+    // eureka client
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+    // swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
     /* 테스트 */
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
