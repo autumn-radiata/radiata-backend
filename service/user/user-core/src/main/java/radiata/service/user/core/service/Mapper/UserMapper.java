@@ -15,6 +15,7 @@ public interface UserMapper {
     @Mapping(source = "address.detailAddress", target = "detailAddress")
     @Mapping(source = "address.zipcode", target = "zipcode")
     @Mapping(source = "id", target = "userId")
+    @Mapping(source = "user.totalPoint.totalPoint", target = "totalPoint")
     UserGetInfoResponseDto userToUserGetInfoResponseDto(User user);
 
     @Mapping(source = "history.id", target = "pointHistoryId")

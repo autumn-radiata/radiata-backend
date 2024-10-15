@@ -3,20 +3,16 @@ package radiata.common.domain.user.dto.request;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails.Address;
 
 public record UserCreateRequestDto(
-
-    @NotBlank(message = "사용자 이름은 필수 입력입니다.")
-    String username, //사용자 아이디
-
-    @Pattern(regexp = "^[A-Za-z\\d!@#$%&*()]{8,15}$",
-        message = "비밀번호는 알파벳 대소문자, 숫자, 특수문자를 사용 가능하며, 최소 8자 이상 15자 이하 여야합니다.")
-    String password, // 비밀번호
 
     @NotBlank(message = "이메일은 필수 입력입니다.")
     @Email(message = "잘못된 이메일 주소 입니다.")
     String email, //이메일
+
+    @Pattern(regexp = "^[A-Za-z\\d!@#$%&*()]{8,15}$",
+        message = "비밀번호는 알파벳 대소문자, 숫자, 특수문자를 사용 가능하며, 최소 8자 이상 15자 이하 여야합니다.")
+    String password, // 비밀번호
 
     String nickname, //닉네임
 
@@ -29,6 +25,6 @@ public record UserCreateRequestDto(
     String detailAddress, // 상세주소
 
     String zipcode // 우편번호
-){
+) {
 
 }
