@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import radiata.common.annotation.Implementation;
+import radiata.common.domain.brand.request.ProductDeductRequestDto;
 import radiata.common.domain.order.dto.request.OrderCreateRequestDto;
 import radiata.common.domain.order.dto.request.OrderItemCreateRequestDto;
 import radiata.common.domain.order.dto.response.OrderItemResponseDto;
@@ -115,8 +116,7 @@ public class OrderItemService {
         for (OrderItemCreateRequestDto itemCreateDto : requestDto.itemList()) {
             try {
 //                // ID, 갯수, 사이즈 담겨있는 Dto 생성 후 사용
-//                int quantity = itemCreateDto.quantity();
-//                Object size = itemCreateDto;
+                int quantity = itemCreateDto.quantity();
 //
 //                // 1️⃣ 타임세일 제품 확인
 //                String timeSaleProductId = itemCreateDto.timeSaleProductId();
@@ -125,11 +125,11 @@ public class OrderItemService {
 //                    timeSaleProductClient.checkAndDeductTimeSaleProduct(timeSaleProductId);
 //                    deductedTimeSales.add(timeSaleProductId);
 //                }
-//                // 2️⃣ 재고 확인 및 차감
-//                String productId = itemCreateDto.productId();
-//
-//                productClient.checkAndDeductStock(productId);   // 재고 확인 및 차감
-//                deductedProducts.add(productId);                // 재고 차감 목록 추가
+                // 2️⃣ 재고 확인 및 차감
+                String productId = itemCreateDto.productId();
+
+                productClient.checkAndDeductStock(new ProductDeductRequestDto(productId, quantity));   // 재고 확인 및 차감
+                deductedProducts.add(productId);                // 재고 차감 목록 추가
 //
 //                // 3️⃣ 쿠폰 사용 여부 체크
 //                String couponIssuedId = itemCreateDto.couponIssuedId();
