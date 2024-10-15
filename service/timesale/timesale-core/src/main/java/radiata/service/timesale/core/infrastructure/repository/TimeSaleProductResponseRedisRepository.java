@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 public class TimeSaleProductResponseRedisRepository {
 
     private final RedisTemplate<String, Object> redisTemplate;
-    private final String productTimeSaleDefaultKey = "cacheProductTimeSales::";
+    public static final String productTimeSaleDefaultKey = "cacheProductTimeSales::";
 
     public void delete(String productId) {
 
