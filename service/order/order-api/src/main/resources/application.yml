@@ -3,6 +3,8 @@ spring:
     name: order-service
   config:
     import: classpath:application-database.yml
+  profiles:
+    default: dev
 
 server:
   port: 8085
