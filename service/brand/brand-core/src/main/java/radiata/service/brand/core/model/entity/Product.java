@@ -87,7 +87,7 @@ public class Product extends BaseEntity {
         deleteEntity();
     }
 
-    public void setLowestDiscountAmount(int discountAmount) {
+    public void setMaxDiscountAmount(int discountAmount) {
         this.discountAmount = discountAmount;
     }
 
