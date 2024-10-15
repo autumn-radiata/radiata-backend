@@ -3,6 +3,7 @@ package radiata.service.user.core.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import radiata.common.domain.user.dto.request.PointModifyRequestDto;
 import radiata.common.domain.user.dto.request.UserModifyRequestDto;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
@@ -17,7 +18,7 @@ import radiata.service.user.core.implement.PointHandler;
 public class UserCommandService {
 
     private final UserRepository userRepository;
-    private PointHandler pointHandler;
+    private final PointHandler pointHandler;
 
     /**
      * 회원 정보 수정
@@ -41,13 +42,13 @@ public class UserCommandService {
         user.delete(userId);
     }
 
-
     /**
-     * 포인트 정산 (증감,차감)
+     * 포인트 차감
      */
-    public void adjustPoint(String userId, int PointAmount, PointType type) {
-        User user = findValidUser(userId);
-        pointHandler.calculatePoint(user, PointAmount, type);
+    public void deductPoint(PointModifyRequestDto dto) {
+        User user = findValidUser(dto.userId());
+        user.deductPoint(dto.point());
+        pointHandler.recordPointHistory(user, dto.point(), PointType.SUBSCRIBE);
     }
 
     private User findValidUser(String userId) {
