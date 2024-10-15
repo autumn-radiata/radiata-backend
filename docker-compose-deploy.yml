@@ -39,6 +39,8 @@ services:
       - postgres_batch_volume:/var/lib/postgresql/data
 
   payment-server:
+    image: wodbs7758/autumn-payment-server:latest
+    container_name: autumn-payment-server
     build:
       dockerfile: Dockerfile
       args:
@@ -53,6 +55,8 @@ services:
       - eureka-server
 
   order-server:
+    image: wodbs7758/autumn-order-server:latest
+    container_name: autumn-order-server
     build:
       dockerfile: Dockerfile
       args:
@@ -67,6 +71,8 @@ services:
       - eureka-server
 
   brand-server:
+    image: wodbs7758/autumn-brand-server:latest
+    container_name: autumn-brand-server
     build:
       dockerfile: Dockerfile
       args:
@@ -81,6 +87,8 @@ services:
       - eureka-server
 
   coupon-server:
+    image: wodbs7758/autumn-coupon-server:latest
+    container_name: autumn-coupon-server
     build:
       dockerfile: Dockerfile
       args:
@@ -95,6 +103,8 @@ services:
       - eureka-server
 
   timesale-server:
+    image: wodbs7758/autumn-timesale-server:latest
+    container_name: autumn-timesale-server
     build:
       dockerfile: Dockerfile
       args:
@@ -109,6 +119,8 @@ services:
       - eureka-server
 
   user-server:
+    image: wodbs7758/autumn-user-server:latest
+    container_name: autumn-user-server
     build:
       dockerfile: Dockerfile
       args:
@@ -123,6 +135,8 @@ services:
       - eureka-server
 
   gateway-server:
+    image: wodbs7758/autumn-gateway-server:latest
+    container_name: autumn-gateway-server
     build:
       dockerfile: Dockerfile
       args:
@@ -137,6 +151,8 @@ services:
       - eureka-server
 
   eureka-server:
+    image: wodbs7758/autumn-eureka-server:latest
+    container_name: autumn-eureka-server
     build:
       dockerfile: Dockerfile
       args:
