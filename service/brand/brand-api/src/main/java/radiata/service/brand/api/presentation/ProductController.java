@@ -1,5 +1,6 @@
 package radiata.service.brand.api.presentation;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +27,7 @@ import radiata.service.brand.core.service.ProductCommandService;
 import radiata.service.brand.core.service.ProductQueryService;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/goods")
 @RequiredArgsConstructor
 public class ProductController {
 
@@ -37,9 +38,9 @@ public class ProductController {
      * 상품 생성
      */
     @PostMapping
-    public CommonResponse createProduct(@RequestBody ProductCreateRequestDto dto) {
-        productCommandService.createProduct(dto);
-        return SuccessResponse.success(SuccessMessage.OK.getMessage());
+    public CommonResponse createProduct(@Valid @RequestBody ProductCreateRequestDto dto) {
+        ProductGetResponseDto response = productCommandService.createProduct(dto);
+        return SuccessResponse.success(SuccessMessage.OK.getMessage(), response);
     }
 
     /**
@@ -54,6 +55,10 @@ public class ProductController {
     /**
      * 상품 목록 조회
      */
+    /*@Cacheable(
+        cacheNames = "itemSearchCache",
+        key = "{ args[0], args[1].pageNumber, args[1].pageSize }"
+    )*/
     @GetMapping("/list")
     public CommonResponse getProducts(
         @PageableDefault(page = 1, size = 10, sort = "createdAt", direction = Direction.ASC) Pageable pageable,
