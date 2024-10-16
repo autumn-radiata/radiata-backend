@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: classpath:application-database.yml
   application:
     name: coupon-service
 
