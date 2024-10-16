@@ -21,7 +21,7 @@ import radiata.service.timeslae.api.service.TimeSaleProductApiService;
         TimeSaleProductApiService.class
     }
 )
-@ConfigurationPropertiesScan(basePackages = {"radiata.service.timesale", "radiata.database", "radiata.database"})
+@ConfigurationPropertiesScan(basePackages = {"radiata.service.timesale", "radiata.database", "radiata.common"})
 public class TimeSaleApiApplication {
 
     public static void main(String[] args) {
