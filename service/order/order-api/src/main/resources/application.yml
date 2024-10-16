@@ -3,6 +3,8 @@ spring:
     name: order-service
   config:
     import: classpath:application-database.yml
+  profiles:
+    default: dev
 
 server:
   port: 8085
@@ -10,6 +12,6 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      defaultZone: http://yunjae.click:19090/eureka/
   instance:
     hostname: localhost
