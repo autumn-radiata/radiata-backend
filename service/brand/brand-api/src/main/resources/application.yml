@@ -11,8 +11,3 @@ eureka:
   client:
     service-url:
       defaultZone: http://yunjae.click:19090/eureka/
-  instance:
-    hostname: yunjae.click
-
-
-
