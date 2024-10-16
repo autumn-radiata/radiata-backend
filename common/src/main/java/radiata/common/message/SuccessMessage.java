@@ -43,7 +43,9 @@ public enum SuccessMessage {
     GET_TIME_SALES(HttpStatus.OK, "0", "타임 세일 목록 조회가 완료 되었습니다."),
 
     CREATE_TIME_SALE_PRODUCT(HttpStatus.OK, "0", "타임 세일 상품이 생성 되었습니다."),
-    SALE_TIME_SALE_PRODUCT(HttpStatus.OK, "0", "타임 세일 상품 판매가 완료 되었습니다.");
+    SALE_TIME_SALE_PRODUCT(HttpStatus.OK, "0", "타임 세일 상품 판매가 완료 되었습니다."),
+
+    GET_MAX_DISCOUNT_TIME_SALE_PRODUCT(HttpStatus.OK, "0", "타임 세일 상품 최고 할인율 조회가 완료 되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

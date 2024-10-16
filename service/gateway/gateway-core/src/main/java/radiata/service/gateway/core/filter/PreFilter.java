@@ -37,7 +37,7 @@ public class PreFilter implements GlobalFilter, Ordered {
 
         //헤더에 값을 추가
         exchange.getRequest().mutate()
-            .header("X-User-Name", jwtUtil.getUsername(claims))
+            .header("X-UserId", jwtUtil.getUsername(claims))
             .header("X-User-Roles", jwtUtil.getRole(claims))
             .build();
 

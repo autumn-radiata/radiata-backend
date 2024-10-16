@@ -1,5 +1,6 @@
 package radiata.service.timesale.core.service.interfaces;
 
-public interface TimeSaleProductService extends TimeSaleProductCreateService, TimeSaleProductUpdateService {
+public interface TimeSaleProductService extends TimeSaleProductCreateService,
+        TimeSaleProductReadService, TimeSaleProductUpdateService {
 
 }

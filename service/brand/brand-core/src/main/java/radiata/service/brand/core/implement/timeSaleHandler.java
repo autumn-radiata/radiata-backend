@@ -1,10 +1,7 @@
 package radiata.service.brand.core.implement;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +9,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import radiata.service.brand.core.model.TimeSaleProductGetResponseDto;
 import radiata.service.brand.core.service.FeignClient.TimeSaleClient;
 
 @Service
@@ -28,7 +24,7 @@ public class timeSaleHandler {
     @Scheduled()
     private void updateTimeSales() {
         log.info("스케줄러 시작");
-        ZSetOperations<String, Object> ops = redisTemplate.opsForZSet();
+        /*ZSetOperations<String, Object> ops = redisTemplate.opsForZSet();
 
         //feignClient 타임세일 상품의 데이터 요청
         List<TimeSaleProductGetResponseDto> timeSales = timeSaleClient.getProducts();
@@ -45,7 +41,7 @@ public class timeSaleHandler {
             // LocalDateTime을 Date로 변환하여 Redis에 만료 시간 설정
             redisTemplate.expireAt(redisKey, Date.from(timeSale.timeSaleEndTime()
                 .atZone(ZoneId.systemDefault()).toInstant()));
-        });
+        });*/
     }
 
     // 타임세일과 상품 할인가격 비교

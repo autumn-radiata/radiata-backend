@@ -33,4 +33,12 @@ public class TimeSaleReaderImpl implements TimeSaleReader {
 
         return timeSaleQueryRepository.findTimeSalesByCondition(condition, pageable);
     }
+
+    @Override
+    public TimeSale readByProductId(String productId) {
+
+        return timeSaleQueryRepository.findByProductId(productId).orElseThrow(
+                () -> new BusinessException(NOT_FOUND)
+        );
+    }
 }

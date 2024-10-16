@@ -1,0 +1,27 @@
+### 타임세일 등록
+POST http://localhost:19091/timesales
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyblRvaW5zdG1UejZnVElsUTJtWEFqMzdSaHgiLCJyb2xlIjoiQlJBTkRfT1dORVIiLCJpc3MiOiJ1c2VyLXNlcnZpY2UiLCJpYXQiOjE3MjkwMjYxOTcsImV4cCI6MTcyOTAyOTc5N30.wCfgP_sFXZc-7PU1bGOlPfw_JvMD83cqJhyW_V8XMYqnWMXVRUlhXHTvWQKeiRenE9mioVLPSPrQYkTUcFCJiA
+
+{
+  "title": "Black Sat Sale",
+  "timeSaleStartDate": "2024-10-10T10:00:00",
+  "timeSaleEndDate": "2024-11-24T18:00:00"
+}
+
+### 타임세일 상품 등록
+POST http://localhost:19091/timesale-products
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyblRvaW5zdG1UejZnVElsUTJtWEFqMzdSaHgiLCJyb2xlIjoiQlJBTkRfT1dORVIiLCJpc3MiOiJ1c2VyLXNlcnZpY2UiLCJpYXQiOjE3MjkwMjYxOTcsImV4cCI6MTcyOTAyOTc5N30.wCfgP_sFXZc-7PU1bGOlPfw_JvMD83cqJhyW_V8XMYqnWMXVRUlhXHTvWQKeiRenE9mioVLPSPrQYkTUcFCJiA
+
+{
+  "productId": "2nUVCqoq4foptQLdcq8pMBWbaSO",
+  "timeSaleId": "2nTzU7rOtGxNiiZUk24pmGYz0Cx",
+  "discountRate": 25,
+  "totalQuantity": 1000,
+  "timeSaleStartTime": "2024-10-01T09:00:00",
+  "timeSaleEndTime": "2024-10-16T06:50:00"
+}
+
+### 타임세일 중 상품의 최저가 세일 가격 반환
+GET http://localhost:19091/products/2nPv5xtreP4hyCNUTkHwsOt2X5p/timesale-products/max-discount
