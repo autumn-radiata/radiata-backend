@@ -29,6 +29,9 @@ public enum ExceptionMessage {
 
     // 잔액 부족 402
     INSUFFICIENT_BALANCE(PAYMENT_REQUIRED, "2001", "충전금이 부족합니다."),
+    PAY_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "2002", "간편결제 사용자가 존재하지 않습니다."),
+    INVALID_PASSWORD(BAD_REQUEST, "2003", "비밀번호가 일치하지 않습니다."),
+    PAY_USER_DUPLICATE(BAD_REQUEST, "2004", "이미 등록된 사용자입니다."),
 
     /* 유저 3000번대 */
 
