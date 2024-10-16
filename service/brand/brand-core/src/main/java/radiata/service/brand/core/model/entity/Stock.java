@@ -34,7 +34,7 @@ public class Stock {
 
     public Stock subStock(int quantity) {
         if (!hasAvailableStock(quantity)) {
-            throw new BusinessException(ExceptionMessage.PRODUCT_INVENTORY_ISSUE_LACK);
+            throw new BusinessException(ExceptionMessage.PRODUCT_INVENTORY_LACK);
         }
         return Stock.from(this.stock - quantity);
     }

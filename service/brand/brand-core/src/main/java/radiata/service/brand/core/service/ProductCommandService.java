@@ -39,6 +39,7 @@ public class ProductCommandService {
      * 상품 생성
      */
     public ProductGetResponseDto createProduct(ProductCreateRequestDto dto) {
+        checkPriceAboveDiscountedAmount(dto.price(), dto.discountAmount());
         Brand brand = findValidBrand(dto.brandId());
         Category category = findValidCategory(dto.categoryId());
         String id = createId();
@@ -107,5 +108,12 @@ public class ProductCommandService {
         return productRepository.findById(productId)
             .orElseThrow(() -> new BusinessException(ExceptionMessage.PRODUCT_NOT_FOUND));
     }
+
+    private void checkPriceAboveDiscountedAmount(int price, int discountAmount) {
+        if (price < discountAmount) {
+            throw new BusinessException(ExceptionMessage.INVALID_DISCOUNT_AMOUNT);
+        }
+    }
+
 
 }
