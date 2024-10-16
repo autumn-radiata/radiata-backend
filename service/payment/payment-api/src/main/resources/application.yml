@@ -9,6 +9,6 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      defaultZone: http://yunjae.click:19090/eureka/
   instance:
-    hostname: localhost
+    hostname: yunjae.click

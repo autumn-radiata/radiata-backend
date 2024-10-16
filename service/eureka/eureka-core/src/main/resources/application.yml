@@ -8,6 +8,6 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      defaultZone: http://yunjae.click:19090/eureka/
   instance:
-    hostname: localhost
+    hostname: yunjae.click
