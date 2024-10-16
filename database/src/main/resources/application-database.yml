@@ -9,8 +9,8 @@ spring:
 
   data:
     redis:
-      host: ${DEV_REDIS_HOST}
-      port: 6380
+      host: yunjae.click
+      port: 63801
 
   jpa:
     hibernate:
