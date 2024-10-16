@@ -31,7 +31,7 @@ services:
       args:
         - FILE_DIRECTORY=service/brand/brand-api
     ports:
-      - "8086:8086"
+      - "8484:8484"
     depends_on:
       - eureka-server
 
