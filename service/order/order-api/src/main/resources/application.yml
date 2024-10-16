@@ -5,6 +5,10 @@ spring:
     import: classpath:application-database.yml
   profiles:
     default: dev
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
 
 server:
   port: 8085
