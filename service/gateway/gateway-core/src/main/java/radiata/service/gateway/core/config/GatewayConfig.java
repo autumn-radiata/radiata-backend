@@ -17,6 +17,9 @@ public class GatewayConfig {
             .route("user-service", r -> r.path("/auth/**", "/users/**")
                 .filters(f -> applyCommonFilters(f, "user-service"))
                 .uri("lb://user-service"))
+            .route("order-service", r -> r.path("/orders/**")
+                .filters(f -> applyCommonFilters(f, "order-service"))
+                .uri("lb://order-service"))
             .route("brand-service", r -> r.path("/goods/**", "/brands/**", "/categories/**")
                 .filters(f -> applyCommonFilters(f, "brand-service"))
                 .uri("lb://brand-service"))
@@ -33,7 +36,6 @@ public class GatewayConfig {
             .route("order-service", r -> r.path("/orders/**")
                 .filters(f -> applyCommonFilters(f, "order-service"))
                 .uri("lb://order-service"))
-
             .build();
     }
 
