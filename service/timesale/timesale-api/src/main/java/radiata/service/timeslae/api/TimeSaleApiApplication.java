@@ -9,19 +9,19 @@ import radiata.service.timeslae.api.service.TimeSaleApiService;
 import radiata.service.timeslae.api.service.TimeSaleProductApiService;
 
 @SpringBootApplication(
-        scanBasePackages = {
-                "radiata.service.timesale",
-                "radiata.common",
-                "radiata.database"
-        },
-        scanBasePackageClasses = {
-                TimeSaleController.class,
-                TimeSaleApiService.class,
-                TimeSaleProductController.class,
-                TimeSaleProductApiService.class
-        }
+    scanBasePackages = {
+        "radiata.service.timesale",
+        "radiata.common",
+        "radiata.database"
+    },
+    scanBasePackageClasses = {
+        TimeSaleController.class,
+        TimeSaleApiService.class,
+        TimeSaleProductController.class,
+        TimeSaleProductApiService.class
+    }
 )
-@ConfigurationPropertiesScan(basePackages = {"radiata.service.timesale", "radiata.database"})
+@ConfigurationPropertiesScan(basePackages = {"radiata.service.timesale", "radiata.database", "radiata.database"})
 public class TimeSaleApiApplication {
 
     public static void main(String[] args) {
