@@ -2,7 +2,6 @@ package radiata.service.timesale.core.service;
 
 import java.util.Comparator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,9 +30,9 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     private final TimeSaleProductResponseRedisRepository timeSaleProductResponseRedisRepository;
 
     @Override
-    @CacheEvict(value = "cacheProductTimeSales", key = "#request.productId()")
+    //@CacheEvict(value = "cacheProductTimeSales", key = "#request.productId()")
     public TimeSaleProductResponseDto createTimeSaleProduct(
-            TimeSaleProductCreateRequestDto request) {
+        TimeSaleProductCreateRequestDto request) {
 
         TimeSale timeSale = timeSaleReader.read(request.timeSaleId());
 
@@ -59,12 +58,12 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     public TimeSaleProductResponseDto getMaxDiscountTimeSaleProduct(String productId) {
 
         return timeSaleProductMapper.toDto(
-                timeSaleReader.readByProductId(productId)
-                        .getTimeSaleProducts().stream()
-                        .sorted(Comparator.comparing(TimeSaleProduct::getId))
-                        .max(Comparator.comparing(TimeSaleProduct::getDiscountRate)).orElseThrow(
-                                () -> new BusinessException(ExceptionMessage.NOT_FOUND)
-                        ));
+            timeSaleReader.readByProductId(productId)
+                .getTimeSaleProducts().stream()
+                .sorted(Comparator.comparing(TimeSaleProduct::getId))
+                .max(Comparator.comparing(TimeSaleProduct::getDiscountRate)).orElseThrow(
+                    () -> new BusinessException(ExceptionMessage.NOT_FOUND)
+                ));
     }
 
     @Override
@@ -72,13 +71,13 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     public TimeSaleProductResponseDto getMaxDiscountTimeSaleProductHasStock(String productId) {
 
         TimeSaleProductResponseDto responseDto = timeSaleProductMapper.toDto(
-                timeSaleReader.readByProductId(productId)
-                        .getTimeSaleProducts().stream()
-                        .filter(a -> a.getSaleQuantity() < a.getTotalQuantity())
-                        .sorted(Comparator.comparing(TimeSaleProduct::getId))
-                        .max(Comparator.comparing(TimeSaleProduct::getDiscountRate)).orElseThrow(
-                                () -> new BusinessException(ExceptionMessage.NOT_FOUND)
-                        ));
+            timeSaleReader.readByProductId(productId)
+                .getTimeSaleProducts().stream()
+                .filter(a -> a.getSaleQuantity() < a.getTotalQuantity())
+                .sorted(Comparator.comparing(TimeSaleProduct::getId))
+                .max(Comparator.comparing(TimeSaleProduct::getDiscountRate)).orElseThrow(
+                    () -> new BusinessException(ExceptionMessage.NOT_FOUND)
+                ));
 
         return responseDto;
     }

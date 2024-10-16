@@ -1,0 +1,16 @@
+### 적립금 차감
+POST http://localhost:8083/users/points/deduct
+Content-Type: application/json
+
+{
+  "userId": "2nS2pAx5iL6OJb3DObnitCh5r96",
+  "point": 500
+}
+
+### 포인트 내역 조회 pointHistories
+GET http://localhost:8083/users/pointHistories
+X-UserId: 2nS2pAx5iL6OJb3DObnitCh5r96
+
+### 사용자 정보 조회
+GET http://localhost:19091/users
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyblRvaW5zdG1UejZnVElsUTJtWEFqMzdSaHgiLCJyb2xlIjoiQlJBTkRfT1dORVIiLCJpc3MiOiJ1c2VyLXNlcnZpY2UiLCJpYXQiOjE3MjkwMjYxOTcsImV4cCI6MTcyOTAyOTc5N30.wCfgP_sFXZc-7PU1bGOlPfw_JvMD83cqJhyW_V8XMYqnWMXVRUlhXHTvWQKeiRenE9mioVLPSPrQYkTUcFCJiA

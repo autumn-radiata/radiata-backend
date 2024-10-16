@@ -1,13 +1,38 @@
 ### 회원가입
-POST http://localhost:8083/auth/sign-up
+POST http://localhost:19091/auth/sign-up
 Content-Type: application/json
 
 {
-  "username": "username",
+  "email": "custom@email.com",
   "password": "password",
-  "email": "email@email.com",
-  "phone": "phone",
+  "phone": "010-4567-2839",
+  "nickname": "nickname",
   "roadAddress": "roadAddress",
   "detailAddress": "detailAddress",
   "zipcode": "zipcode"
 }
+
+### 브랜드 운영자 회원가입
+POST http://localhost:19091/auth/owner/sign-up
+Content-Type: application/json
+
+{
+  "email": "owner@email.com",
+  "password": "password",
+  "nickname": "brand_owner",
+  "phone": "010-4567-2345",
+  "roadAddress": "roadAddress",
+  "detailAddress": "detailAddress",
+  "zipcode": "zipcode"
+}
+
+
+### 로그인
+POST http://localhost:19091/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "owner@email.com",
+  "password": "password"
+}
+

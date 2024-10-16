@@ -7,6 +7,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.brand.request.ProductCreateRequestDto;
 import radiata.common.domain.brand.request.ProductDeductRequestDto;
 import radiata.common.domain.brand.response.ProductGetResponseDto;
@@ -37,7 +38,7 @@ public class ProductCommandService {
     /**
      * 상품 생성
      */
-    public void createProduct(ProductCreateRequestDto dto) {
+    public ProductGetResponseDto createProduct(ProductCreateRequestDto dto) {
         Brand brand = findValidBrand(dto.brandId());
         Category category = findValidCategory(dto.categoryId());
         String id = createId();
@@ -45,11 +46,13 @@ public class ProductCommandService {
             dto.stock(), GenderType.valueOf(dto.gender()), ColorType.valueOf(dto.color()),
             SizeType.valueOf(dto.size()));
         productRepository.save(product);
+        return productMapper.toProductGetResponseDto(product);
     }
 
     /**
      * 상품 재고 차감
      */
+    @Transactional
     @CachePut(cacheNames = PRODUCT_CACHE_NAME, key = "#result.productId")
     public ProductGetResponseDto deductInventory(ProductDeductRequestDto dto) {
         Product product = findValidProduct(dto.productId());
@@ -60,6 +63,7 @@ public class ProductCommandService {
     /**
      * 상품 재고 증감 - 보상 트랜잭션 복구
      */
+    @Transactional
     @CachePut(cacheNames = PRODUCT_CACHE_NAME, key = "#result.productId")
     public ProductGetResponseDto increaseInventory(String productId, Integer quantity) {
         Product product = findValidProduct(productId);
@@ -71,6 +75,7 @@ public class ProductCommandService {
     /**
      * 상품 삭제
      */
+    @Transactional
     @Caching(evict = {
         @CacheEvict(cacheNames = PRODUCT_CACHE_NAME, key = "args[0]"),
         @CacheEvict(cacheNames = "storeAllCache", allEntries = true)
