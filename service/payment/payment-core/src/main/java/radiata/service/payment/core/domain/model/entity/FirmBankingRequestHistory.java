@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
+import radiata.database.model.BaseEntity;
 import radiata.service.payment.core.domain.model.vo.Account;
 import radiata.service.payment.core.domain.model.vo.FirmBankingRequestStatus;
 import radiata.service.payment.core.domain.model.vo.Money;
@@ -26,7 +27,7 @@ import radiata.service.payment.core.domain.model.vo.Money;
 @Builder // 빌더 패턴은 테스트 용도로만 사용
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA 객체는 기본 생성자를 필요로 함
-public class FirmBankingRequestHistory {
+public class FirmBankingRequestHistory extends BaseEntity {
 
     @Id
     private String id;
