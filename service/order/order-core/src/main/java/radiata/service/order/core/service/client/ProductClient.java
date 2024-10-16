@@ -9,7 +9,7 @@ import radiata.common.response.SuccessResponse;
 @FeignClient(name = "brand-service")
 public interface ProductClient {
 
-    @PostMapping("/products/deduct")
+    @PostMapping("/goods/deduct")
     SuccessResponse<String> checkAndDeductStock(@RequestBody ProductDeductRequestDto requestDto);
 
 }
