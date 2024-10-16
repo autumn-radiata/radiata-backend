@@ -41,9 +41,6 @@ public class OrderItem extends BaseEntity {
     @Column(nullable = false)
     private Integer quantity;
 
-//    @Column(nullable = false)
-//    private size;
-
     @Column(nullable = false)
     private Integer unitPrice;
 
@@ -69,7 +66,25 @@ public class OrderItem extends BaseEntity {
             .couponIssuedId(couponIssuedId)
             .quantity(quantity)
             .unitPrice(unitPrice)
-            .paymentPrice(unitPrice * quantity)
             .build();
+    }
+
+    // 금액 지정
+    public int setPrice(String saleType, Integer discountValue) {
+        int price = this.unitPrice * this.quantity;
+        if (saleType == null || discountValue == null) {
+            return this.paymentPrice = price;
+        }
+
+        return calculateDiscount(price, saleType, discountValue);
+    }
+
+    // 할인 금액, 율 계산
+    private int calculateDiscount(int price, String saleType, Integer discountValue) {
+        double finalPrice = saleType.equals("AMOUNT")
+            ? price - discountValue                 // 금액 할인
+            : price * (1 - discountValue / 100.0);  // 할인율 적용
+
+        return this.paymentPrice = (int) finalPrice;
     }
 }
