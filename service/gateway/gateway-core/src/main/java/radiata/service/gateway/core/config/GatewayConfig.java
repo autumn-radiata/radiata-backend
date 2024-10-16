@@ -24,6 +24,15 @@ public class GatewayConfig {
             .route("timesale-service", r -> r.path("/timesales/**", "/timesale-products/**", "/products/**")
                 .filters(f -> applyCommonFilters(f, "timesale-service"))
                 .uri("lb://timesale-service"))
+            .route("payment-service", r -> r.path("/payments/**")
+                .filters(f -> applyCommonFilters(f, "payment-service"))
+                .uri("lb://payment-service"))
+            .route("coupon-service", r -> r.path("/coupons/**", "/couponissues/**")
+                .filters(f -> applyCommonFilters(f, "coupon-service"))
+                .uri("lb://coupon-service"))
+            .route("order-service", r -> r.path("/orders/**")
+                .filters(f -> applyCommonFilters(f, "order-service"))
+                .uri("lb://order-service"))
 
             .build();
     }
@@ -38,5 +47,4 @@ public class GatewayConfig {
                 .setSeries(HttpStatus.Series.SERVER_ERROR)
                 .setMethods(HttpMethod.GET));
     }
-
 }
