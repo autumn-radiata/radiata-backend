@@ -1,4 +1,4 @@
-package radiata.service.payment.core.domain.model.vo;
+package radiata.common.domain.payment.constant;
 
 public enum FirmBankingRequestStatus {
     SUCCESS, FAIL

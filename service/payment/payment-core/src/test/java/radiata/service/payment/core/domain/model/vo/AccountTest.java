@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import radiata.common.domain.payment.constant.Bank;
 
 @DisplayName("Account VO 테스트")
 class AccountTest {

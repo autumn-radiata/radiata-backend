@@ -9,9 +9,9 @@ import org.assertj.core.data.TemporalUnitWithinOffset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import radiata.common.domain.payment.constant.PaymentStatus;
+import radiata.common.domain.payment.constant.PaymentType;
 import radiata.service.payment.core.domain.model.vo.Money;
-import radiata.service.payment.core.domain.model.vo.PaymentStatus;
-import radiata.service.payment.core.domain.model.vo.PaymentType;
 
 @DisplayName("Payment 엔티티 테스트")
 class PaymentTest {
@@ -49,7 +49,7 @@ class PaymentTest {
             "user01",
             "transaction01",
             Money.of(1000),
-            PaymentType.RADIATA_PAY);
+            PaymentType.EASY_PAY);
 
         // then
         assertThat(payPayment.getId()).isNotBlank();
@@ -57,7 +57,7 @@ class PaymentTest {
         assertThat(payPayment.getTransactionId()).isEqualTo("transaction01");
         assertThat(payPayment.getAmount()).isEqualTo(Money.of(1000));
         assertThat(payPayment.getStatus()).isEqualTo(PaymentStatus.PENDING);
-        assertThat(payPayment.getType()).isEqualTo(PaymentType.RADIATA_PAY);
+        assertThat(payPayment.getType()).isEqualTo(PaymentType.EASY_PAY);
     }
 
     @Test

@@ -15,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import radiata.common.annotation.Implementation;
+import radiata.common.exception.BusinessException;
+import radiata.common.message.ExceptionMessage;
+import radiata.service.payment.core.domain.model.entity.PayUser;
 import radiata.service.payment.core.domain.model.entity.Payment;
 import radiata.service.payment.core.service.request.TossPaymentConfirmRequestDto;
 
@@ -74,5 +77,19 @@ public class PaymentRequester {
     private String createBasicAuth() {
         String secretKeyWithPassword = TOSS_PAYMENT_TEST_SECRET_KEY + ":";
         return new String(Base64.getEncoder().encode(secretKeyWithPassword.getBytes(UTF_8)));
+    }
+
+    @Transactional
+    public void requestEasyPay(Payment payment, PayUser payUser) {
+        // 충전금 충분한지 체크
+        if (payUser.isBalanceLessThan(payment.getAmount())) {
+            payment.fail();
+            throw new BusinessException(ExceptionMessage.INSUFFICIENT_BALANCE);
+        }
+
+        // 충전금 차감
+        payUser.withdraw(payment.getAmount());
+        // 결제 승인
+        payment.approve();
     }
 }

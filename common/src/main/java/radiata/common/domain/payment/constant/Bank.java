@@ -1,4 +1,4 @@
-package radiata.service.payment.core.domain.model.vo;
+package radiata.common.domain.payment.constant;
 
 import java.util.Optional;
 import java.util.stream.Stream;
