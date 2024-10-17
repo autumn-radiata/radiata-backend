@@ -34,12 +34,13 @@ public class CouponIssueServiceImplV2 implements CouponIssueService {
     private final CouponIssueSaver couponIssueSaver;
     private final DistributeLockExecutor distributeLockExecutor;
 
+
     @Override
     public void issue(String couponId, String userId) {
 
         Coupon coupon = couponReader.readCoupon(couponId);
 
-        distributeLockExecutor.execute("lock_%s".formatted(couponId), 3000, 3000, () -> {
+        distributeLockExecutor.execute("couponIssueLock_%s".formatted(couponId), 3000, 3000, () -> {
             couponIssueValidator.validate(coupon, userId);
             saveCouponIssue(couponId, userId);
         });
