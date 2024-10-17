@@ -49,7 +49,7 @@ class PaymentTest {
             "user01",
             "transaction01",
             Money.of(1000),
-            PaymentType.RADIATA_PAY);
+            PaymentType.EASY_PAY);
 
         // then
         assertThat(payPayment.getId()).isNotBlank();
@@ -57,7 +57,7 @@ class PaymentTest {
         assertThat(payPayment.getTransactionId()).isEqualTo("transaction01");
         assertThat(payPayment.getAmount()).isEqualTo(Money.of(1000));
         assertThat(payPayment.getStatus()).isEqualTo(PaymentStatus.PENDING);
-        assertThat(payPayment.getType()).isEqualTo(PaymentType.RADIATA_PAY);
+        assertThat(payPayment.getType()).isEqualTo(PaymentType.EASY_PAY);
     }
 
     @Test
