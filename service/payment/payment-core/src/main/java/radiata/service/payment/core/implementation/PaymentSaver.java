@@ -28,4 +28,16 @@ public class PaymentSaver {
 
         return paymentRepository.save(payment);
     }
+
+    @Transactional
+    public Payment createEasyPay(String userId, Long amount) {
+        Payment payment = Payment.of(
+            KsuidGenerator.generate(),
+            userId,
+            KsuidGenerator.generate(),
+            Money.of(amount),
+            PaymentType.EASY_PAY);
+
+        return paymentRepository.save(payment);
+    }
 }
