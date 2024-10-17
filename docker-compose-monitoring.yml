@@ -5,7 +5,7 @@ services:
     ports:
       - "9090:9090"  # Prometheus UI 접근 포트
     volumes:
-      - prometheus-volume:/etc/prometheus/prometheus.yml  # Prometheus 설정 파일 마운트
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml  # Prometheus 설정 파일 마운트
 
   grafana:
     image: grafana/grafana:latest
@@ -26,4 +26,3 @@ services:
 
 volumes:
   grafana-volume:
-  prometheus-volume:
