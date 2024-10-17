@@ -9,8 +9,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisKeyValueAdapter;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.exception.BusinessException;
@@ -26,7 +31,6 @@ import radiata.service.coupon.core.domain.repository.CouponIssueRepository;
 import radiata.service.coupon.core.domain.repository.CouponRepository;
 import radiata.service.coupon.core.infrastructure.repository.CouponIssueJpaRepository;
 import radiata.service.coupon.core.infrastructure.repository.CouponJpaRepository;
-import radiata.service.coupon.core.service.interfaces.coupon_issue.CouponIssueService;
 
 @ActiveProfiles("test")
 @Transactional
@@ -34,7 +38,7 @@ import radiata.service.coupon.core.service.interfaces.coupon_issue.CouponIssueSe
 class CouponIssueServiceImplV1Test {
 
     @Autowired
-    CouponIssueService couponIssueService;
+    CouponIssueServiceImplV1 couponIssueService;
 
     @Autowired
     CouponIssueJpaRepository couponIssueJpaRepository;
@@ -53,6 +57,20 @@ class CouponIssueServiceImplV1Test {
 
     @MockBean
     private RedissonClient redissonClient;
+
+    @MockBean
+    @Qualifier("redisTemplate")
+    private RedisTemplate<String, String> redisTemplate;
+
+    @MockBean
+    @Qualifier("springRedisTemplate")
+    private StringRedisTemplate stringRedisTemplate;
+
+    @MockBean
+    private RedisConnectionFactory redisConnectionFactory;
+
+    @MockBean
+    private RedisKeyValueAdapter redisKeyValueAdapter;
 
     @BeforeEach
     void clean() {
@@ -110,9 +128,9 @@ class CouponIssueServiceImplV1Test {
             .build();
         couponRepository.save(coupon);
         // When
-        CouponIssue couponIssue = couponIssueService.saveCouponIssue(coupon.getId(), userId);
+        couponIssueService.saveCouponIssue(coupon.getId(), userId);
         // Then
-        assertThat(couponIssueJpaRepository.existsById(couponIssue.getId())).isTrue();
+        assertThat(couponIssueJpaRepository.count()).isEqualTo(1);
     }
 
     @Test

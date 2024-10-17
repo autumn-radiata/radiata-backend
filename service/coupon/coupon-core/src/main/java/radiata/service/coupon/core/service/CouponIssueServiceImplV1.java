@@ -38,13 +38,13 @@ public class CouponIssueServiceImplV1 implements CouponIssueService {
     }
 
     @Override
-    public CouponIssue saveCouponIssue(String couponId, String userId) {
+    public void saveCouponIssue(String couponId, String userId) {
 
         checkAlreadyIssuance(couponId, userId);
         Coupon coupon = couponReader.readCoupon(couponId); // 같은 트랙잭션 내에서 가져와서 성능상 별 차이 없을 거 같아서 넣었습니다.
         String couponIssueId = couponIssueIdCreator.create();
 
-        return couponIssueSaver.save(couponIssueMapper.toEntity(coupon, userId, couponIssueId));
+        couponIssueSaver.save(couponIssueMapper.toEntity(coupon, userId, couponIssueId));
     }
 
     private void checkAlreadyIssuance(String couponId, String userId) {
