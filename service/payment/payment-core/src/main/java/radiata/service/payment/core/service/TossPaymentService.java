@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.payment.constant.PaymentStatus;
 import radiata.common.domain.payment.dto.request.TossPaymentCreateRequestDto;
-import radiata.common.domain.payment.dto.response.TossPaymentCreateResponseDto;
+import radiata.common.domain.payment.dto.response.PaymentCreateResponseDto;
 import radiata.service.payment.core.domain.model.entity.Payment;
 import radiata.service.payment.core.implementation.PaymentRequester;
 import radiata.service.payment.core.implementation.PaymentSaver;
@@ -20,12 +20,12 @@ public class TossPaymentService {
     private final PaymentRequester paymentRequester;
 
     @Transactional
-    public TossPaymentCreateResponseDto requestTossPayment(TossPaymentCreateRequestDto request) {
+    public PaymentCreateResponseDto requestTossPayment(TossPaymentCreateRequestDto request) {
         // 결제 생성
         Payment payment = paymentSaver.createTossPayment(request.userId(), request.paymentKey(), request.amount());
         // 토스 결제 요청
         paymentRequester.requestTossPayment(payment, request.orderId());
 
-        return new TossPaymentCreateResponseDto(payment.getStatus().equals(PaymentStatus.APPROVED), payment.getId());
+        return new PaymentCreateResponseDto(payment.getStatus().equals(PaymentStatus.APPROVED), payment.getId());
     }
 }

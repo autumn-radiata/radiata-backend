@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import radiata.common.domain.payment.dto.request.TossPaymentCreateRequestDto;
-import radiata.common.domain.payment.dto.response.TossPaymentCreateResponseDto;
+import radiata.common.domain.payment.dto.response.PaymentCreateResponseDto;
 import radiata.service.payment.core.domain.model.entity.Payment;
 import radiata.service.payment.core.implementation.PaymentRequester;
 import radiata.service.payment.core.implementation.PaymentSaver;
@@ -64,7 +64,7 @@ class TossPaymentServiceTest {
         }).when(paymentRequester).requestTossPayment(eq(payment), anyString());
 
         // when
-        TossPaymentCreateResponseDto responseDto = tossPaymentService.requestTossPayment(requestDto);
+        PaymentCreateResponseDto responseDto = tossPaymentService.requestTossPayment(requestDto);
 
         // then
         assertThat(responseDto).isNotNull();
@@ -100,7 +100,7 @@ class TossPaymentServiceTest {
         }).when(paymentRequester).requestTossPayment(eq(payment), anyString());
 
         // when
-        TossPaymentCreateResponseDto responseDto = tossPaymentService.requestTossPayment(requestDto);
+        PaymentCreateResponseDto responseDto = tossPaymentService.requestTossPayment(requestDto);
 
         // then
         assertThat(responseDto).isNotNull();
