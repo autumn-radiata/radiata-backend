@@ -1,5 +1,6 @@
 package radiata.service.payment.api.presentation;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import radiata.common.message.SuccessMessage;
 import radiata.common.response.SuccessResponse;
 import radiata.service.payment.core.service.TossPaymentService;
 
+@Tag(name = "결제", description = "결제 API")
 @Slf4j
 @RestController
 @RequiredArgsConstructor

@@ -1,0 +1,33 @@
+### 간편결제 유저 생성
+POST http://localhost:8080/payusers
+Content-Type: application/json
+X-Userid: 2nVDCU4ILPYK6ezjTUNqAHXK3jQ
+
+{
+  "password": "123456"
+}
+
+### 간편결제 유저 조회
+GET http://localhost:8080/payusers
+Content-Type: application/json
+X-Userid: 2nVDCU4ILPYK6ezjTUNqAHXK3jQ
+
+### 간편결제 유저 충전금 충전
+PATCH http://localhost:8080/payusers/money/add
+Content-Type: application/json
+X-Userid: 2nVDCU4ILPYK6ezjTUNqAHXK3jQ
+
+{
+  "password": "123456",
+  "amount": 1000
+}
+
+### 간편결제 유저 충전금 출금
+PATCH http://localhost:8080/payusers/money/subtract
+Content-Type: application/json
+X-Userid: 2nVDCU4ILPYK6ezjTUNqAHXK3jQ
+
+{
+  "password": "123456",
+  "amount": 1000
+}
