@@ -2,9 +2,6 @@ package radiata.service.brand.core.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.brand.request.ProductCreateRequestDto;
@@ -30,8 +27,6 @@ import radiata.service.brand.core.service.Mapper.ProductMapper;
 
 public class ProductCommandService {
 
-    private static final String PRODUCT_CACHE_NAME = "ProductCache";
-    private static final String PRODUCT_LIST_CACHE_NAME = "ProductSearchCache";
     private final ProductValidator productValidator;
     private final ProductIdCreator productIdCreator;
     private final ProductSaver productSaver;
@@ -39,6 +34,7 @@ public class ProductCommandService {
     private final BrandReader brandReader;
     private final CategoryReader categoryReader;
     private final ProductMapper productMapper;
+    private final RedisService redisService;
 
     /**
      * 상품 생성
@@ -61,35 +57,49 @@ public class ProductCommandService {
      * 상품 재고 차감
      */
     @Transactional
-    @CachePut(cacheNames = PRODUCT_CACHE_NAME, key = "#result.productId")
-    public ProductGetResponseDto deductInventory(ProductDeductRequestDto dto) {
+    public void deductInventory(ProductDeductRequestDto dto) {
+
+        //db 갱신
         Product product = productReader.read(dto.productId());
         product.subStock(dto.quantity());
-        return productMapper.toProductGetResponseDto(product);
+        productSaver.save(product);
+
+        //redis 갱신
+        ProductGetResponseDto stockSubbedProduct = productMapper.toProductGetResponseDto(product);
+        redisService.updateProduct(stockSubbedProduct);
+        //redisService.evictPagedProductsCache();
+
     }
 
     /**
      * 상품 재고 증감 - 보상 트랜잭션 복구
      */
     @Transactional
-    @CachePut(cacheNames = PRODUCT_CACHE_NAME, key = "#result.productId")
-    public ProductGetResponseDto increaseInventory(ProductDeductRequestDto dto) {
+    public void increaseInventory(ProductDeductRequestDto dto) {
+
         Product product = productReader.read(dto.productId());
         product.addStock(dto.quantity());
-        return productMapper.toProductGetResponseDto(product);
+        productSaver.save(product);
+
+        ProductGetResponseDto stockAddedProduct = productMapper.toProductGetResponseDto(product);
+        redisService.updateProduct(stockAddedProduct);
+        //redisService.evictPagedProductsCache();
+
     }
 
     /**
      * 상품 삭제
      */
     @Transactional
-    @Caching(evict = {
-        @CacheEvict(cacheNames = PRODUCT_CACHE_NAME, key = "args[0]"),
-        @CacheEvict(cacheNames = PRODUCT_LIST_CACHE_NAME, allEntries = true)
-    })
     public void removeProduct(String productId) {
+
         Product product = productReader.read(productId);
         product.delete();
+
+        redisService.evictProduct(productId);
+
+        //redisService.evictPagedProductsCache();
+
     }
 
     /**
