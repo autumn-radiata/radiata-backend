@@ -8,26 +8,25 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import radiata.common.domain.brand.request.ProductCreateRequestDto;
 import radiata.common.domain.brand.request.ProductDeductRequestDto;
+import radiata.common.domain.brand.request.ProductSearchCondition;
 import radiata.common.domain.brand.response.ProductGetResponseDto;
 import radiata.common.message.SuccessMessage;
 import radiata.common.response.CommonResponse;
 import radiata.common.response.SuccessResponse;
-import radiata.service.brand.core.model.constant.ColorType;
-import radiata.service.brand.core.model.constant.GenderType;
-import radiata.service.brand.core.model.constant.SizeType;
 import radiata.service.brand.core.service.ProductCommandService;
 import radiata.service.brand.core.service.ProductQueryService;
 
 @RestController
-@RequestMapping("/goods")
+@RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
 
@@ -62,15 +61,9 @@ public class ProductController {
     @GetMapping("/list")
     public CommonResponse getProducts(
         @PageableDefault(page = 1, size = 10, sort = "createdAt", direction = Direction.ASC) Pageable pageable,
-        @RequestParam(required = false) String brandId,
-        @RequestParam(required = false) String categoryId,
-        @RequestParam(required = false) GenderType gender,
-        @RequestParam(required = false) SizeType size,
-        @RequestParam(required = false) ColorType color,
-        @RequestParam(required = false) String query
+        @ModelAttribute ProductSearchCondition condition
     ) {
-        Page<ProductGetResponseDto> response = productQueryService.getProducts(brandId, categoryId, gender, size, color,
-            query, pageable);
+        Page<ProductGetResponseDto> response = productQueryService.getProducts(condition, pageable);
         return SuccessResponse.success(SuccessMessage.OK.getMessage(), response);
     }
 
@@ -90,7 +83,7 @@ public class ProductController {
     /**
      * 상품 재고 차감
      */
-    @PostMapping("/deduct")
+    @PatchMapping("/deduct")
     public CommonResponse deductProduct(@RequestBody ProductDeductRequestDto request) {
         productCommandService.deductInventory(request);
         return SuccessResponse.success(SuccessMessage.OK.getMessage());

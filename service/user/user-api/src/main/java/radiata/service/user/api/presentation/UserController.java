@@ -7,7 +7,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,7 +69,7 @@ public class UserController {
     /**
      * 포인트 차감
      */
-    @PostMapping("/points/deduct")
+    @PatchMapping("/points/deduct")
     public CommonResponse deductPoint(@RequestBody PointModifyRequestDto request) {
         userCommandService.deductPoint(request);
         return SuccessResponse.success(SuccessMessage.OK.getMessage());
