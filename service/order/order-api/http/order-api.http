@@ -1,0 +1,121 @@
+### 공통 전역 변수
+@email = "test01@email.com"
+@password = "Password12!"
+@baseUrl = http://localhost:19091
+
+### 회원 가입
+POST {{baseUrl}}/auth/sign-up
+Content-Type: application/json
+
+{
+  "username": "testUser",
+  "password": {{password}},
+  "email": {{email}},
+  "nickname": "테스트유저",
+  "phone": "010-9999-9999",
+  "roadAddress": "도로명 주소1",
+  "detailAddress": "상세 주소1",
+  "zipcode": "12345"
+}
+
+
+### 로그인
+POST {{baseUrl}}/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": {{email}},
+  "password": {{password}}
+}
+
+### 토큰 사용
+@Authorization = Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyblkzWWVybjZmMUFCWWV2MHF1UlRnMG9CRXgiLCJyb2xlIjoiQ1VTVE9NRVIiLCJpc3MiOiJ1c2VyLXNlcnZpY2UiLCJpYXQiOjE3MjkxNDM5MjUsImV4cCI6MTcyOTE0NzUyNX0.1M7uNwXUfkcqZL2ax6nfxungLSLQzhtvcyvRzL8J9higt-8cEUkne249OFpk1qDg24_Ic0Jkn9U5N1NTFVByHw
+
+
+### 브랜드 생성
+POST {{baseUrl}}/brands
+Content-Type: application/json
+Authorization: {{Authorization}}
+
+
+### 카테고리 생성
+POST {{baseUrl}}/categories
+Content-Type: application/json
+Authorization: {{Authorization}}
+
+
+### 브랜드 & 카테고리 ID
+@brandId = 2nXspusELHwmrDj0RG71XIVwMQa
+@categoryId = 2nXsqNjcYqFOJL69XI1RgGXYyKJ
+
+
+### 상품 등록
+POST {{baseUrl}}/goods
+Content-Type: application/json
+Authorization: {{Authorization}}
+
+{
+  "brandId":{{brandId}},
+  "categoryId":{{categoryId}},
+  "name":"반팔티",
+  "price":15000,
+  "discountAmount":10,
+  "stock": 100,
+  "gender":"ALL",
+  "color":"BLUE",
+  "size":"LARGE"
+}
+
+
+### 쿠폰 생성
+POST {{baseUrl}}/coupons
+Content-Type: application/json
+Authorization: {{Authorization}}
+
+{
+  "title": "Coupon Amount1",
+  "couponType": "FIRST_COME_FIRST_SERVED",
+  "couponSaleType": "AMOUNT",
+  "totalQuantity": 100,
+  "discountAmount": 5000,
+  "discountRate": null,
+  "minAvailableAmount": 20000,
+  "issueStartDate": "2024-10-01T00:00:00",
+  "issueEndDate": "2024-10-31T23:59:59"
+}
+
+### 쿠폰ID
+@couponId = 2nXtvTVxJFuuKosj6KtOtVkQGG0
+
+### 쿠폰 발급
+POST {{baseUrl}}/coupons/{{couponId}}/issue
+Content-Type: application/json
+Authorization: {{Authorization}}
+
+
+### 주문 등록
+POST {{baseUrl}}/orders
+Content-Type: application/json
+Authorization: {{Authorization}}
+
+{
+  "address": "address-01",
+  "comment": "comment-01",
+  "point": 0,
+  "itemList": [
+    {
+      "productId": "2nXt9CSsHsWe4GgPEHXVoiAwB0Z",
+      "timeSaleProductId": null,
+      "couponIssuedId": "2nYLlmu5q41qt8Juc3PLmjQornL",
+      "quantity": 10,
+      "unitPrice": "30000"
+    },
+    {
+      "productId": "2nXtdCF4D3PguWvp03pPDa4Yjrp",
+      "timeSaleProductId": null,
+      "couponIssuedId": "2nYLhcM29HC4dH4BKypBS2Wf02I",
+      "quantity": 5,
+      "unitPrice": "15000"
+    }
+  ]
+}
