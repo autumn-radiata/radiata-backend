@@ -1,5 +1,6 @@
 server:
   port: 19091
+  shutdown: graceful  # 애플리케이션 종료 시 정상 종료 (Graceful Shutdown)
 spring:
   application:
     name: gateway-service
@@ -13,6 +14,8 @@ spring:
       filter:
         circuit-breaker:
           enabled:
+  lifecycle:
+    timeout-per-shutdown-phase: 12s
 
 eureka:
   client:

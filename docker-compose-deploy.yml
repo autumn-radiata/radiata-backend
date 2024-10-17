@@ -8,6 +8,8 @@ services:
         - FILE_DIRECTORY=service/payment/payment-api
     ports:
       - "8080:8080"
+    stop_grace_period: 15s
+    stop_signal: SIGTERM
     depends_on:
       - eureka-server
 
@@ -20,6 +22,8 @@ services:
         - FILE_DIRECTORY=service/order/order-api
     ports:
       - "8085:8085"
+    stop_grace_period: 15s
+    stop_signal: SIGTERM
     depends_on:
       - eureka-server
 
@@ -32,6 +36,8 @@ services:
         - FILE_DIRECTORY=service/brand/brand-api
     ports:
       - "8484:8484"
+    stop_grace_period: 15s
+    stop_signal: SIGTERM
     depends_on:
       - eureka-server
 
@@ -44,6 +50,8 @@ services:
         - FILE_DIRECTORY=service/coupon/coupon-api
     ports:
       - "8081:8081"
+    stop_grace_period: 15s
+    stop_signal: SIGTERM
     depends_on:
       - eureka-server
 
@@ -56,6 +64,8 @@ services:
         - FILE_DIRECTORY=service/timesale/timesale-api
     ports:
       - "8082:8082"
+    stop_grace_period: 15s
+    stop_signal: SIGTERM
     depends_on:
       - eureka-server
 
@@ -68,6 +78,8 @@ services:
         - FILE_DIRECTORY=service/user/user-api
     ports:
       - "8083:8083"
+    stop_grace_period: 15s
+    stop_signal: SIGTERM
     depends_on:
       - eureka-server
 
@@ -80,6 +92,8 @@ services:
         - FILE_DIRECTORY=service/gateway/gateway-core
     ports:
       - "19091:19091"
+    stop_grace_period: 17s
+    stop_signal: SIGTERM
     depends_on:
       - eureka-server
 
@@ -92,9 +106,5 @@ services:
         - FILE_DIRECTORY=service/eureka/eureka-core
     ports:
       - "19090:19090"
-
-volumes:
-  postgres_main_volume:
-  postgres_batch_volume:
-  redis_volume:
-
+    stop_grace_period: 15s
+    stop_signal: SIGTERM
