@@ -9,6 +9,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +26,7 @@ import radiata.service.brand.core.service.ProductCommandService;
 import radiata.service.brand.core.service.ProductQueryService;
 
 @RestController
-@RequestMapping("/goods")
+@RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
 
@@ -82,7 +83,7 @@ public class ProductController {
     /**
      * 상품 재고 차감
      */
-    @PostMapping("/deduct")
+    @PatchMapping("/deduct")
     public CommonResponse deductProduct(@RequestBody ProductDeductRequestDto request) {
         productCommandService.deductInventory(request);
         return SuccessResponse.success(SuccessMessage.OK.getMessage());
