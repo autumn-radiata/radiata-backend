@@ -34,8 +34,6 @@ public class CouponServiceImplV1 implements CouponService {
     private final CouponReader couponReader;
     private final CouponDeleter couponDeleter;
     private final CouponCreateRequestDtoValidator couponCreateRequestDtoValidator;
-    private final RedisTemplate<String, Object> redisTemplate;
-    private final ObjectMapper objectMapper;
 
     @Override
     public CouponResponseDto createCoupon(CouponCreateRequestDto requestDto) {
@@ -45,12 +43,6 @@ public class CouponServiceImplV1 implements CouponService {
         String couponId = couponIdCreator.create();
 
         Coupon savedCoupon = couponSaver.save(couponMapper.toEntity(requestDto, couponId));
-
-        try {
-            redisTemplate.opsForValue().set(savedCoupon.getId(), objectMapper.writeValueAsString(savedCoupon));
-        } catch (JsonProcessingException e) {
-            throw new BusinessException(ExceptionMessage.SYSTEM_ERROR);
-        }
 
         return couponMapper.toDto(savedCoupon);
     }
