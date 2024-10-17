@@ -27,7 +27,7 @@ public class GatewayConfig {
             .route("timesale-service", r -> r.path("/timesales/**", "/timesale-products/**", "/products/**")
                 .filters(f -> applyCommonFilters(f, "timesale-service"))
                 .uri("lb://timesale-service"))
-            .route("payment-service", r -> r.path("/payments/**")
+            .route("payment-service", r -> r.path("/payments/**", "/payusers/**")
                 .filters(f -> applyCommonFilters(f, "payment-service"))
                 .uri("lb://payment-service"))
             .route("coupon-service", r -> r.path("/coupons/**", "/couponissues/**")
