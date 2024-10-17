@@ -28,7 +28,7 @@ public class EasyPayPaymentService {
      * 간편결제 요청
      */
     @Transactional
-    public PaymentCreateResponseDto requestTossPayment(EasyPayCreateRequestDto request) {
+    public PaymentCreateResponseDto requestPayment(EasyPayCreateRequestDto request) {
         // 간편결제 유저 조회
         PayUser payUser = payUserReader.getPayUserByUserId(request.userId());
         // 간편결제 유저 비밀번호 검증
