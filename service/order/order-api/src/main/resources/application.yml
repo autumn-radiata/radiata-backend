@@ -20,3 +20,14 @@ eureka:
   client:
     service-url:
       defaultZone: http://yunjae.click:19090/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true

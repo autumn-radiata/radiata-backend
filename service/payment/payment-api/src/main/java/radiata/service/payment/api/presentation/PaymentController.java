@@ -37,7 +37,7 @@ public class PaymentController {
     public SuccessResponse<PaymentCreateResponseDto> requestEasyPay(
         @Validated @RequestBody EasyPayCreateRequestDto request
     ) {
-        PaymentCreateResponseDto response = easyPayPaymentService.requestTossPayment(request);
+        PaymentCreateResponseDto response = easyPayPaymentService.requestPayment(request);
         return SuccessResponse.success(SuccessMessage.OK.getMessage(), response);
     }
 }
