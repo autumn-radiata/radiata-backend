@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import radiata.common.domain.coupon.dto.response.CouponIssueResponseDto;
-import radiata.service.coupon.core.component.DistributeLockExecutor;
 import radiata.service.coupon.core.service.interfaces.coupon_issue.CouponIssueService;
 
 @RequiredArgsConstructor
@@ -13,14 +12,11 @@ import radiata.service.coupon.core.service.interfaces.coupon_issue.CouponIssueSe
 public class CouponIssueApiServiceImpl implements CouponIssueApiService {
 
     private final CouponIssueService couponIssueService;
-    private final DistributeLockExecutor distributeLockExecutor;
 
     @Override
     public void issueCoupon(String couponId, String userId) {
 
-        distributeLockExecutor.execute("lock_" + couponId, 10000, 10000, () -> {
-            couponIssueService.issue(couponId, userId);
-        });
+        couponIssueService.issue(couponId, userId);
     }
 
     @Override
