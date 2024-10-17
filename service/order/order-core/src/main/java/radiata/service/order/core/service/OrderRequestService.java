@@ -3,53 +3,24 @@ package radiata.service.order.core.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import radiata.common.domain.order.dto.request.OrderCreateRequestDto;
 import radiata.common.domain.order.dto.request.OrderPaymentRequestDto;
 import radiata.common.domain.order.dto.response.OrderResponseDto;
 import radiata.service.order.core.domain.model.constant.OrderStatus;
 import radiata.service.order.core.domain.model.entity.Order;
 import radiata.service.order.core.domain.model.entity.OrderItem;
-import radiata.service.order.core.implemetation.OrderIdCreator;
 import radiata.service.order.core.implemetation.OrderReader;
-import radiata.service.order.core.implemetation.OrderSaver;
 import radiata.service.order.core.implemetation.OrderValidator;
 import radiata.service.order.core.service.mapper.OrderMapper;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService {
+public class OrderRequestService {
 
-    private final OrderIdCreator orderIdCreator;
-    private final OrderSaver orderSaver;
     private final OrderReader orderReader;
     private final OrderMapper orderMapper;
     private final OrderValidator orderValidator;
     private final OrderItemService orderItemService;
 
-
-    // 주문 생성
-    @Transactional
-    public OrderResponseDto createOrder(OrderCreateRequestDto requestDto, String userId) {
-        // 주문 ID 생성
-        String orderId = orderIdCreator.create();
-        // 초기 주문 생성
-        Order order = orderSaver.save(orderMapper.toEntity(requestDto, orderId, userId));
-        // 주문 상품 목록 처리
-        orderItemService.processOrderItems(requestDto, order, userId);
-        // 주문 상품 목록 추가 & 반환
-        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getOrderItems()));
-    }
-
-    // 주문 상세 조회
-    @Transactional(readOnly = true)
-    public OrderResponseDto getOrder(String orderId, String userId) {
-        // 주문 조회
-        Order order = orderReader.readOrder(orderId);
-        // 사용자의 주문 내역인지 확인
-        orderValidator.validateUserOwnsOrder(order.getUserId(), userId);
-        // 주문 상품 목록 추가 & 반환
-        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getOrderItems()));
-    }
 
     // 결제 요청 -> 주문 상태 (결제 요청 중 -> 결제 대기 중 -> 결제 완료)
     @Transactional
@@ -73,39 +44,6 @@ public class OrderService {
 //        order.setPaymentIdAndType(paymentId, type);
         // 주문 상태 체크 & 변경(결제 완료)
         orderValidator.checkCanMoveToNextStatus(order, OrderStatus.PAYMENT_COMPLETED);
-        // 반환
-        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getOrderItems()));
-    }
-
-    // 주문 상태 변경 (배송 대기 중)
-    @Transactional
-    public OrderResponseDto updateStatusPendingShipping(String orderId) {
-        // 주문 조회
-        Order order = orderReader.readOrder(orderId);
-        // 주문 상태 체크 & 변경(배송 대기 중)
-        orderValidator.checkCanMoveToNextStatus(order, OrderStatus.SHIPPING_PENDING);
-        // 반환
-        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getOrderItems()));
-    }
-
-    // 주문 상태 변경 (배송 중)
-    @Transactional
-    public OrderResponseDto updateStatusShipping(String orderId) {
-        // 주문 조회
-        Order order = orderReader.readOrder(orderId);
-        // 주문 상태 체크 & 변경(배송 중)
-        orderValidator.checkCanMoveToNextStatus(order, OrderStatus.SHIPPING_IN_PROGRESS);
-        // 반환
-        return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getOrderItems()));
-    }
-
-    // 주문 상태 변경 (배송 완료)
-    @Transactional
-    public OrderResponseDto updateStatusCompletedShipping(String orderId) {
-        // 주문 조회
-        Order order = orderReader.readOrder(orderId);
-        // 주문 상태 체크 & 변경(배송 완료)
-        orderValidator.checkCanMoveToNextStatus(order, OrderStatus.SHIPPING_COMPLETED);
         // 반환
         return orderMapper.toDto(order).withItemList(orderItemService.toDtoSet(order.getOrderItems()));
     }
