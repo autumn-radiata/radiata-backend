@@ -13,10 +13,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
+import radiata.common.domain.payment.constant.PaymentStatus;
+import radiata.common.domain.payment.constant.PaymentType;
 import radiata.database.model.BaseEntity;
 import radiata.service.payment.core.domain.model.vo.Money;
-import radiata.service.payment.core.domain.model.vo.PaymentStatus;
-import radiata.service.payment.core.domain.model.vo.PaymentType;
 
 @Getter
 @Entity

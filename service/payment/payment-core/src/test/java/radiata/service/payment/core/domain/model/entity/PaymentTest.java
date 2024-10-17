@@ -9,9 +9,9 @@ import org.assertj.core.data.TemporalUnitWithinOffset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import radiata.common.domain.payment.constant.PaymentStatus;
+import radiata.common.domain.payment.constant.PaymentType;
 import radiata.service.payment.core.domain.model.vo.Money;
-import radiata.service.payment.core.domain.model.vo.PaymentStatus;
-import radiata.service.payment.core.domain.model.vo.PaymentType;
 
 @DisplayName("Payment 엔티티 테스트")
 class PaymentTest {

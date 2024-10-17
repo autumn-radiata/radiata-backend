@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import radiata.common.domain.payment.constant.Bank;
 
 @Getter
 @Embeddable // JPA 값객체 어노테이션

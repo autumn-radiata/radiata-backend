@@ -16,9 +16,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
+import radiata.common.domain.payment.constant.PaymentType;
 import radiata.database.model.BaseEntity;
 import radiata.service.order.core.domain.model.constant.OrderStatus;
-import radiata.service.payment.core.domain.model.vo.PaymentType;
 
 @Entity
 @Table(name = "r_order")
