@@ -40,7 +40,7 @@ public class Stock {
     }
 
     public boolean hasAvailableStock(int quantity) {
-        return this.stock > quantity;
+        return this.stock >= quantity;
     }
 
     public Integer getStock() {
