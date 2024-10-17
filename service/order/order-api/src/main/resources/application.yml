@@ -5,6 +5,10 @@ spring:
     import: classpath:application-database.yml
   profiles:
     default: dev
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
   lifecycle:
     timeout-per-shutdown-phase: 10s
 
@@ -16,4 +20,3 @@ eureka:
   client:
     service-url:
       defaultZone: http://yunjae.click:19090/eureka/
-

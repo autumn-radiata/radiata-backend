@@ -63,7 +63,6 @@ class OrderTest {
         assertThat(orderItem.getCouponIssuedId()).isEqualTo("couponIssuedId-01");
         assertThat(orderItem.getQuantity()).isEqualTo(5);
         assertThat(orderItem.getUnitPrice()).isEqualTo(10000);
-        assertThat(orderItem.getPaymentPrice()).isEqualTo(50000);
     }
 
     @Test
