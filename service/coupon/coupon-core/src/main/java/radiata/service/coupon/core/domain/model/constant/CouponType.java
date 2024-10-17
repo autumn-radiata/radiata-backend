@@ -6,4 +6,8 @@ public enum CouponType {
     public boolean isFirstComeFirstServed() {
         return this.equals(FIRST_COME_FIRST_SERVED);
     }
+
+    public boolean isUnlimited() {
+        return this.equals(UNLIMITED);
+    }
 }
