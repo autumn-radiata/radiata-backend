@@ -3,8 +3,6 @@ spring:
     name: order-service
   config:
     import: classpath:application-database.yml
-  profiles:
-    default: dev
   cloud:
     openfeign:
       okhttp:
