@@ -50,6 +50,7 @@ public class Order extends BaseEntity {
 
     private String paymentId;
 
+    @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
     // TODO - 사용 예정
     private Integer usedPoint;
