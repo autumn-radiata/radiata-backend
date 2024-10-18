@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import radiata.service.order.core.domain.model.entity.OrderItem;
+import radiata.service.order.core.service.context.OrderRollbackContext;
 
 @Service
 @Slf4j(topic = "Rollback-Service")
@@ -18,9 +19,10 @@ public class RollbackService {
             // 타임세일 상품 재고 증감 요청
             deductedTimeSaleStocks.forEach(timeSaleProduct -> {
                 // TODO - kafka 를 이용한 비동기 처리
+                System.out.println("timeSaleProductId = " + timeSaleProduct);
             });
         } catch (RuntimeException e) {
-            log.info(" [Rollback Error]: TimeSale-Service ");
+            log.error(" [Rollback Error]: TimeSale-Service ");
         }
     }
 
@@ -30,9 +32,10 @@ public class RollbackService {
             // 상품 재고 증감 요청
             deductedProductStocks.forEach(product -> {
                 // TODO - kafka 를 이용한 비동기 처리
+                System.out.println("productId = " + product);
             });
         } catch (RuntimeException e) {
-            log.info(" [Rollback Error]: Product-Service ");
+            log.error(" [Rollback Error]: Product-Service ");
         }
     }
 
@@ -42,9 +45,10 @@ public class RollbackService {
             // 쿠폰 상태 변경 요청(USED -> ISSUED)
             usedCoupons.forEach(usedCouponId -> {
                 // TODO - kafka 를 이용한 비동기 처리
+                System.out.println("usedCouponId = " + usedCouponId);
             });
         } catch (RuntimeException e) {
-            log.info(" [Rollback Error]: Coupon-Service ");
+            log.error(" [Rollback Error]: Coupon-Service ");
         }
     }
 
@@ -54,7 +58,7 @@ public class RollbackService {
             // 적립금 증감 요청
             // TODO - kafka 를 이용한 비동기 처리
         } catch (RuntimeException e) {
-            log.info(" [Rollback Error]: User(Point)-Service ");
+            log.error(" [Rollback Error]: User(Point)-Service ");
         }
     }
 
@@ -63,23 +67,22 @@ public class RollbackService {
             // 결제 취소 요청 - (== 환불)
 
         } catch (RuntimeException e) {
-            log.info(" [Rollback Error]: Payment-Service ");
+            log.error(" [Rollback Error]: Payment-Service ");
         }
     }
 
 
     // 주문 등록 - 보상 트랜잭션
-    public void createOrderItemsRollbackTransaction(List<String> deductedTimeSales, List<String> deductedProducts,
-        List<String> usedCoupons) {
+    public void createOrderItemsRollbackTransaction(OrderRollbackContext context) {
 
-        rollbackTimeSaleStock(deductedTimeSales);
-        rollbackProductStock(deductedProducts);
-        rollbackCoupons(usedCoupons);
+        rollbackTimeSaleStock(context.getDeductedTimeSales());
+        rollbackProductStock(context.getDeductedProducts());
+        rollbackCoupons(context.getUsedCoupons());
     }
 
     // 주문 취소 - 보상 트랜잭션
     public void cancelOrderItemsRollback(Set<OrderItem> orderItems) {
-        
+
         // 타임세일 재고 롤백
         // 상품 재고 롤백
         // 쿠폰 상태 롤백
