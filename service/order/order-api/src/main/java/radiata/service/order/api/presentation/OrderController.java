@@ -7,6 +7,7 @@ import static radiata.common.message.SuccessMessage.GET_ORDER;
 import static radiata.common.message.SuccessMessage.UPDATE_ORDER;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +39,7 @@ public class OrderController {
 
     // 주문 등록 - POST
     @PostMapping
-    public SuccessResponse<OrderResponseDto> createOrder(@RequestBody OrderCreateRequestDto requestDto,
+    public SuccessResponse<OrderResponseDto> createOrder(@Validated @RequestBody OrderCreateRequestDto requestDto,
         @RequestHeader("X-UserId") String userId) {
 
         return SuccessResponse.success(CREATE_ORDER.getMessage(), orderCreateService.createOrder(requestDto, userId));
