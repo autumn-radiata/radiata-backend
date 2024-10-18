@@ -46,7 +46,7 @@ public class OrderItemService {
             int quantity = itemCreateDto.quantity();
             // 1️⃣ 타임세일 상품 재고 확인 및 차감
             String timeSaleProductId = itemCreateDto.timeSaleProductId();
-            processService.checkAndDeductTimeSaleProduct(rollbackContext, timeSaleProductId);
+            processService.checkAndDeductTimeSaleProduct(rollbackContext, timeSaleProductId, quantity);
             // 2️⃣ 상품 재고 확인 및 차감
             String productId = itemCreateDto.productId();
             processService.checkAndDeductStock(rollbackContext, productId, quantity);

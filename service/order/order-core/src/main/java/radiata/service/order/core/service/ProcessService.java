@@ -38,11 +38,11 @@ public class ProcessService {
 
 
     // 타임세일상품 재고 확인 및 차감 요청
-    public void checkAndDeductTimeSaleProduct(OrderRollbackContext context, String timeSaleProductId) {
+    public void checkAndDeductTimeSaleProduct(OrderRollbackContext context, String timeSaleProductId, int quantity) {
         try {
             if (timeSaleProductId != null) {
                 timeSaleProductClient.checkAndDeductTimeSaleProduct(timeSaleProductId);
-                context.addDeductedTimeSale(timeSaleProductId);
+                context.addDeductedTimeSale(timeSaleProductId, quantity);
             }
         } catch (FeignException e) {
             log.error("[TimeSale-Service FeignException]: Deduct TimeSale Product Request Error");
@@ -55,7 +55,7 @@ public class ProcessService {
     public void checkAndDeductStock(OrderRollbackContext context, String productId, int quantity) {
         try {
             productClient.checkAndDeductStock(new ProductDeductRequestDto(productId, quantity));
-            context.addDeductedProduct(productId);
+            context.addDeductedProduct(productId, quantity);
         } catch (FeignException e) {
             log.error("[Brand(Product)-Service FeignException]: DeductStock Request Error");
             rollbackService.createOrderItemsRollbackTransaction(context);
