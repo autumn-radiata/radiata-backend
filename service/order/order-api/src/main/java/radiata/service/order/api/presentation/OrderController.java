@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import radiata.common.domain.order.dto.request.OrderCreateRequestDto;
-import radiata.common.domain.order.dto.request.OrderPaymentRequestDto;
+import radiata.common.domain.order.dto.request.OrderEasyPaymentRequestDto;
+import radiata.common.domain.order.dto.request.OrderTossPaymentRequestDto;
 import radiata.common.domain.order.dto.response.OrderResponseDto;
 import radiata.common.response.SuccessResponse;
 import radiata.service.order.core.service.OrderCreateService;
@@ -61,14 +62,26 @@ public class OrderController {
     }
 
     // 주문 환불 요청 - POST("/{orderId}/refunded")
-    // 주문 결제 승인 요청 및 완료
-    @PostMapping("/{orderId}/payment-requested")
-    public SuccessResponse<OrderResponseDto> completePayment(@PathVariable("orderId") String orderId,
+
+    // 주문 결제 승인 요청 및 완료 - 간편결제
+    @PostMapping("/{orderId}/payment-requested/easypay")
+    public SuccessResponse<OrderResponseDto> requestCompleteEasyPayment(@PathVariable("orderId") String orderId,
         @RequestHeader("X-UserId") String userId,
-        @RequestBody OrderPaymentRequestDto requestDto) {
+        @RequestBody OrderEasyPaymentRequestDto requestDto) {
 
         return SuccessResponse.success(COMPLETE_ORDER_PAYMENT.getMessage(),
-            orderRequestService.sendPaymentRequest(orderId, userId, requestDto));
+            orderRequestService.sendEasyPaymentRequest(orderId, userId, requestDto));
+    }
+
+
+    // 주문 결제 승인 요청 및 완료 - 토스
+    @PostMapping("/{orderId}/payment-requested/toss")
+    public SuccessResponse<OrderResponseDto> requestCompleteTossPayment(@PathVariable("orderId") String orderId,
+        @RequestHeader("X-UserId") String userId,
+        @RequestBody OrderTossPaymentRequestDto requestDto) {
+
+        return SuccessResponse.success(COMPLETE_ORDER_PAYMENT.getMessage(),
+            orderRequestService.sendTossPaymentRequest(orderId, userId, requestDto));
     }
 
     // 주문 상태 변경(배송 대기 중) - PATCH
