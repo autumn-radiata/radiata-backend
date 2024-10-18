@@ -7,4 +7,6 @@ public interface RedisRepository {
     Long sCard(String key);
 
     Boolean sIsMember(String key, String value);
+
+    void issueRequest(String couponId, String userId, Integer totalIssueQuantity);
 }

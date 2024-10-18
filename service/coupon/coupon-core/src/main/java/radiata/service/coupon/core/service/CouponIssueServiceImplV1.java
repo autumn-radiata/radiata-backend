@@ -34,11 +34,11 @@ public class CouponIssueServiceImplV1 implements CouponIssueService {
     public void issue(String couponId, String userId) {
         Coupon coupon = couponReader.readCoupon(couponId);
         coupon.issue();
-        saveCouponIssue(couponId, userId);
+        saveCouponIssue(couponId, userId, coupon.getTotalQuantity());
     }
 
     @Override
-    public void saveCouponIssue(String couponId, String userId) {
+    public void saveCouponIssue(String couponId, String userId, Integer totalQuantity) {
 
         checkAlreadyIssuance(couponId, userId);
         Coupon coupon = couponReader.readCoupon(couponId); // 같은 트랙잭션 내에서 가져와서 성능상 별 차이 없을 거 같아서 넣었습니다.

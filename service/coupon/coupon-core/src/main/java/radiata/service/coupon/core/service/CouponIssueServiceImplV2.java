@@ -9,13 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.coupon.dto.response.CouponIssueResponseDto;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
-import radiata.service.coupon.core.component.DistributeLockExecutor;
 import radiata.service.coupon.core.domain.model.Coupon;
 import radiata.service.coupon.core.domain.model.CouponIssue;
 import radiata.service.coupon.core.implementation.interfaces.CouponIssueDeleter;
 import radiata.service.coupon.core.implementation.interfaces.CouponIssueReader;
 import radiata.service.coupon.core.implementation.interfaces.CouponIssueSaver;
-import radiata.service.coupon.core.implementation.interfaces.CouponIssueValidator;
 import radiata.service.coupon.core.implementation.interfaces.CouponReader;
 import radiata.service.coupon.core.service.interfaces.coupon_issue.CouponIssueService;
 import radiata.service.coupon.core.service.mapper.CouponIssueMapper;
@@ -30,27 +28,28 @@ public class CouponIssueServiceImplV2 implements CouponIssueService {
     private final CouponIssueReader couponIssueReader;
     private final CouponIssueMapper couponIssueMapper;
     private final CouponIssueDeleter couponIssueDeleter;
-    private final CouponIssueValidator couponIssueValidator;
     private final CouponIssueSaver couponIssueSaver;
-    private final DistributeLockExecutor distributeLockExecutor;
 
 
     @Override
     public void issue(String couponId, String userId) {
 
         Coupon coupon = couponReader.readCoupon(couponId);
-
-        distributeLockExecutor.execute("couponIssueLock_%s".formatted(couponId), 3000, 3000, () -> {
-            couponIssueValidator.validate(coupon, userId);
-            saveCouponIssue(couponId, userId);
-        });
+        coupon.checkIssuableCoupon();
+        saveCouponIssue(couponId, userId, coupon.getTotalQuantity());
     }
 
     @Override
-    public void saveCouponIssue(String couponId, String userId) {
-
-        couponIssueSaver.saveToRedis(couponId, userId);
+    public void saveCouponIssue(String couponId, String userId, Integer totalQuantity) {
+        if (totalQuantity == null) {
+            couponIssueSaver.saveToRedis(couponId, userId, Integer.MAX_VALUE);
+        }
+        couponIssueSaver.saveToRedis(couponId, userId, totalQuantity);
         // TODO 큐에 적재
+    }
+
+    private void requestCouponIssueToQueue(String couponId, String userId) {
+
     }
 
     @Override

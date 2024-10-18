@@ -3,6 +3,7 @@ package radiata.service.coupon.core.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.time.Duration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import radiata.common.domain.timesale.dto.response.TimeSaleProductResponseDto;
+import radiata.service.coupon.core.domain.model.Coupon;
 
 @EnableCaching
 @Configuration
@@ -42,7 +43,6 @@ public class CouponCacheConfig {
     public RedisTemplate<String, String> redisTemplate() {
         RedisTemplate<String, String> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory());
-        template.setEnableTransactionSupport(true);
 
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new StringRedisSerializer());
@@ -63,7 +63,8 @@ public class CouponCacheConfig {
                 )
                 .serializeValuesWith(
                         SerializationPair.fromSerializer(jackson2JsonRedisSerializer())
-                );
+                )
+                .entryTtl(Duration.ofMinutes(30));
 
         return RedisCacheManager.builder(redisConnectionFactory)
                 .cacheWriter(RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory))
@@ -71,11 +72,11 @@ public class CouponCacheConfig {
                 .build();
     }
 
-    private Jackson2JsonRedisSerializer<TimeSaleProductResponseDto> jackson2JsonRedisSerializer() {
+    private Jackson2JsonRedisSerializer<Coupon> jackson2JsonRedisSerializer() {
         ObjectMapper objectMapper = new ObjectMapper()
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .registerModule(new JavaTimeModule());
 
-        return new Jackson2JsonRedisSerializer<>(objectMapper, TimeSaleProductResponseDto.class);
+        return new Jackson2JsonRedisSerializer<>(objectMapper, Coupon.class);
     }
 }

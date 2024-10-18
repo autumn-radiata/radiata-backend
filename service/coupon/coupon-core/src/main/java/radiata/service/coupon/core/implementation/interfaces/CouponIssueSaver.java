@@ -6,5 +6,5 @@ public interface CouponIssueSaver {
 
     CouponIssue save(CouponIssue couponIssue);
 
-    void saveToRedis(String couponId, String userId);
+    void saveToRedis(String couponId, String userId, Integer totalQuantity);
 }

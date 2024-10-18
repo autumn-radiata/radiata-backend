@@ -22,9 +22,8 @@ public class CouponIssueSaverImpl implements CouponIssueSaver {
     }
 
     @Override
-    public void saveToRedis(String couponId, String userId) {
+    public void saveToRedis(String couponId, String userId, Integer totalQuantity) {
 
-        String key = RedisKeyUtil.getIssueRequestKey(couponId);
-        redisRepository.sAdd(key, userId);
+        redisRepository.issueRequest(couponId, userId, totalQuantity);
     }
 }
