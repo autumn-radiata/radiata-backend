@@ -78,7 +78,15 @@ public class RollbackService {
     }
 
     // 주문 취소 - 보상 트랜잭션
-    public void cancelOrderItemsRollback(Set<OrderItem> orderItems, String paymentId) {
+    public void cancelOrderItemsRollback(Set<OrderItem> orderItems) {
+        
+        // 타임세일 재고 롤백
+        // 상품 재고 롤백
+        // 쿠폰 상태 롤백
+        // 적립금?
+    }
+
+    public void refundPaymentAmountRollback(Set<OrderItem> orderItems, String paymentId) {
         rollbackPaymentAmount(paymentId);
         // 타임세일 재고 롤백
         // 상품 재고 롤백
