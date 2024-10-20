@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import radiata.common.domain.brand.request.ProductCreateRequestDto;
 import radiata.common.domain.brand.request.ProductDeductRequestDto;
+import radiata.common.domain.brand.request.ProductModifyRequestDto;
 import radiata.common.domain.brand.request.ProductSearchCondition;
 import radiata.common.domain.brand.response.ProductGetResponseDto;
 import radiata.common.message.SuccessMessage;
@@ -54,15 +55,13 @@ public class ProductController {
     /**
      * 상품 목록 조회
      */
-    /*@Cacheable(
-        cacheNames = "itemSearchCache",
-        key = "{ args[0], args[1].pageNumber, args[1].pageSize }"
-    )*/
     @GetMapping("/list")
     public CommonResponse getProducts(
-        @PageableDefault(page = 1, size = 10, sort = "createdAt", direction = Direction.ASC) Pageable pageable,
+        @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.ASC) Pageable pageable,
         @ModelAttribute ProductSearchCondition condition
     ) {
+        System.out.println("gender:" + condition.gender());
+
         Page<ProductGetResponseDto> response = productQueryService.getProducts(condition, pageable);
         return SuccessResponse.success(SuccessMessage.OK.getMessage(), response);
     }
@@ -71,11 +70,18 @@ public class ProductController {
      * 상품 수정
      */
 
+    @PatchMapping
+    public CommonResponse modifyProduct(@Valid @RequestBody ProductModifyRequestDto request) {
+        productCommandService.modifyProduct(request);
+        return SuccessResponse.success(SuccessMessage.OK.getMessage());
+    }
+
     /**
      * 상품 삭제
      */
     @DeleteMapping("/{productId}")
     public CommonResponse deleteProduct(@PathVariable String productId) {
+
         productCommandService.removeProduct(productId);
         return SuccessResponse.success(SuccessMessage.OK.getMessage());
     }
@@ -88,6 +94,5 @@ public class ProductController {
         productCommandService.deductInventory(request);
         return SuccessResponse.success(SuccessMessage.OK.getMessage());
     }
-
 
 }
