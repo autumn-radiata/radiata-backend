@@ -11,6 +11,7 @@ import radiata.common.domain.brand.request.ProductSearchCondition;
 import radiata.common.domain.brand.response.ProductGetResponseDto;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductResponseDto;
 import radiata.service.brand.core.implement.ProductReader;
+import radiata.service.brand.core.implement.RedisService;
 import radiata.service.brand.core.model.entity.Product;
 import radiata.service.brand.core.service.FeignClient.TimeSaleClient;
 import radiata.service.brand.core.service.Mapper.ProductMapper;
@@ -43,18 +44,17 @@ public class ProductQueryService {
         //1,2번의 경우 타임세일 상품이 갱신되면 레디스의 해당 데이터를 삭제.
 
         //1. 레디스 - 타임 세일 상품 조회
-        ProductGetResponseDto timeSaleProductDto = (ProductGetResponseDto) redisService.getValue(timeSaleKey);
+        ProductGetResponseDto timeSaleProductDto = redisService.getProductDto(timeSaleKey, ProductGetResponseDto.class);
         if (timeSaleProductDto != null) {
             log.info("레디스 조회:타임세일 상품  " + timeSaleKey);
             return timeSaleProductDto;
         }
 
         //2. 레디스 - 일반 상품 조회
-        ProductGetResponseDto productDto = (ProductGetResponseDto) redisService.getValue(key);
+        ProductGetResponseDto productDto = redisService.getProductDto(key, ProductGetResponseDto.class);
         if (productDto != null) {
             log.info("레디스 조회:일반 상품  " + key);
-            // TTL 갱신 - TTI
-            redisService.setExpire(key, PRODUCT_EXPIRED_DURATION);
+            redisService.putExpireProductDto(key, PRODUCT_EXPIRED_DURATION);
             return productDto;
         }
 
@@ -70,7 +70,7 @@ public class ProductQueryService {
         //4. db 조회 - 일반 상품으로 레디스에 저장
         log.info("db 조회:일반 상품  " + key);
         ProductGetResponseDto newProductDto = productMapper.toProductGetResponseDto(product);
-        redisService.setValueWithExpire(key, newProductDto, PRODUCT_EXPIRED_DURATION);
+        redisService.setProductDtoWithExpire(key, newProductDto, PRODUCT_EXPIRED_DURATION);
         return newProductDto;
     }
 
@@ -80,23 +80,29 @@ public class ProductQueryService {
     @Transactional(readOnly = true)
     public Page<ProductGetResponseDto> getProducts(ProductSearchCondition condition, Pageable pageable) {
 
-        String productSearchPagingKey = PRODUCT_SEARCH_CACHE_NAME + pageable.getPageNumber();
+        String productSearchPagingKey = generateSearchCacheKey(condition, pageable);
+        Page<ProductGetResponseDto> cachedProducts = redisService.getProductDto(productSearchPagingKey, Page.class);
+        if (cachedProducts != null) {
+            return cachedProducts;
+        }
 
-        //1.레디스 데이터 조회
-        Page<ProductGetResponseDto> productPaging =
-            (Page<ProductGetResponseDto>) redisService.getValue(productSearchPagingKey);
+        Page<ProductGetResponseDto> productsSearchWithCondition = productReader.readWithCondition(condition, pageable)
+            .map(productMapper::toProductGetResponseDto);
 
-        //2.db 데이터 조회
-        //TimeSaleProduct api
-        //최저가 비교
-        //redis 저장
-        return null;
+        //todo : TimeSaleProduct api ,최저가 비교
+
+        if (pageable.getPageSize() <= 5) {
+            redisService.setProductDtoWithExpire(productSearchPagingKey, productsSearchWithCondition,
+                PRODUCT_SEARCH_DURATION);
+        }
+
+        return productsSearchWithCondition;
+
     }
 
 
     private ProductGetResponseDto fetchAndCacheTimeSaleProduct(Product product, String key) {
 
-        //todo : fallbackFactory 비즈니스로직 분리되어 유지보수성 떨어짐 다른 방법을 찾아보기
         try {
             TimeSaleProductResponseDto maxDisCountTimeSaleProduct =
                 timeSaleClient.getMaxDiscountTimeSaleProduct(product.getId()).data();
@@ -105,7 +111,7 @@ public class ProductQueryService {
                 product.setMaxDiscountAmount(maxDisCountTimeSaleProduct.discountRate());
 
                 ProductGetResponseDto maxDisCountTimeSaleProductDto = productMapper.toProductGetResponseDto(product);
-                redisService.setValueWithExpireAt(key, maxDisCountTimeSaleProductDto,
+                redisService.setProductDtoWithExpireAt(key, maxDisCountTimeSaleProductDto,
                     maxDisCountTimeSaleProduct.timeSaleEndTime());
                 return maxDisCountTimeSaleProductDto;
             }
@@ -113,6 +119,18 @@ public class ProductQueryService {
             log.info("세일 상품으로 등록되어 있지 않은 상품");
         }
         return null;
+    }
+
+    private String generateSearchCacheKey(ProductSearchCondition condition, Pageable pageable) {
+        return String.format(PRODUCT_SEARCH_CACHE_NAME + "%s:%s:%s:%s:%s:%s:page:%d:size:%d",
+            condition.brandId(),
+            condition.categoryId(),
+            condition.gender(),
+            condition.size(),
+            condition.color(),
+            condition.query(),
+            pageable.getPageNumber(),
+            pageable.getPageSize());
     }
 
 }

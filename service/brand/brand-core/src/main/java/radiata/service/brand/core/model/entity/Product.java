@@ -82,10 +82,12 @@ public class Product extends BaseEntity {
             .build();
     }
 
-    public void updateInfo(Category category, String name, Integer price, Integer discountAmount, Integer stock,
+    public void updateInfo(Category category, Brand brand, String name, Integer price, Integer discountAmount,
+        Integer stock,
         GenderType gender,
         ColorType color, SizeType size) {
         this.category = category;
+        this.brand = brand;
         this.name = name;
         this.price = price;
         this.discountAmount = discountAmount;

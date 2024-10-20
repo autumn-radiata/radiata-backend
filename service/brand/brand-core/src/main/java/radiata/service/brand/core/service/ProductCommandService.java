@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.brand.request.ProductCreateRequestDto;
 import radiata.common.domain.brand.request.ProductDeductRequestDto;
+import radiata.common.domain.brand.request.ProductModifyRequestDto;
 import radiata.common.domain.brand.response.ProductGetResponseDto;
 import radiata.service.brand.core.implement.BrandReader;
 import radiata.service.brand.core.implement.CategoryReader;
@@ -13,6 +14,7 @@ import radiata.service.brand.core.implement.ProductIdCreator;
 import radiata.service.brand.core.implement.ProductReader;
 import radiata.service.brand.core.implement.ProductSaver;
 import radiata.service.brand.core.implement.ProductValidator;
+import radiata.service.brand.core.implement.RedisService;
 import radiata.service.brand.core.model.constant.ColorType;
 import radiata.service.brand.core.model.constant.GenderType;
 import radiata.service.brand.core.model.constant.SizeType;
@@ -24,7 +26,6 @@ import radiata.service.brand.core.service.Mapper.ProductMapper;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-
 public class ProductCommandService {
 
     private final ProductValidator productValidator;
@@ -56,6 +57,7 @@ public class ProductCommandService {
     /**
      * 상품 재고 차감
      */
+    // todo : 분산락 추가
     @Transactional
     public void deductInventory(ProductDeductRequestDto dto) {
 
@@ -66,7 +68,7 @@ public class ProductCommandService {
 
         //redis 갱신
         ProductGetResponseDto stockSubbedProduct = productMapper.toProductGetResponseDto(product);
-        redisService.updateProduct(stockSubbedProduct);
+        redisService.putProductDto(stockSubbedProduct);
         //redisService.evictPagedProductsCache();
 
     }
@@ -82,7 +84,7 @@ public class ProductCommandService {
         productSaver.save(product);
 
         ProductGetResponseDto stockAddedProduct = productMapper.toProductGetResponseDto(product);
-        redisService.updateProduct(stockAddedProduct);
+        redisService.putProductDto(stockAddedProduct);
         //redisService.evictPagedProductsCache();
 
     }
@@ -105,6 +107,21 @@ public class ProductCommandService {
     /**
      * 상품 수정
      */
+    @Transactional
+    public void modifyProduct(ProductModifyRequestDto dto) {
+        productValidator.checkPriceAboveDiscountedAmount(dto.price(), dto.discountAmount());
+        Product product = productReader.read(dto.productId());
+        Brand brand = brandReader.read(dto.brandId());
+        Category category = categoryReader.read(dto.categoryId());
+
+        product.updateInfo(category, brand, dto.name(), dto.price(), dto.discountAmount(),
+            dto.stock(), GenderType.valueOf(dto.gender()), ColorType.valueOf(dto.color()),
+            SizeType.valueOf(dto.size()));
+        ProductGetResponseDto productGetResponseDto = productMapper.toProductGetResponseDto(product);
+
+        productSaver.save(product);
+        redisService.putProductDto(productGetResponseDto);
+    }
 
 
 }
