@@ -4,5 +4,5 @@ public interface CouponIssueCreateService {
 
     void issue(String couponId, String userId);
 
-    void saveCouponIssue(String couponId, String userId, Integer totalQuantity);
+    void saveCouponIssue(String couponId, String userId);
 }

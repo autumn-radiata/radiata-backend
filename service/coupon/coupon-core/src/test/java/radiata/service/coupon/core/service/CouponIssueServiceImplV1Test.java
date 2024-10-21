@@ -2,25 +2,36 @@ package radiata.service.coupon.core.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisServer;
 import org.springframework.data.redis.core.RedisKeyValueAdapter;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
 import radiata.service.coupon.core.CouponCoreConfiguration;
+import radiata.service.coupon.core.configuration.KafkaConfig;
 import radiata.service.coupon.core.domain.model.Coupon;
 import radiata.service.coupon.core.domain.model.CouponIssue;
 import radiata.service.coupon.core.domain.model.constant.CouponSaleType;
@@ -56,21 +67,29 @@ class CouponIssueServiceImplV1Test {
     CouponRepository couponRepository;
 
     @MockBean
-    private RedissonClient redissonClient;
-
-    @MockBean
-    @Qualifier("redisTemplate")
-    private RedisTemplate<String, String> redisTemplate;
-
-    @MockBean
-    @Qualifier("springRedisTemplate")
-    private StringRedisTemplate stringRedisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @MockBean
     private RedisConnectionFactory redisConnectionFactory;
 
     @MockBean
     private RedisKeyValueAdapter redisKeyValueAdapter;
+
+    @MockBean
+    private KafkaConfig kafkaConfig;
+
+    @MockBean
+    private KafkaTemplate<String, Object> kafkaTemplate;
+
+    @MockBean
+    private CacheManager cacheManager;
+
+    @BeforeEach
+    void setUp() { // 캐시 무시 설정
+        Cache cache = Mockito.mock(Cache.class);
+        when(cacheManager.getCache("couponEntity")).thenReturn(cache);
+        when(cache.get(any())).thenReturn(null);
+    }
 
     @BeforeEach
     void clean() {

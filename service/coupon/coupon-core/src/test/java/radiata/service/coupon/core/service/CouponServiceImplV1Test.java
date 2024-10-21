@@ -11,6 +11,11 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cache.CacheManager;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisKeyValueAdapter;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
@@ -18,6 +23,7 @@ import radiata.common.domain.coupon.dto.response.CouponResponseDto;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
 import radiata.service.coupon.core.CouponCoreConfiguration;
+import radiata.service.coupon.core.configuration.KafkaConfig;
 import radiata.service.coupon.core.domain.model.constant.CouponSaleType;
 import radiata.service.coupon.core.domain.model.constant.CouponType;
 import radiata.service.coupon.core.implementation.interfaces.CouponIdCreator;
@@ -43,7 +49,22 @@ class CouponServiceImplV1Test {
     CouponIdCreator couponIdCreator;
 
     @MockBean
-    private RedissonClient redissonClient;
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @MockBean
+    private RedisConnectionFactory redisConnectionFactory;
+
+    @MockBean
+    private RedisKeyValueAdapter redisKeyValueAdapter;
+
+    @MockBean
+    private KafkaConfig kafkaConfig;
+
+    @MockBean
+    private KafkaTemplate<String, Object> kafkaTemplate;
+
+    @MockBean
+    private CacheManager cacheManager;
 
 
     @Nested
