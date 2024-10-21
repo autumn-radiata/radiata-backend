@@ -2,8 +2,11 @@ package radiata.service.brand.core.model.entity;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -31,28 +34,37 @@ public class Product extends BaseEntity {
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "brandId")
+    @JoinColumn(name = "brandId", nullable = false)
     private Brand brand;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryId")
+    @JoinColumn(name = "categoryId", nullable = false)
     private Category category;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private Integer price;
 
+    @Column(nullable = false)
     private Integer discountAmount;
 
     @Embedded
+    @Column(nullable = false)
     private Stock stock;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private GenderType gender;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ColorType color;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private SizeType size;
-
 
     public static Product of(String id, Brand brand, Category category, String name, Integer price,
         Integer discountAmount, Integer stock, GenderType gender, ColorType color, SizeType size) {
@@ -70,10 +82,12 @@ public class Product extends BaseEntity {
             .build();
     }
 
-    public void updateInfo(Category category, String name, Integer price, Integer discountAmount, Integer stock,
+    public void updateInfo(Category category, Brand brand, String name, Integer price, Integer discountAmount,
+        Integer stock,
         GenderType gender,
         ColorType color, SizeType size) {
         this.category = category;
+        this.brand = brand;
         this.name = name;
         this.price = price;
         this.discountAmount = discountAmount;

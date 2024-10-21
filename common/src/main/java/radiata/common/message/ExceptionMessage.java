@@ -5,7 +5,6 @@ import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.PAYMENT_REQUIRED;
 import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,7 +43,8 @@ public enum ExceptionMessage {
     BRAND_NOT_FOUND(HttpStatus.NOT_FOUND, "4001", "해당 브랜드를 찾을 수 없습니다."),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "4002", "해당 카테고리를 찾을 수 없습니다."),
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "4003", "해당 상품을 찾을 수 없습니다."),
-    PRODUCT_INVENTORY_ISSUE_LACK(BAD_REQUEST, "4004", "재고가 부족합니다."),
+    PRODUCT_INVENTORY_LACK(BAD_REQUEST, "4004", "재고가 부족합니다."),
+    INVALID_DISCOUNT_AMOUNT(BAD_REQUEST, "4005", "상품 할인가격이 상품 가격보다 높을 수 없습니다."),
 
 
     /* 주문 5000번대 */

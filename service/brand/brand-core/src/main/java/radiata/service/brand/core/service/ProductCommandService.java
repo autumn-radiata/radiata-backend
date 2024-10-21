@@ -1,27 +1,26 @@
 package radiata.service.brand.core.service;
 
-import com.github.ksuid.Ksuid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.brand.request.ProductCreateRequestDto;
 import radiata.common.domain.brand.request.ProductDeductRequestDto;
+import radiata.common.domain.brand.request.ProductModifyRequestDto;
 import radiata.common.domain.brand.response.ProductGetResponseDto;
-import radiata.common.exception.BusinessException;
-import radiata.common.message.ExceptionMessage;
+import radiata.service.brand.core.implement.BrandReader;
+import radiata.service.brand.core.implement.CategoryReader;
+import radiata.service.brand.core.implement.ProductIdCreator;
+import radiata.service.brand.core.implement.ProductReader;
+import radiata.service.brand.core.implement.ProductSaver;
+import radiata.service.brand.core.implement.ProductValidator;
+import radiata.service.brand.core.implement.RedisService;
 import radiata.service.brand.core.model.constant.ColorType;
 import radiata.service.brand.core.model.constant.GenderType;
 import radiata.service.brand.core.model.constant.SizeType;
 import radiata.service.brand.core.model.entity.Brand;
 import radiata.service.brand.core.model.entity.Category;
 import radiata.service.brand.core.model.entity.Product;
-import radiata.service.brand.core.model.repository.BrandRepository;
-import radiata.service.brand.core.model.repository.CategoryRepository;
-import radiata.service.brand.core.model.repository.ProductRepository;
 import radiata.service.brand.core.service.Mapper.ProductMapper;
 
 @Service
@@ -29,83 +28,102 @@ import radiata.service.brand.core.service.Mapper.ProductMapper;
 @Slf4j
 public class ProductCommandService {
 
-    private static final String PRODUCT_CACHE_NAME = "cacheProduct";
-    private final ProductRepository productRepository;
-    private final BrandRepository brandRepository;
-    private final CategoryRepository categoryRepository;
+    private final ProductValidator productValidator;
+    private final ProductIdCreator productIdCreator;
+    private final ProductSaver productSaver;
+    private final ProductReader productReader;
+    private final BrandReader brandReader;
+    private final CategoryReader categoryReader;
     private final ProductMapper productMapper;
+    private final RedisService redisService;
 
     /**
      * 상품 생성
      */
+    @Transactional
     public ProductGetResponseDto createProduct(ProductCreateRequestDto dto) {
-        Brand brand = findValidBrand(dto.brandId());
-        Category category = findValidCategory(dto.categoryId());
-        String id = createId();
+        productValidator.checkPriceAboveDiscountedAmount(dto.price(), dto.discountAmount());
+        Brand brand = brandReader.read(dto.brandId());
+        Category category = categoryReader.read(dto.categoryId());
+        String id = productIdCreator.create();
+
         Product product = Product.of(id, brand, category, dto.name(), dto.price(), dto.discountAmount(),
             dto.stock(), GenderType.valueOf(dto.gender()), ColorType.valueOf(dto.color()),
             SizeType.valueOf(dto.size()));
-        productRepository.save(product);
+        productSaver.save(product);
         return productMapper.toProductGetResponseDto(product);
     }
 
     /**
      * 상품 재고 차감
      */
+    // todo : 분산락 추가
     @Transactional
-    @CachePut(cacheNames = PRODUCT_CACHE_NAME, key = "#result.productId")
-    public ProductGetResponseDto deductInventory(ProductDeductRequestDto dto) {
-        Product product = findValidProduct(dto.productId());
+    public void deductInventory(ProductDeductRequestDto dto) {
+
+        //db 갱신
+        Product product = productReader.read(dto.productId());
         product.subStock(dto.quantity());
-        return productMapper.toProductGetResponseDto(product);
+        productSaver.save(product);
+
+        //redis 갱신
+        ProductGetResponseDto stockSubbedProduct = productMapper.toProductGetResponseDto(product);
+        redisService.putProductDto(stockSubbedProduct);
+        //redisService.evictPagedProductsCache();
+
     }
 
     /**
      * 상품 재고 증감 - 보상 트랜잭션 복구
      */
     @Transactional
-    @CachePut(cacheNames = PRODUCT_CACHE_NAME, key = "#result.productId")
-    public ProductGetResponseDto increaseInventory(String productId, Integer quantity) {
-        Product product = findValidProduct(productId);
-        product.addStock(quantity);
-        return productMapper.toProductGetResponseDto(product);
-    }
+    public void increaseInventory(ProductDeductRequestDto dto) {
 
+        Product product = productReader.read(dto.productId());
+        product.addStock(dto.quantity());
+        productSaver.save(product);
+
+        ProductGetResponseDto stockAddedProduct = productMapper.toProductGetResponseDto(product);
+        redisService.putProductDto(stockAddedProduct);
+        //redisService.evictPagedProductsCache();
+
+    }
 
     /**
      * 상품 삭제
      */
     @Transactional
-    @Caching(evict = {
-        @CacheEvict(cacheNames = PRODUCT_CACHE_NAME, key = "args[0]"),
-        @CacheEvict(cacheNames = "storeAllCache", allEntries = true)
-    })
     public void removeProduct(String productId) {
-        Product product = findValidProduct(productId);
+
+        Product product = productReader.read(productId);
         product.delete();
+
+        redisService.evictProduct(productId);
+
+        //redisService.evictPagedProductsCache();
+
     }
 
     /**
      * 상품 수정
      */
+    @Transactional
+    public void modifyProduct(ProductModifyRequestDto dto) {
+        productValidator.checkPriceAboveDiscountedAmount(dto.price(), dto.discountAmount());
+        Product product = productReader.read(dto.productId());
+        Brand brand = brandReader.read(dto.brandId());
+        Category category = categoryReader.read(dto.categoryId());
 
-    private String createId() {
-        return Ksuid.newKsuid().toString();
+        product.updateInfo(category, brand, dto.name(), dto.price(), dto.discountAmount(),
+            dto.stock(), GenderType.valueOf(dto.gender()), ColorType.valueOf(dto.color()),
+            SizeType.valueOf(dto.size()));
+        ProductGetResponseDto productGetResponseDto = productMapper.toProductGetResponseDto(product);
+
+        productSaver.save(product);
+        redisService.putProductDto(productGetResponseDto);
     }
 
-    private Brand findValidBrand(String brandId) {
-        return brandRepository.findById(brandId)
-            .orElseThrow(() -> new BusinessException(ExceptionMessage.BRAND_NOT_FOUND));
-    }
-
-    private Category findValidCategory(String categoryId) {
-        return categoryRepository.findById(categoryId)
-            .orElseThrow(() -> new BusinessException(ExceptionMessage.CATEGORY_NOT_FOUND));
-    }
-
-    private Product findValidProduct(String productId) {
-        return productRepository.findById(productId)
-            .orElseThrow(() -> new BusinessException(ExceptionMessage.PRODUCT_NOT_FOUND));
-    }
 
 }
+
+
