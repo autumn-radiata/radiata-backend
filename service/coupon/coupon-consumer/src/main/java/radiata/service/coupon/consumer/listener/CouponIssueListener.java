@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import radiata.common.domain.coupon.dto.CouponIssueRequestDto;
+import radiata.service.coupon.core.component.DistributeLockExecutor;
 import radiata.service.coupon.core.service.interfaces.coupon_issue.CouponIssueService;
 
 @Component
@@ -16,6 +17,7 @@ public class CouponIssueListener {
 
     private final CouponIssueService couponIssueService;
     private final ObjectMapper objectMapper;
+    private final DistributeLockExecutor distributeLockExecutor;
 
     @KafkaListener(topics = "coupon.issue", groupId = "coupon.issue.create")
     public void listen(String message) throws JsonProcessingException {

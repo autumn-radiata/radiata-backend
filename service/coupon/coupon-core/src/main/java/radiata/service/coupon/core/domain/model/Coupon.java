@@ -69,6 +69,7 @@ public class Coupon extends BaseEntity implements Serializable {
     @Column(nullable = false)
     private LocalDateTime issueEndDate; // 발급 종료일
 
+    @JsonIgnore
     @OneToMany(mappedBy = "coupon", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<CouponIssue> couponIssues;
 
