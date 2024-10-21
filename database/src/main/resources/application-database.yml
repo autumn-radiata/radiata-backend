@@ -9,7 +9,7 @@ spring:
 
   data:
     redis:
-      host: yunjae.click
+      host: localhost
       port: 63801
 
   jpa:

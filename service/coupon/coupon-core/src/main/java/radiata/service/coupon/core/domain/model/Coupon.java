@@ -92,7 +92,6 @@ public class Coupon extends BaseEntity implements Serializable {
             .build();
     }
 
-    @Deprecated
     public void issue() {
 
         // 1. 현재 시간이 발급 가능한 시간인지 확인한다.

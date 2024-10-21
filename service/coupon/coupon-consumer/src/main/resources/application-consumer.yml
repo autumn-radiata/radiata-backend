@@ -2,13 +2,13 @@ spring:
   config:
     import: classpath:application-database.yml
   application:
-    name: coupon-service
+    name: coupon-consumer-service
   kafka:
     bootstrap-servers: localhost:9092
 
 
 server:
-  port: 8081
+  port: 9081
 
 eureka:
   client:
