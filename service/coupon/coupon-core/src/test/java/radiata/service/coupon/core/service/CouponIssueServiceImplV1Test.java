@@ -81,7 +81,7 @@ class CouponIssueServiceImplV1Test {
     @MockBean
     private KafkaTemplate<String, Object> kafkaTemplate;
 
-    @MockBean
+    @MockBean(name = "testCacheManager")
     private CacheManager cacheManager;
 
     @BeforeEach
