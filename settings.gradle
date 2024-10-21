@@ -28,6 +28,4 @@ include 'service:order:order-api'
 include 'service:gateway:gateway-core'
 
 include 'service:eureka:eureka-core'
-include 'service:coupon:coupon-consumer'
-findProject(':service:coupon:coupon-consumer')?.name = 'coupon-consumer'
 
