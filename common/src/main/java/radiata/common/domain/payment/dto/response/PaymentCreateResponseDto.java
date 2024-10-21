@@ -1,6 +1,6 @@
 package radiata.common.domain.payment.dto.response;
 
-public record TossPaymentCreateResponseDto(
+public record PaymentCreateResponseDto(
     Boolean isPaymentSuccess,
     String paymentId
 ) {

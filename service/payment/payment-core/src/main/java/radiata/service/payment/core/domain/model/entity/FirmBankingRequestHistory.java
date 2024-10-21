@@ -15,9 +15,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
+import radiata.common.domain.payment.constant.FirmBankingRequestStatus;
 import radiata.database.model.BaseEntity;
 import radiata.service.payment.core.domain.model.vo.Account;
-import radiata.service.payment.core.domain.model.vo.FirmBankingRequestStatus;
 import radiata.service.payment.core.domain.model.vo.Money;
 
 @Getter

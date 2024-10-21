@@ -16,10 +16,10 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
+import radiata.common.domain.payment.constant.PaymentStatus;
+import radiata.common.domain.payment.constant.PaymentType;
 import radiata.service.payment.core.domain.model.entity.Payment;
 import radiata.service.payment.core.domain.model.vo.Money;
-import radiata.service.payment.core.domain.model.vo.PaymentStatus;
-import radiata.service.payment.core.domain.model.vo.PaymentType;
 
 @DisplayName("PaymentRequester 테스트")
 @ExtendWith(MockitoExtension.class)

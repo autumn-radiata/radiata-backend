@@ -11,9 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import radiata.common.domain.payment.constant.PaymentType;
 import radiata.service.payment.core.domain.model.entity.Payment;
 import radiata.service.payment.core.domain.model.vo.Money;
-import radiata.service.payment.core.domain.model.vo.PaymentType;
 import radiata.service.payment.core.domain.repository.PaymentRepository;
 
 @DisplayName("PaymentSaver 테스트")

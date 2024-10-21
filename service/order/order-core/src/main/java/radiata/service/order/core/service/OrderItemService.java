@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import radiata.common.annotation.Implementation;
 import radiata.common.domain.brand.request.ProductDeductRequestDto;
+import radiata.common.domain.coupon.dto.response.CouponResponseDto;
 import radiata.common.domain.order.dto.request.OrderCreateRequestDto;
 import radiata.common.domain.order.dto.request.OrderItemCreateRequestDto;
 import radiata.common.domain.order.dto.response.OrderItemResponseDto;
@@ -115,7 +116,11 @@ public class OrderItemService {
 
         for (OrderItemCreateRequestDto itemCreateDto : requestDto.itemList()) {
             try {
-//                // ID, 갯수, 사이즈 담겨있는 Dto 생성 후 사용
+                // 주문 상품 ID 생성 및 주문 상품 목록에 추가
+                String orderItemId = orderIdCreator.create();
+                OrderItem orderItem = orderItemMapper.toEntity(itemCreateDto, orderItemId, order);
+                orderItems.add(orderItem);
+
                 int quantity = itemCreateDto.quantity();
 //
 //                // 1️⃣ 타임세일 제품 확인
@@ -127,25 +132,23 @@ public class OrderItemService {
 //                }
                 // 2️⃣ 재고 확인 및 차감
                 String productId = itemCreateDto.productId();
+                productClient.checkAndDeductStock(new ProductDeductRequestDto(productId, quantity));    // 재고 확인 및 차감
+                deductedProducts.add(productId); // 재고 차감 목록 추가
 
-                productClient.checkAndDeductStock(new ProductDeductRequestDto(productId, quantity));   // 재고 확인 및 차감
-                deductedProducts.add(productId);                // 재고 차감 목록 추가
-//
-//                // 3️⃣ 쿠폰 사용 여부 체크
-//                String couponIssuedId = itemCreateDto.couponIssuedId();
-//                if (couponIssuedId != null) {
-//                    // 아래 둘 중 하나에서 쿠폰 할인율 or 할인 금액을 가져와야함.
-//                    couponIssueClient.getCouponIssue(couponIssuedId, userId).getBody();  // 쿠폰 조회
-//                    couponIssueClient.useCouponIssue(couponIssuedId, userId).getBody();  // 쿠폰 사용
-//                    usedCoupons.add(couponIssuedId);                                     // 사용된 쿠폰 목록 추가
-//                }
+                // 3️⃣ 쿠폰 사용 여부 체크
+                String couponIssuedId = itemCreateDto.couponIssuedId();
+                String saleType = null;
+                Integer discountValue = null;
+                if (couponIssuedId != null) {
+                    String couponId = couponIssueClient.useCouponIssue(couponIssuedId, userId).data().couponId();
+                    usedCoupons.add(couponIssuedId);                                                   // 사용된 쿠폰 목록 추가
 
-                // 주문 상품 ID 생성 및 주문 상품 목록에 추가
-                String orderItemId = orderIdCreator.create();
-                OrderItem orderItem = orderItemMapper.toEntity(itemCreateDto, orderItemId, order);
-                orderItems.add(orderItem);
-                // 주문 금액 추가 - 할인율 or 할인금액 적용
-                orderPrice += (orderItem.getUnitPrice() * orderItem.getQuantity());
+                    CouponResponseDto couponInfo = couponIssueClient.getCouponType(couponId).data();
+                    saleType = couponInfo.couponSaleType();
+                    discountValue = checkCouponSaleType(couponInfo);
+                }
+
+                orderPrice += orderItem.setPrice(saleType, discountValue);
 
             } catch (FeignException e) {
                 // 보상 트랜잭션 - 비동기 처리 (Kafka 사용)
@@ -171,5 +174,12 @@ public class OrderItemService {
 
         // 주문 - 금액 & 상품 목록 지정
         order.setOrderPriceAndItems(orderPrice, orderItems);
+    }
+
+    private int checkCouponSaleType(CouponResponseDto couponInfo) {
+        if (couponInfo.couponSaleType().equals("AMOUNT")) {
+            return couponInfo.discountAmount();
+        }
+        return couponInfo.discountRate();
     }
 }

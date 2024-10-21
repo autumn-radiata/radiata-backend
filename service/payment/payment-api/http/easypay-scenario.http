@@ -1,0 +1,19 @@
+### 간편결제 유저 충전금 충전
+PATCH http://localhost:8080/payusers/money/add
+Content-Type: application/json
+X-Userid: 2nVDCU4ILPYK6ezjTUNqAHXK3jQ
+
+{
+  "password": "123456",
+  "amount": 1000
+}
+
+### 간편결제 요청
+POST http://localhost:8080/payments/easypay
+Content-Type: application/json
+
+{
+  "userId": "2nVDCU4ILPYK6ezjTUNqAHXK3jQ",
+  "amount": 1000,
+  "password": "123456"
+}

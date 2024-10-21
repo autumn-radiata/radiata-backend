@@ -94,14 +94,6 @@ jobs:
           script: |
             echo ${{ env.DOCKER_HUB_TOKEN }} | docker login -u ${{ env.DOCKER_HUB_USERNAME }} --password-stdin
             docker compose -f ./docker-compose-deploy.yml down
-            docker rm -f autumn-user-server
-            docker rm -f autumn-coupon-server
-            docker rm -f autumn-timesale-server
-            docker rm -f autumn-order-server
-            docker rm -f autumn-brand-server
-            docker rm -f autumn-payment-server
-            docker rm -f autumn-gateway-server
-            docker rm -f autumn-eureka-server
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-user-server:latest
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-server:latest
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-timesale-server:latest

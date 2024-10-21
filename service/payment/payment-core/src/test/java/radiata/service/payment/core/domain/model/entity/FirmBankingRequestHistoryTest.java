@@ -6,9 +6,9 @@ import com.github.ksuid.Ksuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import radiata.common.domain.payment.constant.Bank;
+import radiata.common.domain.payment.constant.FirmBankingRequestStatus;
 import radiata.service.payment.core.domain.model.vo.Account;
-import radiata.service.payment.core.domain.model.vo.Bank;
-import radiata.service.payment.core.domain.model.vo.FirmBankingRequestStatus;
 import radiata.service.payment.core.domain.model.vo.Money;
 
 @DisplayName("FirmBankingRequestHistory 엔티티 테스트")

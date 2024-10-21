@@ -3,14 +3,28 @@ spring:
     import: classpath:application-database.yml
   application:
     name: coupon-service
+  lifecycle:
+    timeout-per-shutdown-phase: 10s
   kafka:
     bootstrap-servers: localhost:9092
 
 
 server:
+  shutdown: graceful  # 애플리케이션 종료 시 정상 종료 (Graceful Shutdown)
   port: 8081
 
 eureka:
   client:
     service-url:
       defaultZone: http://yunjae.click:19090/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true

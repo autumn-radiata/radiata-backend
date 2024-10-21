@@ -9,11 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
+import radiata.common.domain.brand.request.ProductSearchCondition;
 import radiata.service.brand.core.model.constant.ColorType;
 import radiata.service.brand.core.model.constant.GenderType;
 import radiata.service.brand.core.model.constant.SizeType;
-import radiata.service.brand.core.model.entity.Brand;
-import radiata.service.brand.core.model.entity.Category;
 import radiata.service.brand.core.model.entity.Product;
 import radiata.service.brand.core.model.entity.QProduct;
 import radiata.service.brand.core.model.repository.ProductQueryDslRepository;
@@ -31,30 +30,29 @@ public class ProductQueryDslRepositoryImpl implements ProductQueryDslRepository 
     }
 
     @Override
-    public Page<Product> findProductsByCondition(Brand brand, Category category, GenderType gender, SizeType size,
-        ColorType color, String query, Pageable pageable) {
+    public Page<Product> findProductsByCondition(ProductSearchCondition condition, Pageable pageable) {
 
         QProduct product = QProduct.product;
         BooleanBuilder builder = new BooleanBuilder();
 
         // 추가적인 동적 조건 추가
-        if (brand != null) {
-            builder.and(product.brand.eq(brand));
+        if (condition.brandId() != null) {
+            builder.and(product.brand.id.eq(condition.brandId()));
         }
-        if (category != null) {
-            builder.and(product.category.eq(category));
+        if (condition.categoryId() != null) {
+            builder.and(product.category.id.eq(condition.categoryId()));
         }
-        if (gender != null) {
-            builder.and(product.gender.eq(gender));
+        if (condition.gender() != null) {
+            builder.and(product.gender.eq(GenderType.valueOf(condition.gender())));
         }
-        if (size != null) {
-            builder.and(product.size.eq(size));
+        if (condition.size() != null) {
+            builder.and(product.size.eq(SizeType.valueOf(condition.size())));
         }
-        if (color != null) {
-            builder.and(product.color.eq(color));
+        if (condition.color() != null) {
+            builder.and(product.color.eq(ColorType.valueOf(condition.color())));
         }
-        if (query != null && !query.isEmpty()) {
-            builder.and(product.name.containsIgnoreCase(query));
+        if (condition.query() != null && !condition.query().isEmpty()) {
+            builder.and(product.name.containsIgnoreCase(condition.query()));
         }
 
         // 페이징 처리
@@ -63,7 +61,7 @@ public class ProductQueryDslRepositoryImpl implements ProductQueryDslRepository 
             .where(builder)
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
-            .orderBy(product.createdAt.asc()) // 정렬
+            .orderBy(product.createdAt.asc())
             .fetch();
 
         // 전체 카운트를 가져오는 쿼리
@@ -74,4 +72,5 @@ public class ProductQueryDslRepositoryImpl implements ProductQueryDslRepository 
 
         return PageableExecutionUtils.getPage(products, pageable, countQuery::fetchOne);
     }
+
 }

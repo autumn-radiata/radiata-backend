@@ -6,7 +6,10 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
-public record ProductCreateRequestDto(
+public record ProductModifyRequestDto(
+
+    @NotBlank(message = "상품 식별자는 필수 입니다.")
+    String productId,
 
     @NotBlank(message = "브랜드 식별자는 필수 입니다.")
     String brandId,
@@ -38,6 +41,7 @@ public record ProductCreateRequestDto(
     @NotBlank(message = "상품 사이즈는 필수입니다.")
     @Pattern(regexp = "^(SMALL|MEDIUM|LARGE|FREE)$", message = "사이즈는 S,M,L,F 중 하나여야 합니다.")
     String size
+
 ) {
 
 }

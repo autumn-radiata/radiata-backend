@@ -7,8 +7,8 @@ import com.github.ksuid.Ksuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import radiata.common.domain.payment.constant.Bank;
 import radiata.service.payment.core.domain.model.vo.Account;
-import radiata.service.payment.core.domain.model.vo.Bank;
 
 @DisplayName("Account 엔티티 테스트")
 class PayAccountTest {

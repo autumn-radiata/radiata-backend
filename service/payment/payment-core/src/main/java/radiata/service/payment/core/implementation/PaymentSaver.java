@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.annotation.Implementation;
+import radiata.common.domain.payment.constant.PaymentType;
 import radiata.service.payment.core.domain.model.entity.Payment;
 import radiata.service.payment.core.domain.model.vo.Money;
-import radiata.service.payment.core.domain.model.vo.PaymentType;
 import radiata.service.payment.core.domain.repository.PaymentRepository;
 
 @Slf4j
@@ -25,6 +25,18 @@ public class PaymentSaver {
             paymentKey,
             Money.of(amount),
             PaymentType.TOSS_PAYMENTS);
+
+        return paymentRepository.save(payment);
+    }
+
+    @Transactional
+    public Payment createEasyPay(String userId, Long amount) {
+        Payment payment = Payment.of(
+            KsuidGenerator.generate(),
+            userId,
+            KsuidGenerator.generate(),
+            Money.of(amount),
+            PaymentType.EASY_PAY);
 
         return paymentRepository.save(payment);
     }

@@ -1,0 +1,43 @@
+global:
+  scrape_interval: 10s  # 데이터 수집 간격
+
+scrape_configs:
+  - job_name: "eureka-server"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: [ "host.docker.internal:19090" ]
+
+  - job_name: "gateway-server"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: [ "host.docker.internal:19091" ]
+
+  - job_name: "payment-server"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: [ "host.docker.internal:8080" ]
+
+  - job_name: "order-server"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: [ "host.docker.internal:8085" ]
+
+  - job_name: "brand-server"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: [ "host.docker.internal:8484" ]
+
+  - job_name: "coupon-server"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: [ "host.docker.internal:8081" ]
+
+  - job_name: "timesale-server"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: [ "host.docker.internal:8082" ]
+
+  - job_name: "user-server"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: [ "host.docker.internal:8083" ]
