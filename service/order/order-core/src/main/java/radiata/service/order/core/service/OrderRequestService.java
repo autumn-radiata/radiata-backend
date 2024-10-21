@@ -8,7 +8,6 @@ import radiata.common.domain.order.dto.request.OrderTossPaymentRequestDto;
 import radiata.common.domain.order.dto.response.OrderResponseDto;
 import radiata.service.order.core.domain.model.constant.OrderStatus;
 import radiata.service.order.core.domain.model.entity.Order;
-import radiata.service.order.core.domain.model.entity.OrderItem;
 import radiata.service.order.core.implemetation.OrderReader;
 import radiata.service.order.core.implemetation.OrderValidator;
 import radiata.service.order.core.service.mapper.OrderMapper;
@@ -73,20 +72,10 @@ public class OrderRequestService {
         Order order = orderReader.readOrder(orderId);
         // 사용자의 주문 내역인지 확인
         orderValidator.validateUserOwnsOrder(order.getUserId(), userId);
-        // 주문 상태 체크 - 결제 단계만 주문 취소 가능
+        // 결제 단계 상태만 취소 가능
         orderValidator.checkStatusIsPaymentLevel(order.getStatus());
-        // 주문 상태 업데이트 - 주문 취소 요청
-        order.updateOrderStatus(OrderStatus.PAYMENT_CANCEL_REQUESTED);
-        // TODO - 결제 취소, 타임세일 상품, 상품 재고, 쿠폰 -> 롤백 (주문 상품 목록 재고 ++ & 쿠폰 이슈 복구 & 주문 상태 이전으로? - 스케줄러)
-        for (OrderItem orderItem : order.getOrderItems()) {
-            /*
-            try - 1) 재고 증감
-             */
-
-            /*
-            try - 2) 쿠폰 상태 변경 - USED -> ISSUED
-            */
-        }
+        // 주문 취소 - 롤백 처리
+        processService.processCancelOrder(order);
         // 주문 상태 체크
         orderValidator.checkStatusIsPaymentCancelRequested(order.getStatus());
         // 주문 상태 업데이트 - 주문 취소 완료

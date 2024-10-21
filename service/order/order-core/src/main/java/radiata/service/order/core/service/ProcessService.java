@@ -16,6 +16,7 @@ import radiata.common.domain.payment.dto.request.TossPaymentCreateRequestDto;
 import radiata.common.domain.user.dto.request.PointModifyRequestDto;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
+import radiata.service.order.core.domain.model.constant.OrderStatus;
 import radiata.service.order.core.domain.model.entity.Order;
 import radiata.service.order.core.service.client.CouponIssueClient;
 import radiata.service.order.core.service.client.PaymentClient;
@@ -41,6 +42,7 @@ public class ProcessService {
     public void checkAndDeductTimeSaleProduct(OrderRollbackContext context, String timeSaleProductId, int quantity) {
         try {
             if (timeSaleProductId != null) {
+                // TODO - 갯수 넘기면 header Or param으로 날릴 예정
                 timeSaleProductClient.checkAndDeductTimeSaleProduct(timeSaleProductId);
                 context.addDeductedTimeSale(timeSaleProductId, quantity);
             }
@@ -65,6 +67,7 @@ public class ProcessService {
 
     // 쿠폰 확인 및 상태변경 요청
     public CouponInfoDto checkAndUseCoupon(OrderRollbackContext context, String couponIssuedId, String userId) {
+
         String saleType = null;
         Integer discountValue = null;
 
@@ -108,7 +111,7 @@ public class ProcessService {
             order.setPaymentIdAndType(paymentId, PaymentType.TOSS_PAYMENTS);
         } catch (FeignException e) {
             log.error("[Payment-Service FeignException]: EasyPay Request Error");
-            rollbackService.cancelOrderItemsRollback(order.getOrderItems());
+            rollbackService.cancelOrderItemsRollback(order);
             throw new BusinessException(ExceptionMessage.ORDER_PAYMENT_FAILED);
         }
     }
@@ -121,7 +124,7 @@ public class ProcessService {
             order.setPaymentIdAndType(paymentId, PaymentType.TOSS_PAYMENTS);
         } catch (FeignException e) {
             log.error("[Payment-Service FeignException]: TossPay Request Error");
-            rollbackService.cancelOrderItemsRollback(order.getOrderItems());
+            rollbackService.cancelOrderItemsRollback(order);
             throw new BusinessException(ExceptionMessage.ORDER_PAYMENT_FAILED);
         }
     }
@@ -153,5 +156,13 @@ public class ProcessService {
             userId,
             requestDto.paymentKeyId(),
             requestDto.amount().longValue());
+    }
+
+    // 주문 취소 요청
+    public void processCancelOrder(Order order) {
+        // 상태 -> 주문 취소로 변경
+        order.updateOrderStatus(OrderStatus.PAYMENT_CANCEL_REQUESTED);
+        // 주문 관련 롤백 요청
+        rollbackService.cancelOrderItemsRollback(order);
     }
 }
