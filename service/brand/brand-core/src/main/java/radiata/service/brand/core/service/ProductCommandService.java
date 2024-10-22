@@ -2,6 +2,8 @@ package radiata.service.brand.core.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.brand.request.ProductCreateRequestDto;
@@ -10,7 +12,7 @@ import radiata.common.domain.brand.request.ProductModifyRequestDto;
 import radiata.common.domain.brand.response.ProductGetResponseDto;
 import radiata.service.brand.core.implement.BrandReader;
 import radiata.service.brand.core.implement.CategoryReader;
-import radiata.service.brand.core.implement.ProductIdCreator;
+import radiata.service.brand.core.implement.IdCreator;
 import radiata.service.brand.core.implement.ProductReader;
 import radiata.service.brand.core.implement.ProductSaver;
 import radiata.service.brand.core.implement.ProductValidator;
@@ -29,13 +31,15 @@ import radiata.service.brand.core.service.Mapper.ProductMapper;
 public class ProductCommandService {
 
     private final ProductValidator productValidator;
-    private final ProductIdCreator productIdCreator;
+    private final IdCreator productIdCreator;
     private final ProductSaver productSaver;
     private final ProductReader productReader;
     private final BrandReader brandReader;
     private final CategoryReader categoryReader;
     private final ProductMapper productMapper;
     private final RedisService redisService;
+
+    //todo : writeAround전략으로 saveAndFlush 로 변경
 
     /**
      * 상품 생성
@@ -76,11 +80,14 @@ public class ProductCommandService {
     /**
      * 상품 재고 증감 - 보상 트랜잭션 복구
      */
-    @Transactional
-    public void increaseInventory(ProductDeductRequestDto dto) {
 
-        Product product = productReader.read(dto.productId());
-        product.addStock(dto.quantity());
+    @Transactional
+    @KafkaListener(topics = "product.add-stock", containerFactory = "KafkaListenerContainerFactory")
+    public void increaseStock(ConsumerRecord<String, String> consumerRecord) {
+        ProductDeductRequestDto stockAddRequestDto = EventSerializer.deserialize(consumerRecord.value(),
+            ProductDeductRequestDto.class);
+        Product product = productReader.read(stockAddRequestDto.productId());
+        product.addStock(stockAddRequestDto.quantity());
         productSaver.save(product);
 
         ProductGetResponseDto stockAddedProduct = productMapper.toProductGetResponseDto(product);
