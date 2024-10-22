@@ -85,7 +85,7 @@ public class RollbackService {
 
 
     // 주문 등록 - 보상 트랜잭션
-    public void createOrderItemsRollbackTransaction(OrderRollbackContext context) {
+    public void createOrderItemsRollback(OrderRollbackContext context) {
 
         rollbackTimeSaleStock(context.getDeductedTimeSales());
         rollbackProductStock(context.getDeductedProducts());
@@ -97,7 +97,7 @@ public class RollbackService {
 
         OrderRollbackContext rollbackContext = collectOrderItemInfo(order.getOrderItems());
 
-        // TODO - 타임세일 시간 끝나면 복구 안해도 되지않나?
+        // TODO - 타임세일 시간 끝나면 복구 X
         rollbackTimeSaleStock(rollbackContext.getDeductedTimeSales());
         rollbackProductStock(rollbackContext.getDeductedProducts());
         rollbackCoupons(rollbackContext.getUsedCoupons());
@@ -112,7 +112,7 @@ public class RollbackService {
         OrderRollbackContext rollbackContext = collectOrderItemInfo(order.getOrderItems());
 
         rollbackPaymentAmount(order.getPaymentId());
-        // TODO - 타임세일 시간 끝나면 복구 안해도 되지않나?
+        // TODO - 타임세일 시간 끝나면 복구 X
         rollbackTimeSaleStock(rollbackContext.getDeductedTimeSales());
         rollbackProductStock(rollbackContext.getDeductedProducts());
     }
@@ -130,7 +130,7 @@ public class RollbackService {
         }
     }
 
-    private OrderRollbackContext collectOrderItemInfo(Set<OrderItem> orderItems) {
+    public OrderRollbackContext collectOrderItemInfo(Set<OrderItem> orderItems) {
         OrderRollbackContext rollbackContext = new OrderRollbackContext();
 
         for (OrderItem orderItem : orderItems) {
