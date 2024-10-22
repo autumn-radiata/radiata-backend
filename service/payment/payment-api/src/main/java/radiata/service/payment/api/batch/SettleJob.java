@@ -1,13 +1,12 @@
 package radiata.service.payment.api.batch;
 
 import java.util.Map;
+import java.util.concurrent.Executors;
 import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.JobScope;
-import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
@@ -19,11 +18,13 @@ import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilde
 import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.core.task.support.TaskExecutorAdapter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.transaction.PlatformTransactionManager;
 import radiata.common.domain.payment.constant.PaymentStatus;
 
-@Slf4j
+@Slf4j(topic = "settle-job")
 @Configuration
 @RequiredArgsConstructor
 public class SettleJob {
@@ -35,6 +36,11 @@ public class SettleJob {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
 
+    @Bean(name = JOB_NAME + "taskPool")
+    public TaskExecutor executor() {
+        return new TaskExecutorAdapter(Executors.newVirtualThreadPerTaskExecutor());
+    }
+
     @Bean(JOB_NAME)
     public Job paymentJob() {
         return new JobBuilder(JOB_NAME, jobRepository)
@@ -44,17 +50,16 @@ public class SettleJob {
     }
 
     @Bean(JOB_NAME + "_step")
-    @JobScope
     public Step paymentStep() {
         return new StepBuilder(JOB_NAME + "_step", jobRepository)
             .<ApprovedPayment, ApprovedPayment>chunk(PAGE_SIZE, transactionManager)
             .reader(paymentReader())
             .writer(paymentWriter())
+            .taskExecutor(executor())
             .build();
     }
 
     @Bean(JOB_NAME + "_reader")
-    @StepScope
     public ItemReader<ApprovedPayment> paymentReader() {
         return new JdbcPagingItemReaderBuilder<ApprovedPayment>()
             .name(JOB_NAME + "_reader")
@@ -66,11 +71,11 @@ public class SettleJob {
             .parameterValues(Map.of("status", PaymentStatus.APPROVED.name()))
             .rowMapper((rs, rowNum) -> new ApprovedPayment(rs.getString("id")))
             .sortKeys(Map.of("id", Order.ASCENDING))
+            .saveState(false)
             .build();
     }
 
     @Bean(JOB_NAME + "_writer")
-    @StepScope
     public ItemWriter<ApprovedPayment> paymentWriter() {
         return new JdbcBatchItemWriterBuilder<ApprovedPayment>()
             .dataSource(dataSource)
