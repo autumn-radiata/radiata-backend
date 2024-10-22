@@ -19,9 +19,7 @@ import radiata.service.order.core.service.context.OrderRollbackContext;
 @RequiredArgsConstructor
 public class RollbackService {
 
-    private final KafkaTemplate<String, String> cancelRequestKafkaTemplate;
-    private final KafkaTemplate<String, AddStockRequestDto> addStockKafkaTemplate;
-    private final KafkaTemplate<String, AddPointRequestDto> addPointKafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     // 보상 트랜잭션 - 타임 세일 상품 재고
     private void rollbackTimeSaleStock(List<StockInfoDto> deductedTimeSaleStocks) {
@@ -30,7 +28,8 @@ public class RollbackService {
             deductedTimeSaleStocks.forEach(timeSaleProduct -> {
                 AddStockRequestDto requestDto = new AddStockRequestDto(timeSaleProduct.id(),
                     timeSaleProduct.quantity());
-                addStockKafkaTemplate.send("timesale.add-stock", requestDto);
+                String data = EventSerializer.serialize(requestDto);
+                kafkaTemplate.send("timesale.add-stock", data);
             });
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: TimeSale-Service ");
@@ -43,7 +42,8 @@ public class RollbackService {
             // 상품 재고 증감 요청
             deductedProductStocks.forEach(product -> {
                 AddStockRequestDto requestDto = new AddStockRequestDto(product.id(), product.quantity());
-                addStockKafkaTemplate.send("product.add-stock", requestDto);
+                String data = EventSerializer.serialize(requestDto);
+                kafkaTemplate.send("product.add-stock", data);
             });
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: Product-Service ");
@@ -55,7 +55,8 @@ public class RollbackService {
         try {
             // 쿠폰 상태 변경 요청(USED -> ISSUED)
             usedCoupons.forEach(usedCouponId -> {
-                cancelRequestKafkaTemplate.send("coupon.rollback-status", usedCouponId);
+                String data = EventSerializer.serialize(usedCouponId);
+                kafkaTemplate.send("coupon.rollback-status", data);
             });
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: Coupon-Service ");
@@ -67,7 +68,8 @@ public class RollbackService {
         try {
             // 적립금 증감 요청
             AddPointRequestDto requestDto = new AddPointRequestDto(userId, point);
-            addPointKafkaTemplate.send("user.add-point", requestDto);
+            String data = EventSerializer.serialize(requestDto);
+            kafkaTemplate.send("user.add-point", data);
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: User(Point)-Service ");
         }
@@ -77,7 +79,8 @@ public class RollbackService {
     private void rollbackPaymentAmount(String paymentId) {
         try {
             // 결제 취소 요청 - (== 환불)
-            cancelRequestKafkaTemplate.send("payment.cancel", paymentId);
+            String data = EventSerializer.serialize(paymentId);
+            kafkaTemplate.send("payment.cancel", data);
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: Payment-Service ");
         }
@@ -85,7 +88,7 @@ public class RollbackService {
 
 
     // 주문 등록 - 보상 트랜잭션
-    public void createOrderItemsRollbackTransaction(OrderRollbackContext context) {
+    public void createOrderItemsRollback(OrderRollbackContext context) {
 
         rollbackTimeSaleStock(context.getDeductedTimeSales());
         rollbackProductStock(context.getDeductedProducts());
@@ -97,7 +100,7 @@ public class RollbackService {
 
         OrderRollbackContext rollbackContext = collectOrderItemInfo(order.getOrderItems());
 
-        // TODO - 타임세일 시간 끝나면 복구 안해도 되지않나?
+        // TODO - 타임세일 시간 끝나면 복구 X
         rollbackTimeSaleStock(rollbackContext.getDeductedTimeSales());
         rollbackProductStock(rollbackContext.getDeductedProducts());
         rollbackCoupons(rollbackContext.getUsedCoupons());
@@ -112,7 +115,7 @@ public class RollbackService {
         OrderRollbackContext rollbackContext = collectOrderItemInfo(order.getOrderItems());
 
         rollbackPaymentAmount(order.getPaymentId());
-        // TODO - 타임세일 시간 끝나면 복구 안해도 되지않나?
+        // TODO - 타임세일 시간 끝나면 복구 X
         rollbackTimeSaleStock(rollbackContext.getDeductedTimeSales());
         rollbackProductStock(rollbackContext.getDeductedProducts());
     }
@@ -125,12 +128,12 @@ public class RollbackService {
     }
 
     private void checkUsedPointAndReward(String userId, Integer usedPoint) {
-        if (usedPoint != null) {
+        if (usedPoint > 0) {
             rollbackRewardPoint(userId, usedPoint);
         }
     }
 
-    private OrderRollbackContext collectOrderItemInfo(Set<OrderItem> orderItems) {
+    public OrderRollbackContext collectOrderItemInfo(Set<OrderItem> orderItems) {
         OrderRollbackContext rollbackContext = new OrderRollbackContext();
 
         for (OrderItem orderItem : orderItems) {

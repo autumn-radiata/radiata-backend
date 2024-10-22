@@ -28,7 +28,8 @@ public class OrderMapper {
             order.getIsRefunded(),
             order.getAddress(),
             order.getPaymentId(),
-            order.getComment()
+            order.getComment(),
+            order.getUsedPoint()
         );
     }
 }

@@ -48,7 +48,7 @@ public class ProcessService {
             }
         } catch (FeignException e) {
             log.error("[TimeSale-Service FeignException]: Deduct TimeSale Product Request Error");
-            rollbackService.createOrderItemsRollbackTransaction(context);
+            rollbackService.createOrderItemsRollback(context);
             throw new BusinessException(HttpStatus.CONFLICT, e.getMessage(), "5006");
         }
     }
@@ -60,7 +60,7 @@ public class ProcessService {
             context.addDeductedProduct(productId, quantity);
         } catch (FeignException e) {
             log.error("[Brand(Product)-Service FeignException]: DeductStock Request Error");
-            rollbackService.createOrderItemsRollbackTransaction(context);
+            rollbackService.createOrderItemsRollback(context);
             throw new BusinessException(HttpStatus.CONFLICT, e.getMessage(), "5007");
         }
     }
@@ -82,7 +82,7 @@ public class ProcessService {
             }
         } catch (FeignException e) {
             log.error("[Coupon-Service FeignException]: UseCoupon Request Error");
-            rollbackService.createOrderItemsRollbackTransaction(context);
+            rollbackService.createOrderItemsRollback(context);
             throw new BusinessException(HttpStatus.CONFLICT, e.getMessage(), "5008");
         }
         return CouponInfoDto.of(saleType, discountValue);
@@ -98,7 +98,7 @@ public class ProcessService {
             }
         } catch (FeignException e) {
             log.error("[User(Point)-Service FeignException]: UsePoint Request Error");
-            rollbackService.createOrderItemsRollbackTransaction(context);
+            rollbackService.createOrderItemsRollback(context);
             throw new BusinessException(HttpStatus.CONFLICT, e.getMessage(), "5008");
         }
     }
