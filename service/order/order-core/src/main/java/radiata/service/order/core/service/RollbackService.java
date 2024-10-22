@@ -125,7 +125,7 @@ public class RollbackService {
     }
 
     private void checkUsedPointAndReward(String userId, Integer usedPoint) {
-        if (usedPoint != null) {
+        if (usedPoint > 0) {
             rollbackRewardPoint(userId, usedPoint);
         }
     }
