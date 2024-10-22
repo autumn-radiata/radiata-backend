@@ -1,8 +1,11 @@
 package radiata.service.user.core.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.user.dto.request.PointModifyRequestDto;
@@ -16,6 +19,7 @@ import radiata.service.user.core.implement.PointHandler;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserCommandService {
 
     private final UserRepository userRepository;
@@ -56,20 +60,22 @@ public class UserCommandService {
     }
 
     /**
-     * 포인트 증감 -보상 트랜잭션 복구
+     * 포인트 증감 -보상 트랜잭션 복구, 리뷰 이벤트 정산
      */
     @Transactional
-    @KafkaListener(topics = "user.add-point", containerFactory = "KafkaListenerContainerFactory")
-    public void increasePoint(ConsumerRecord<String, String> consumerRecord) {
-        PointModifyRequestDto stockAddRequestDto = EventSerializer.deserialize(consumerRecord.value(),
-            PointModifyRequestDto.class);
-        User user = findValidUser(stockAddRequestDto.userId());
-        user.addPoint(stockAddRequestDto.point());
+    @KafkaListener(topics = "user.add-point", containerFactory = "backKafkaListenerContainerFactory")
+    public void increasePoint(ConsumerRecords<String, String> records, Acknowledgment ack) {
+        log.info("배치 처리 중");
+        for (ConsumerRecord<String, String> record : records) {
+            PointModifyRequestDto pointAddRequestDto = EventSerializer.deserialize(record.value(),
+                PointModifyRequestDto.class);
+            log.info("호출:" + pointAddRequestDto.userId());
+            User user = findValidUser(pointAddRequestDto.userId());
+            user.addPoint(pointAddRequestDto.point());
+            pointHandler.recordPointHistory(user, pointAddRequestDto.point(), PointType.INCREMENT_REVIEW);
+        }
+        ack.acknowledge();
     }
-
-    /**
-     * 포인트 증감 - 리뷰 정산
-     */
 
     private User findValidUser(String userId) {
         return userRepository.findById(userId)
