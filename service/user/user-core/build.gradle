@@ -40,6 +40,10 @@ dependencies {
     //jwt
     implementation 'io.jsonwebtoken:jjwt:0.12.6'
 
+    //kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+
+
     /* test */
 
     /* //h2
