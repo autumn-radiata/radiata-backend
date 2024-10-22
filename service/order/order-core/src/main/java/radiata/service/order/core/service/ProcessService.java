@@ -154,7 +154,7 @@ public class ProcessService {
         return new TossPaymentCreateRequestDto(
             orderId,
             userId,
-            requestDto.paymentKeyId(),
+            requestDto.paymentKey(),
             requestDto.amount().longValue());
     }
 
