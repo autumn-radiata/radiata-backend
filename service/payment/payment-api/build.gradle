@@ -1,13 +1,5 @@
-plugins {
-    id 'java'
-}
-
 group = 'radiata.service.payment'
 version = '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
 
 bootJar.enabled = true
 jar.enabled = false
@@ -27,6 +19,9 @@ dependencies {
     // swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 
+    // batch
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+
     /* test */
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
@@ -37,8 +32,4 @@ dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
-}
-
-test {
-    useJUnitPlatform()
 }
