@@ -55,6 +55,20 @@ services:
     depends_on:
       - eureka-server
 
+  coupon-consumer-server:
+    image: wodbs7758/autumn-coupon-consumer-server:latest
+    container_name: autumn-coupon-server
+    build:
+      dockerfile: Dockerfile
+      args:
+        - FILE_DIRECTORY=service/coupon/coupon-consumer
+    ports:
+      - "9081:9081"
+    stop_grace_period: 15s
+    stop_signal: SIGTERM
+    depends_on:
+      - eureka-server
+
   timesale-server:
     image: wodbs7758/autumn-timesale-server:latest
     container_name: autumn-timesale-server

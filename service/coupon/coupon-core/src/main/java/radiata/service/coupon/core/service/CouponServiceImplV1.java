@@ -1,8 +1,11 @@
 package radiata.service.coupon.core.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.coupon.dto.condition.CouponSearchCondition;
@@ -12,8 +15,6 @@ import radiata.common.domain.coupon.dto.response.CouponResponseDto;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
 import radiata.service.coupon.core.domain.model.Coupon;
-import radiata.service.coupon.core.domain.model.constant.CouponSaleType;
-import radiata.service.coupon.core.domain.model.constant.CouponType;
 import radiata.service.coupon.core.implementation.interfaces.CouponCreateRequestDtoValidator;
 import radiata.service.coupon.core.implementation.interfaces.CouponDeleter;
 import radiata.service.coupon.core.implementation.interfaces.CouponIdCreator;

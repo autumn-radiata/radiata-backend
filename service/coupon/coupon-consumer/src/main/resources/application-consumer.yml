@@ -1,0 +1,16 @@
+spring:
+  config:
+    import: classpath:application-database.yml
+  application:
+    name: coupon-consumer-service
+  kafka:
+    bootstrap-servers: http://yunjae.click:9092
+
+
+server:
+  port: 9081
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://yunjae.click:19090/eureka/

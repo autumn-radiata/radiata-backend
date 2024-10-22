@@ -17,6 +17,7 @@ include 'service:user:user-core'
 
 include 'service:coupon:coupon-core'
 include 'service:coupon:coupon-api'
+include 'service:coupon:coupon-consumer'
 
 include 'service:timesale:timesale-core'
 include 'service:timesale:timesale-api'
