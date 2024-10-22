@@ -1,5 +1,6 @@
 package radiata.service.timeslae.api.service;
 
+import java.util.List;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductCreateRequestDto;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductResponseDto;
 
@@ -9,7 +10,7 @@ public interface TimeSaleProductApiService {
 
     void saleTimeSaleProduct(String timeSaleProductId);
 
-    TimeSaleProductResponseDto getMaxDiscountTimeSaleProduct(String productId);
+    List<TimeSaleProductResponseDto> getMaxDiscountTimeSaleProduct(List<String> productIds);
 
-    TimeSaleProductResponseDto getMaxDiscountTimeSaleProductHasStock(String productId);
+    List<TimeSaleProductResponseDto> getMaxDiscountTimeSaleProductHasStock(List<String> productIds);
 }

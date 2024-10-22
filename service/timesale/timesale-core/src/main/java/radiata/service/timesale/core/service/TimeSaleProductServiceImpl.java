@@ -1,14 +1,15 @@
 package radiata.service.timesale.core.service;
 
-import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductCreateRequestDto;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductResponseDto;
-import radiata.common.exception.BusinessException;
-import radiata.common.message.ExceptionMessage;
 import radiata.service.timesale.core.domain.TimeSale;
 import radiata.service.timesale.core.domain.TimeSaleProduct;
 import radiata.service.timesale.core.implementation.interfaces.TimeSaleProductIdCreator;
@@ -30,7 +31,6 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     private final TimeSaleProductResponseRedisRepository timeSaleProductResponseRedisRepository;
 
     @Override
-    //@CacheEvict(value = "cacheProductTimeSales", key = "#request.productId()")
     public TimeSaleProductResponseDto createTimeSaleProduct(
         TimeSaleProductCreateRequestDto request) {
 
@@ -55,30 +55,45 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     }
 
     @Override
-    public TimeSaleProductResponseDto getMaxDiscountTimeSaleProduct(String productId) {
+    public List<TimeSaleProductResponseDto> getMaxDiscountTimeSaleProduct(List<String> productIds) {
 
-        return timeSaleProductMapper.toDto(
-            timeSaleReader.readByProductId(productId)
-                .getTimeSaleProducts().stream()
-                .sorted(Comparator.comparing(TimeSaleProduct::getId))
-                .max(Comparator.comparing(TimeSaleProduct::getDiscountRate)).orElseThrow(
-                    () -> new BusinessException(ExceptionMessage.NOT_FOUND)
+        List<TimeSaleProductResponseDto> allTimeSaleProducts = timeSaleReader.readByProductIds(productIds).stream()
+                .flatMap(timeSale -> timeSale.getTimeSaleProducts().stream())
+                .map(timeSaleProductMapper::toDto)
+                .toList();
+
+
+        Map<String, TimeSaleProductResponseDto> maxDiscountProducts = allTimeSaleProducts.stream()
+                .collect(Collectors.toMap(
+                        TimeSaleProductResponseDto::productId,
+                        Function.identity(),
+                        (existing, replacement) -> replacement.discountRate() > existing.discountRate() ? replacement : existing
                 ));
+
+        return new ArrayList<>(maxDiscountProducts.values());
     }
 
     @Override
-    @Cacheable(value = "cacheProductTimeSales", key = "#productId")
-    public TimeSaleProductResponseDto getMaxDiscountTimeSaleProductHasStock(String productId) {
+    public List<TimeSaleProductResponseDto> getMaxDiscountTimeSaleProductHasStock(List<String> productIds) {
 
-        TimeSaleProductResponseDto responseDto = timeSaleProductMapper.toDto(
-            timeSaleReader.readByProductId(productId)
-                .getTimeSaleProducts().stream()
-                .filter(a -> a.getSaleQuantity() < a.getTotalQuantity())
-                .sorted(Comparator.comparing(TimeSaleProduct::getId))
-                .max(Comparator.comparing(TimeSaleProduct::getDiscountRate)).orElseThrow(
-                    () -> new BusinessException(ExceptionMessage.NOT_FOUND)
+        List<TimeSaleProductResponseDto> allTimeSaleProducts = timeSaleReader.readByProductIds(productIds).stream()
+                .flatMap(timeSale -> timeSale.getTimeSaleProducts().stream())
+                .map(timeSaleProductMapper::toDto)
+                .toList();
+
+
+        List<TimeSaleProductResponseDto> availableStockProducts = allTimeSaleProducts.stream()
+                .filter(product -> product.saleQuantity() < product.totalQuantity())
+                .toList();
+
+
+        Map<String, TimeSaleProductResponseDto> maxDiscountProducts = availableStockProducts.stream()
+                .collect(Collectors.toMap(
+                        TimeSaleProductResponseDto::productId,
+                        Function.identity(),
+                        (existing, replacement) -> replacement.discountRate() > existing.discountRate() ? replacement : existing
                 ));
 
-        return responseDto;
+        return new ArrayList<>(maxDiscountProducts.values());
     }
 }
