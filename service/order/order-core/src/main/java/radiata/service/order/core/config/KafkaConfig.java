@@ -18,7 +18,6 @@ public class KafkaConfig {
     @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    // 쿠폰 상태 변경 & 결제 취소 요청
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
