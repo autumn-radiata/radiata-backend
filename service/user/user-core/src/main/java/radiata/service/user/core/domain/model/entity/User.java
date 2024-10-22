@@ -96,5 +96,9 @@ public class User extends BaseEntity {
         this.totalPoint = this.totalPoint.subPoint(requirePoint);
     }
 
+    public void addPoint(int requirePoint) {
+        this.totalPoint = this.totalPoint.addPoint(requirePoint);
+    }
+
 }
 

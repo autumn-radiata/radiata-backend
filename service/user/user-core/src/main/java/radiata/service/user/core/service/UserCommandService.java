@@ -1,6 +1,8 @@
 package radiata.service.user.core.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.user.dto.request.PointModifyRequestDto;
@@ -14,7 +16,6 @@ import radiata.service.user.core.implement.PointHandler;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserCommandService {
 
     private final UserRepository userRepository;
@@ -23,6 +24,7 @@ public class UserCommandService {
     /**
      * 회원 정보 수정
      */
+    @Transactional
     public void updateUserInfo(String userId, UserModifyRequestDto dto) {
         User user = findValidUser(userId);
         user.updateInfo(
@@ -37,6 +39,7 @@ public class UserCommandService {
     /**
      * 회원 삭제
      */
+    @Transactional
     public void removeUser(String userId) {
         User user = findValidUser(userId);
         user.delete(userId);
@@ -45,11 +48,28 @@ public class UserCommandService {
     /**
      * 포인트 차감
      */
+    @Transactional
     public void deductPoint(PointModifyRequestDto dto) {
         User user = findValidUser(dto.userId());
         user.deductPoint(dto.point());
         pointHandler.recordPointHistory(user, dto.point(), PointType.SUBSCRIBE);
     }
+
+    /**
+     * 포인트 증감 -보상 트랜잭션 복구
+     */
+    @Transactional
+    @KafkaListener(topics = "user.add-point", containerFactory = "KafkaListenerContainerFactory")
+    public void increasePoint(ConsumerRecord<String, String> consumerRecord) {
+        PointModifyRequestDto stockAddRequestDto = EventSerializer.deserialize(consumerRecord.value(),
+            PointModifyRequestDto.class);
+        User user = findValidUser(stockAddRequestDto.userId());
+        user.addPoint(stockAddRequestDto.point());
+    }
+
+    /**
+     * 포인트 증감 - 리뷰 정산
+     */
 
     private User findValidUser(String userId) {
         return userRepository.findById(userId)
