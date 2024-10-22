@@ -13,7 +13,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
-import radiata.database.model.BaseEntity;
 
 @Entity
 @Table(name = "r_order_item")
