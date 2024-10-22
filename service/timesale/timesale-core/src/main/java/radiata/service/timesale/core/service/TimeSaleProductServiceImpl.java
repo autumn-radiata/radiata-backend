@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductCreateRequestDto;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductResponseDto;
+import radiata.common.exception.BusinessException;
+import radiata.common.message.ExceptionMessage;
 import radiata.service.timesale.core.domain.TimeSale;
 import radiata.service.timesale.core.domain.TimeSaleProduct;
 import radiata.service.timesale.core.implementation.interfaces.TimeSaleProductIdCreator;
@@ -57,6 +59,10 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     @Override
     public List<TimeSaleProductResponseDto> getMaxDiscountTimeSaleProduct(List<String> productIds) {
 
+        if (productIds.size() > 100) {
+            throw new BusinessException(ExceptionMessage.REQUEST_LIST_SIZE_LIMIT);
+        }
+
         List<TimeSaleProductResponseDto> allTimeSaleProducts = timeSaleReader.readByProductIds(productIds).stream()
                 .flatMap(timeSale -> timeSale.getTimeSaleProducts().stream())
                 .map(timeSaleProductMapper::toDto)
@@ -75,6 +81,10 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
 
     @Override
     public List<TimeSaleProductResponseDto> getMaxDiscountTimeSaleProductHasStock(List<String> productIds) {
+
+        if (productIds.size() > 100) {
+            throw new BusinessException(ExceptionMessage.REQUEST_LIST_SIZE_LIMIT);
+        }
 
         List<TimeSaleProductResponseDto> allTimeSaleProducts = timeSaleReader.readByProductIds(productIds).stream()
                 .flatMap(timeSale -> timeSale.getTimeSaleProducts().stream())
