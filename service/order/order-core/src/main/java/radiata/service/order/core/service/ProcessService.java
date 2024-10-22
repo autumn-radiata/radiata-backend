@@ -108,7 +108,7 @@ public class ProcessService {
         try {
             EasyPayCreateRequestDto paymentRequestDto = createEasyPayRequestDto(userId, requestDto);
             String paymentId = paymentClient.requestEasyPay(paymentRequestDto).data().paymentId();
-            order.setPaymentIdAndType(paymentId, PaymentType.TOSS_PAYMENTS);
+            order.setPaymentIdAndType(paymentId, PaymentType.EASY_PAY);
         } catch (FeignException e) {
             log.error("[Payment-Service FeignException]: EasyPay Request Error");
             rollbackService.cancelOrderItemsRollback(order);
