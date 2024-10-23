@@ -35,4 +35,24 @@ public class DistributeLockExecutor {
         }
     }
 
+    public void execute(String lockName, long waitMs, long leaseMs, Runnable logic) {
+        RLock lock = redissonClient.getLock(lockName);
+        try {
+            boolean isLocked = lock.tryLock(waitMs, leaseMs, TimeUnit.MILLISECONDS);
+            if (!isLocked) {
+                throw new IllegalArgumentException("["+ lockName + "] lock 획득 실패");
+            }
+            logic.run();
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
+        }
+    }
+
 }
