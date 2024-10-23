@@ -10,7 +10,6 @@ import radiata.service.order.core.domain.model.entity.Order;
 import radiata.service.order.core.implemetation.OrderReader;
 import radiata.service.order.core.implemetation.OrderRemover;
 import radiata.service.order.core.implemetation.OrderValidator;
-import radiata.service.order.core.service.context.OrderRollbackContext;
 import radiata.service.order.core.service.mapper.OrderMapper;
 
 @Service
@@ -42,10 +41,7 @@ public class OrderReadService {
         List<Order> orders = orderReader.readOrders();
 
         orders.forEach(order -> {
-            // 롤백
-            OrderRollbackContext rollbackContext = rollbackService.collectOrderItemInfo(order.getOrderItems());
-            rollbackService.createOrderItemsRollback(rollbackContext);
-            // 삭제
+            rollbackService.cancelOrderItemsRollback(order);
             orderRemover.delete(order);
         });
     }

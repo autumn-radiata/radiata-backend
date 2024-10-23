@@ -56,7 +56,6 @@ public class OrderItem extends BaseEntity {
         Integer quantity,
         Integer unitPrice) {
 
-        // TODO - 쿠폰&적립금 형식 정해지면 paymentPrice 계산 추가
         return OrderItem.builder()
             .id(id)
             .order(order)
@@ -65,25 +64,21 @@ public class OrderItem extends BaseEntity {
             .couponIssuedId(couponIssuedId)
             .quantity(quantity)
             .unitPrice(unitPrice)
+            .paymentPrice(quantity * unitPrice)
             .build();
     }
 
     // 금액 지정
-    public int setPrice(String saleType, Integer discountValue) {
-        int price = this.unitPrice * this.quantity;
-        if (saleType == null || discountValue == null) {
-            return this.paymentPrice = price;
-        }
-
-        return calculateDiscount(price, saleType, discountValue);
+    public void setPrice(String saleType, Integer discountValue) {
+        this.paymentPrice = calculateDiscount(saleType, discountValue);
     }
 
     // 할인 금액, 율 계산
-    private int calculateDiscount(int price, String saleType, Integer discountValue) {
+    private int calculateDiscount(String saleType, Integer discountValue) {
         double finalPrice = saleType.equals("AMOUNT")
-            ? price - discountValue                 // 금액 할인
-            : price * (1 - discountValue / 100.0);  // 할인율 적용
+            ? this.paymentPrice - discountValue                 // 금액 할인
+            : this.paymentPrice * (1 - discountValue / 100.0);  // 할인율 적용
 
-        return this.paymentPrice = (int) finalPrice;
+        return (int) finalPrice;
     }
 }

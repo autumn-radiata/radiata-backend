@@ -9,15 +9,16 @@ import radiata.common.domain.brand.request.ProductDeductRequestDto;
 import radiata.common.domain.coupon.dto.response.CouponResponseDto;
 import radiata.common.domain.order.dto.request.OrderEasyPaymentRequestDto;
 import radiata.common.domain.order.dto.request.OrderTossPaymentRequestDto;
-import radiata.common.domain.order.dto.response.CouponInfoDto;
 import radiata.common.domain.payment.constant.PaymentType;
 import radiata.common.domain.payment.dto.request.EasyPayCreateRequestDto;
 import radiata.common.domain.payment.dto.request.TossPaymentCreateRequestDto;
+import radiata.common.domain.timesale.dto.request.TimeSaleProductSaleRequestDto;
 import radiata.common.domain.user.dto.request.PointModifyRequestDto;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
 import radiata.service.order.core.domain.model.constant.OrderStatus;
 import radiata.service.order.core.domain.model.entity.Order;
+import radiata.service.order.core.domain.model.entity.OrderItem;
 import radiata.service.order.core.service.client.CouponIssueClient;
 import radiata.service.order.core.service.client.PaymentClient;
 import radiata.service.order.core.service.client.ProductClient;
@@ -39,12 +40,17 @@ public class ProcessService {
 
 
     // 타임세일상품 재고 확인 및 차감 요청
-    public void checkAndDeductTimeSaleProduct(OrderRollbackContext context, String timeSaleProductId, int quantity) {
+    public void checkAndDeductTimeSaleProduct(OrderRollbackContext context, OrderItem orderItem) {
         try {
+            String timeSaleProductId = orderItem.getTimeSaleProductId();
+            int quantity = orderItem.getQuantity();
+
             if (timeSaleProductId != null) {
                 // TODO - 갯수 넘기면 header Or param으로 날릴 예정
-                timeSaleProductClient.checkAndDeductTimeSaleProduct(timeSaleProductId);
+                int discountRate = timeSaleProductClient.checkAndDeductTimeSaleProduct(timeSaleProductId,
+                    new TimeSaleProductSaleRequestDto(quantity)).data().discountRate();
                 context.addDeductedTimeSale(timeSaleProductId, quantity);
+                orderItem.setPrice("RATE", discountRate);
             }
         } catch (FeignException e) {
             log.error("[TimeSale-Service FeignException]: Deduct TimeSale Product Request Error");
@@ -54,8 +60,11 @@ public class ProcessService {
     }
 
     // 상품 재고 확인 및 차감 요청
-    public void checkAndDeductStock(OrderRollbackContext context, String productId, int quantity) {
+    public void checkAndDeductStock(OrderRollbackContext context, OrderItem orderItem) {
         try {
+            String productId = orderItem.getProductId();
+            int quantity = orderItem.getQuantity();
+
             productClient.checkAndDeductStock(new ProductDeductRequestDto(productId, quantity));
             context.addDeductedProduct(productId, quantity);
         } catch (FeignException e) {
@@ -66,26 +75,24 @@ public class ProcessService {
     }
 
     // 쿠폰 확인 및 상태변경 요청
-    public CouponInfoDto checkAndUseCoupon(OrderRollbackContext context, String couponIssuedId, String userId) {
-
-        String saleType = null;
-        Integer discountValue = null;
-
+    public void checkAndUseCoupon(OrderRollbackContext context, String userId, OrderItem orderItem) {
         try {
+            String couponIssuedId = orderItem.getCouponIssuedId();
+
             if (couponIssuedId != null) {
                 String couponId = couponIssueClient.useCouponIssue(couponIssuedId, userId).data().couponId();
                 context.addUsedCoupon(couponIssuedId);
 
                 CouponResponseDto couponInfo = couponIssueClient.getCouponType(couponId).data();
-                saleType = couponInfo.couponSaleType();
-                discountValue = checkCouponSaleType(couponInfo);
+                String saleType = couponInfo.couponSaleType();
+                int discountValue = checkCouponSaleType(couponInfo);
+                orderItem.setPrice(saleType, discountValue);
             }
         } catch (FeignException e) {
             log.error("[Coupon-Service FeignException]: UseCoupon Request Error");
             rollbackService.createOrderItemsRollback(context);
             throw new BusinessException(HttpStatus.CONFLICT, e.getMessage(), "5008");
         }
-        return CouponInfoDto.of(saleType, discountValue);
     }
 
     // 적립금 확인 및 차감 요청

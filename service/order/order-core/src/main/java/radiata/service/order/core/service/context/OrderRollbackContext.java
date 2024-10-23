@@ -14,7 +14,9 @@ public class OrderRollbackContext {
     private List<String> usedCoupons = new ArrayList<>();
 
     public void addDeductedTimeSale(String timeSaleProductId, int quantity) {
-        deductedTimeSales.add(new StockInfoDto(timeSaleProductId, quantity));
+        if (timeSaleProductId != null) {
+            deductedTimeSales.add(new StockInfoDto(timeSaleProductId, quantity));
+        }
     }
 
     public void addDeductedProduct(String productId, int quantity) {
@@ -22,6 +24,8 @@ public class OrderRollbackContext {
     }
 
     public void addUsedCoupon(String couponIssuedId) {
-        usedCoupons.add(couponIssuedId);
+        if (couponIssuedId != null) {
+            usedCoupons.add(couponIssuedId);
+        }
     }
 }
