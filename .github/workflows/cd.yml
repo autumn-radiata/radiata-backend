@@ -34,19 +34,10 @@ jobs:
   build-and-push:
     needs: detect-changes
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include: [ ]
+    if: env.changed_modules != ''
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Prepare matrix dynamically
-        id: prepare-matrix
-        run: |
-          if [ -n "${{ env.changed_modules }}" ]; then
-            echo "::set-output name=matrix::${{ env.changed_modules }}"
-          fi
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -56,13 +47,17 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-${{ matrix.module }}-server:latest \
-            --build-arg FILE_DIRECTORY=service/${{ matrix.module }}/${{ matrix.module }}-api -f ./Dockerfile .
-          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-${{ matrix.module }}-server:latest
+          for module in ${{ env.changed_modules }}; do
+            echo "Building and pushing $module..."
+            docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-${module}-server:latest \
+              --build-arg FILE_DIRECTORY=service/${module}/${module}-api -f ./Dockerfile .
+            docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-${module}-server:latest
+          done
 
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
+    if: env.changed_modules != ''
 
     steps:
       - name: SSH into EC2 and deploy
