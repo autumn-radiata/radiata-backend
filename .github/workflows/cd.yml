@@ -25,16 +25,16 @@ jobs:
         run: |
           CHANGED_MODULES=$(git diff --name-only HEAD~1 HEAD | cut -d'/' -f2 | sort -u | uniq)
           if [ -z "$CHANGED_MODULES" ]; then
-            echo "changed_modules=" >> $GITHUB_ENV
+            echo "::set-output name=changed_modules::"
           else
             echo "Changed modules: $CHANGED_MODULES"
-            echo "changed_modules=$CHANGED_MODULES" >> $GITHUB_ENV
+            echo "::set-output name=changed_modules::$CHANGED_MODULES"
           fi
 
   build-and-push:
     needs: detect-changes
     runs-on: ubuntu-latest
-    if: env.changed_modules != ''
+    if: needs.detect-changes.outputs.changed_modules != ''
 
     steps:
       - uses: actions/checkout@v4
@@ -47,7 +47,7 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          for module in ${{ env.changed_modules }}; do
+          for module in ${{ needs.detect-changes.outputs.changed_modules }}; do
             echo "Building and pushing $module..."
             docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-${module}-server:latest \
               --build-arg FILE_DIRECTORY=service/${module}/${module}-api -f ./Dockerfile .
@@ -57,7 +57,7 @@ jobs:
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
-    if: env.changed_modules != ''
+    if: needs.detect-changes.outputs.changed_modules != ''
 
     steps:
       - name: SSH into EC2 and deploy
@@ -69,7 +69,7 @@ jobs:
           script: |
             echo ${{ env.DOCKER_HUB_TOKEN }} | docker login -u ${{ env.DOCKER_HUB_USERNAME }} --password-stdin
 
-            for module in ${{ env.changed_modules }}; do
+            for module in ${{ needs.detect-changes.outputs.changed_modules }}; do
               echo "Updating $module..."
               docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-${module}-server:latest
               docker compose -f ./docker-compose-deploy.yml up -d --no-deps ${module}-server
