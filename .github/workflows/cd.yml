@@ -2,7 +2,7 @@ name: CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ] # main 브랜치로 merge 시 작동
 
 env:
   AWS_EC2_HOST: ${{ secrets.AWS_EC2_HOST }}
@@ -12,55 +12,83 @@ env:
   DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
 
 jobs:
-  detect-changes:
+  build:
     runs-on: ubuntu-latest
-    outputs:
-      changed_modules: ${{ steps.detect.outputs.changed_modules }}
+    permissions:
+      contents: read
+      packages: write
+      actions: write
 
     steps:
       - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
 
-      - name: Detect changed modules
-        id: detect
-        run: |
-          CHANGED_MODULES=$(git diff --name-only HEAD~1 HEAD | cut -d'/' -f2 | sort -u | uniq)
-          if [ -z "$CHANGED_MODULES" ]; then
-            echo "::set-output name=changed_modules::"
-          else
-            echo "Changed modules: $CHANGED_MODULES"
-            echo "::set-output name=changed_modules::$CHANGED_MODULES"
-          fi
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
-  build-and-push:
-    needs: detect-changes
-    runs-on: ubuntu-latest
-    if: needs.detect-changes.outputs.changed_modules != ''
+      - run: pwd
 
-    steps:
-      - uses: actions/checkout@v4
+      - run: ls -al
 
+      - name: Build with Gradle Wrapper
+        run: ./gradlew clean build -x test --warning-mode=all
+
+      # Docker 로그인
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ env.DOCKER_HUB_USERNAME }}
           password: ${{ env.DOCKER_HUB_TOKEN }}
 
-      - name: Build and push Docker images
+      # Docker 이미지 빌드
+      - name: Build Docker images
         run: |
-          for module in ${{ needs.detect-changes.outputs.changed_modules }}; do
-            echo "Building and pushing $module..."
-            docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-${module}-server:latest \
-              --build-arg FILE_DIRECTORY=service/${module}/${module}-api -f ./Dockerfile .
-            docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-${module}-server:latest
-          done
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-user-server:latest \
+            --build-arg FILE_DIRECTORY=service/user/user-api -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-payment-server:latest \
+            --build-arg FILE_DIRECTORY=service/payment/payment-api -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-order-server:latest \
+            --build-arg FILE_DIRECTORY=service/order/order-api -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-brand-server:latest \
+            --build-arg FILE_DIRECTORY=service/brand/brand-api -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-server:latest \
+            --build-arg FILE_DIRECTORY=service/coupon/coupon-api -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-consumer-server:latest \
+            --build-arg FILE_DIRECTORY=service/coupon/coupon-consumer -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-timesale-server:latest \
+            --build-arg FILE_DIRECTORY=service/timesale/timesale-api -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-gateway-server:latest \
+            --build-arg FILE_DIRECTORY=service/gateway/gateway-core -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-eureka-server:latest \
+            --build-arg FILE_DIRECTORY=service/eureka/eureka-core -f ./Dockerfile .
+
+      # Docker Hub에 이미지 푸시
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-user-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-consumer-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-timesale-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-order-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-brand-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-payment-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-gateway-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-eureka-server:latest
 
   deploy:
-    needs: build-and-push
+    needs: build
     runs-on: ubuntu-latest
-    if: needs.detect-changes.outputs.changed_modules != ''
+    permissions:
+      contents: read
+      packages: write
+      actions: write
 
     steps:
-      - name: SSH into EC2 and deploy
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.AWS_EC2_HOST }}
@@ -68,9 +96,14 @@ jobs:
           key: ${{ env.AWS_EC2_SSH_KEY }}
           script: |
             echo ${{ env.DOCKER_HUB_TOKEN }} | docker login -u ${{ env.DOCKER_HUB_USERNAME }} --password-stdin
-
-            for module in ${{ needs.detect-changes.outputs.changed_modules }}; do
-              echo "Updating $module..."
-              docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-${module}-server:latest
-              docker compose -f ./docker-compose-deploy.yml up -d --no-deps ${module}-server
-            done
+            docker compose -f ./docker-compose-deploy.yml down
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-user-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-consumer-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-timesale-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-order-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-brand-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-payment-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-gateway-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-eureka-server:latest
+            docker compose -f ./docker-compose-deploy.yml up -d
