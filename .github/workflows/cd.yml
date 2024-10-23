@@ -2,7 +2,7 @@ name: CD
 
 on:
   push:
-    branches: [ "main" ]  # main 브랜치로 푸시 시 작동
+    branches: [ "main" ]
 
 env:
   AWS_EC2_HOST: ${{ secrets.AWS_EC2_HOST }}
@@ -24,15 +24,22 @@ jobs:
         id: detect
         run: |
           CHANGED_MODULES=$(git diff --name-only HEAD~1 HEAD | cut -d'/' -f2 | sort -u | uniq)
-          echo "Changed modules: $CHANGED_MODULES"
-          echo "::set-output name=changed_modules::$CHANGED_MODULES"
+          if [ -z "$CHANGED_MODULES" ]; then
+            echo "[]"
+            echo "changed_modules=[]" >> $GITHUB_ENV
+          else
+            echo "Changed modules: $CHANGED_MODULES"
+            CHANGED_JSON=$(echo "$CHANGED_MODULES" | jq -R -s 'split("\n")[:-1]')
+            echo "changed_modules=$CHANGED_JSON" >> $GITHUB_ENV
+          fi
 
   build-and-push:
     needs: detect-changes
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        module: ${{ fromJson(needs.detect-changes.outputs.changed-modules) }}
+        module: ${{ fromJson(env.changed_modules) }}
+        include: [ ]
 
     steps:
       - uses: actions/checkout@v4
@@ -63,8 +70,7 @@ jobs:
           script: |
             echo ${{ env.DOCKER_HUB_TOKEN }} | docker login -u ${{ env.DOCKER_HUB_USERNAME }} --password-stdin
 
-            # 변경된 모듈의 컨테이너만 업데이트
-            for module in ${{ fromJson(needs.detect-changes.outputs.changed-modules) }}; do
+            for module in ${{ fromJson(env.changed_modules) }}; do
               echo "Updating $module..."
               docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-${module}-server:latest
               docker compose -f ./docker-compose-deploy.yml up -d --no-deps ${module}-server
