@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.PAYMENT_REQUIRED;
 import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ public enum ExceptionMessage {
     PAY_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "2002", "간편결제 사용자가 존재하지 않습니다."),
     INVALID_PASSWORD(BAD_REQUEST, "2003", "비밀번호가 일치하지 않습니다."),
     PAY_USER_DUPLICATE(BAD_REQUEST, "2004", "이미 등록된 사용자입니다."),
+    PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "2005", "결제 정보가 존재하지 않습니다."),
 
     /* 유저 3000번대 */
 
