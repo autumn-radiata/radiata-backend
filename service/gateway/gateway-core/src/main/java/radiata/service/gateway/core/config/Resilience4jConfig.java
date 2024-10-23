@@ -21,7 +21,7 @@ public class Resilience4jConfig {
     public CircuitBreakerConfig circuitBreakerConfig() {
         return CircuitBreakerConfig.custom()
             .slidingWindowType(CircuitBreakerConfig.SlidingWindowType.COUNT_BASED)  // 슬라이딩 윈도우 타입 설정
-            .slidingWindowSize(5)  // 슬라이딩 윈도우 크기 설정
+            .slidingWindowSize(1000)  // 슬라이딩 윈도우 크기 설정
             .minimumNumberOfCalls(5)  // 최소 호출 수 설정
             .slowCallRateThreshold(100)  // 느린 호출 비율 임계값 설정
             .slowCallDurationThreshold(Duration.ofMillis(60000))  // 느린 호출 기준 시간 설정
