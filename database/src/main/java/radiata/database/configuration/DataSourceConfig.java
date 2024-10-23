@@ -35,7 +35,7 @@ public class DataSourceConfig {
             .password(mainDataSourceProperty.password())
             .build();
 
-        dataSource.setMaximumPoolSize(300);
+        dataSource.setMaximumPoolSize(30);
 
         return new LazyConnectionDataSourceProxy(dataSource); // 트랜잭션 진입 하더라도 커넥션 가져오지 않음
     }
