@@ -26,11 +26,6 @@ public class CouponIssueListener {
         CouponIssueRequestDto couponIssueRequestDto = objectMapper.readValue(message,
                 CouponIssueRequestDto.class);
 
-        distributeLockExecutor.execute(
-                "coupon.issue.create.lock" + couponIssueRequestDto.couponId(),
-                1000, 1000, () -> {
-                    couponIssueService.issue(couponIssueRequestDto.couponId(),
-                            couponIssueRequestDto.userId());
-                });
+        couponIssueService.issue(couponIssueRequestDto.couponId(), couponIssueRequestDto.userId());
     }
 }
