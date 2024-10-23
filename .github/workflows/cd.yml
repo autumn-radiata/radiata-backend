@@ -15,7 +15,7 @@ jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      changed-modules: ${{ steps.detect.outputs.changed_modules }}
+      changed_modules: ${{ steps.detect.outputs.changed_modules }}
 
     steps:
       - uses: actions/checkout@v4
@@ -25,21 +25,21 @@ jobs:
         run: |
           CHANGED_MODULES=$(git diff --name-only HEAD~1 HEAD | cut -d'/' -f2 | sort -u | uniq)
           if [ -z "$CHANGED_MODULES" ]; then
-            echo "[]"
-            echo "changed_modules=[]" >> $GITHUB_ENV
+            echo "[]" > changed_modules.json
           else
-            echo "Changed modules: $CHANGED_MODULES"
-            CHANGED_JSON=$(echo "$CHANGED_MODULES" | jq -R -s 'split("\n")[:-1]')
-            echo "changed_modules=$CHANGED_JSON" >> $GITHUB_ENV
+            echo "$CHANGED_MODULES" | jq -R -s 'split("\n")[:-1]' > changed_modules.json
           fi
+
+      - name: Set changed modules output
+        id: set-output
+        run: echo "::set-output name=changed_modules::$(cat changed_modules.json)"
 
   build-and-push:
     needs: detect-changes
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        module: ${{ fromJson(env.changed_modules) }}
-        include: [ ]
+        module: ${{ fromJson(needs.detect-changes.outputs.changed_modules) }}
 
     steps:
       - uses: actions/checkout@v4
@@ -70,7 +70,7 @@ jobs:
           script: |
             echo ${{ env.DOCKER_HUB_TOKEN }} | docker login -u ${{ env.DOCKER_HUB_USERNAME }} --password-stdin
 
-            for module in ${{ fromJson(env.changed_modules) }}; do
+            for module in ${{ fromJson(needs.detect-changes.outputs.changed_modules) }}; do
               echo "Updating $module..."
               docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-${module}-server:latest
               docker compose -f ./docker-compose-deploy.yml up -d --no-deps ${module}-server
