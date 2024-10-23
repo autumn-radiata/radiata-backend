@@ -60,6 +60,13 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     }
 
     @Override
+    public void incrementSaleQuantity(String timeSaleProductId, Integer quantity) {
+
+        TimeSaleProduct timeSaleProduct = timeSaleProductReader.read(timeSaleProductId);
+        timeSaleProduct.incrementSaleQuantity(quantity);
+    }
+
+    @Override
     public List<TimeSaleProductResponseDto> getMaxDiscountTimeSaleProduct(List<String> productIds) {
 
         if (productIds.size() > 100) {

@@ -27,7 +27,7 @@ public class TimeSaleProductApiServiceImpl implements TimeSaleProductApiService 
     public TimeSaleProductResponseDto saleTimeSaleProduct(String timeSaleProductId,
             TimeSaleProductSaleRequestDto requestDto) {
 
-        return distributeLockExecutor.execute("lock_" + timeSaleProductId, 10000, 10000,
+        return distributeLockExecutor.execute("timeSaleProduct_sale_lock_" + timeSaleProductId, 10000, 10000,
                 () -> timeSaleProductService.sale(timeSaleProductId, requestDto)
         );
     }
