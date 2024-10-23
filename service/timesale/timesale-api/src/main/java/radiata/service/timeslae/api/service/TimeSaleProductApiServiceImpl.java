@@ -1,5 +1,6 @@
 package radiata.service.timeslae.api.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductCreateRequestDto;
@@ -29,14 +30,14 @@ public class TimeSaleProductApiServiceImpl implements TimeSaleProductApiService 
     }
 
     @Override
-    public TimeSaleProductResponseDto getMaxDiscountTimeSaleProduct(String productId) {
+    public List<TimeSaleProductResponseDto> getMaxDiscountTimeSaleProduct(List<String> productIds) {
 
-        return timeSaleProductService.getMaxDiscountTimeSaleProduct(productId);
+        return timeSaleProductService.getMaxDiscountTimeSaleProduct(productIds);
     }
 
     @Override
-    public TimeSaleProductResponseDto getMaxDiscountTimeSaleProductHasStock(String productId) {
+    public List<TimeSaleProductResponseDto> getMaxDiscountTimeSaleProductHasStock(List<String> productIds) {
 
-        return timeSaleProductService.getMaxDiscountTimeSaleProductHasStock(productId);
+        return timeSaleProductService.getMaxDiscountTimeSaleProductHasStock(productIds);
     }
 }

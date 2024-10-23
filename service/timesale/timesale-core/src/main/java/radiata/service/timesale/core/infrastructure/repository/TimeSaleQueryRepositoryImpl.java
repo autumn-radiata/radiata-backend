@@ -66,6 +66,22 @@ public class TimeSaleQueryRepositoryImpl implements TimeSaleQueryRepository {
                 .fetchOne());
     }
 
+    @Override
+    public List<TimeSale> findByProductIds(List<String> productIds) {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        return queryFactory.select(timeSale)
+                .from(timeSale)
+                .leftJoin(timeSaleProduct).on(timeSaleProduct.timeSale.id.eq(timeSale.id))
+                .where(
+                        timeSaleProduct.productId.in(productIds),
+                        timeSaleProduct.timeSaleStartTime.before(now),
+                        timeSaleProduct.timeSaleEndTime.after(now)
+                )
+                .fetch();
+    }
+
     private BooleanExpression titleEq(String title) {
 
         return title != null ? timeSale.title.contains(title) : null;

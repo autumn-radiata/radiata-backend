@@ -10,4 +10,6 @@ public interface CouponReader {
     Coupon readCoupon(String couponId);
 
     Page<Coupon> readCouponsByCondition(CouponSearchCondition condition, Pageable pageable);
+
+    Coupon readCouponByLock(String couponId);
 }

@@ -11,4 +11,6 @@ public interface CouponRepository {
     Optional<Coupon> findById(String couponId);
 
     void delete(Coupon coupon);
+
+    Optional<Coupon> findByIdWithLock(String couponId);
 }

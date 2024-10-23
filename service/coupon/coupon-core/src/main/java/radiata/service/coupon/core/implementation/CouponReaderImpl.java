@@ -30,6 +30,13 @@ public class CouponReaderImpl implements CouponReader {
         );
     }
 
+    public Coupon readCouponByLock(String couponId) {
+
+        return couponRepository.findByIdWithLock(couponId).orElseThrow(
+                () -> new BusinessException(NOT_FOUND)
+        );
+    }
+
     @Override
     public Page<Coupon> readCouponsByCondition(CouponSearchCondition condition, Pageable pageable) {
 

@@ -37,7 +37,7 @@ public class CouponIssueServiceImplV1 implements CouponIssueService {
 
     @Override
     public void issue(String couponId, String userId) {
-        Coupon coupon = couponReader.readCoupon(couponId);
+        Coupon coupon = couponReader.readCouponByLock(couponId);
         coupon.issue();
         couponSaver.save(coupon);
         saveCouponIssue(couponId, userId);
