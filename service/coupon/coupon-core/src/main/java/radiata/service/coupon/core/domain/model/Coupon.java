@@ -4,6 +4,7 @@ import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 import static radiata.common.message.ExceptionMessage.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -13,6 +14,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -21,8 +23,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 import radiata.common.exception.BusinessException;
-import radiata.service.coupon.core.domain.model.constant.CouponSaleType;
-import radiata.service.coupon.core.domain.model.constant.CouponType;
+import radiata.common.domain.coupon.constant.CouponSaleType;
+import radiata.common.domain.coupon.constant.CouponType;
 import radiata.service.coupon.core.domain.model.vo.CouponDiscountRate;
 
 @Entity
@@ -32,7 +34,7 @@ import radiata.service.coupon.core.domain.model.vo.CouponDiscountRate;
 @Table(name = "r_coupon")
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
-public class Coupon extends BaseEntity {
+public class Coupon extends BaseEntity implements Serializable {
 
     @Id
     private String id;
@@ -67,6 +69,7 @@ public class Coupon extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime issueEndDate; // 발급 종료일
 
+    @JsonIgnore
     @OneToMany(mappedBy = "coupon", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<CouponIssue> couponIssues;
 
@@ -106,6 +109,7 @@ public class Coupon extends BaseEntity {
         issuedQuantity++;
     }
 
+    @JsonIgnore
     public boolean isFirstComeFirstServed() {
 
         return this.couponType.isFirstComeFirstServed();
@@ -118,6 +122,14 @@ public class Coupon extends BaseEntity {
         return (now.isEqual(issueStartDate) || now.isAfter(issueStartDate)) && now.isBefore(issueEndDate);
     }
 
+    public void checkIssuableCoupon() {
+
+        if (!availableIssueDate()) {
+            throw new BusinessException(COUPON_ISSUE_PERIOD);
+        }
+    }
+
+    @Deprecated
     public boolean availableIssuedQuantity() {
 
         return issuedQuantity < totalQuantity;

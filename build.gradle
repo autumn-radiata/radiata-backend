@@ -38,6 +38,51 @@ allprojects {
         }
     }
 
+    setJacoco()
+}
+
+subprojects {
+
+    if (isDirectory()) {
+        return
+    }
+
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    bootJar.enabled = false
+
+    dependencies {
+        /* module */
+
+        /* library */
+
+        // spring
+        implementation 'org.springframework.boot:spring-boot-starter'
+
+        // validation
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+        // lombok
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        // prometheus
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
+        runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+        /* test */
+
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+}
+
+def isDirectory() {
+    def directoryModules = ['service', 'support', 'order', 'payment', 'user']
+    return directoryModules.contains(project.name)
+}
+
+def setJacoco() {
     // jacoco report 설정
     jacocoTestReport {
         reports {
@@ -89,44 +134,4 @@ allprojects {
             }
         }
     }
-}
-
-subprojects {
-
-    if (isDirectory()) {
-        return
-    }
-
-    apply plugin: 'org.springframework.boot'
-    apply plugin: 'io.spring.dependency-management'
-    bootJar.enabled = false
-
-    dependencies {
-        /* module */
-
-        /* library */
-
-        // spring
-        implementation 'org.springframework.boot:spring-boot-starter'
-
-        // validation
-        implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-        // lombok
-        compileOnly 'org.projectlombok:lombok'
-        annotationProcessor 'org.projectlombok:lombok'
-        
-        // prometheus
-        implementation 'org.springframework.boot:spring-boot-starter-actuator'
-        runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
-
-        /* test */
-
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    }
-}
-
-def isDirectory() {
-    return project.name == 'support' || project.name == 'service'
 }

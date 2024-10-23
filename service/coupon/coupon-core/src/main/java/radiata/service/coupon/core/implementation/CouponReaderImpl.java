@@ -3,6 +3,7 @@ package radiata.service.coupon.core.implementation;
 import static radiata.common.message.ExceptionMessage.NOT_FOUND;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import radiata.common.annotation.Implementation;
@@ -21,10 +22,18 @@ public class CouponReaderImpl implements CouponReader {
     private final CouponQueryRepository couponQueryRepository;
 
     @Override
+    @Cacheable(value = "couponEntity", key = "#couponId")
     public Coupon readCoupon(String couponId) {
 
         return couponRepository.findById(couponId).orElseThrow(
             () -> new BusinessException(NOT_FOUND)
+        );
+    }
+
+    public Coupon readCouponByLock(String couponId) {
+
+        return couponRepository.findByIdWithLock(couponId).orElseThrow(
+                () -> new BusinessException(NOT_FOUND)
         );
     }
 

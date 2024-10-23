@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+}
+
+group = 'radiata.service.coupon'
+version = 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+bootJar.enabled = true
+jar.enabled = false
+
+dependencies {
+
+    // module
+    api project(':common')
+    api project(':database')
+    api project(":service:coupon:coupon-core")
+
+    // library
+    implementation 'org.springframework.kafka:spring-kafka'
+
+    // test
+    testImplementation 'com.h2database:h2:2.1.214'
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}

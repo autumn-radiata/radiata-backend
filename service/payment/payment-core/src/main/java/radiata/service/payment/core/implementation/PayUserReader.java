@@ -22,7 +22,7 @@ public class PayUserReader {
             .orElseThrow(() -> new BusinessException(ExceptionMessage.PAY_USER_NOT_FOUND));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public PayUser getPayUserByUserId(String userId) {
         return payUserRepository.findByUserId(userId)
             .orElseThrow(() -> new BusinessException(ExceptionMessage.PAY_USER_NOT_FOUND));

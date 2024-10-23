@@ -66,17 +66,17 @@ public class TimeSaleProduct extends BaseEntity {
             .build();
     }
 
-    public void sale() {
+    public void sale(int quantity) {
 
         if (!availableSaleTime()) {
             throw new BusinessException(ExceptionMessage.TIME_SALE_PRODUCT_PERIOD);
         }
 
-        if (!availableSaleQuantity()) {
+        if (!availableSaleQuantity(quantity)) {
             throw new BusinessException(ExceptionMessage.TIME_SALE_PRODUCT_LIMITED_SALE);
         }
 
-        this.saleQuantity++;
+        this.saleQuantity += quantity;
     }
 
     public boolean availableSaleTime() {
@@ -86,12 +86,26 @@ public class TimeSaleProduct extends BaseEntity {
         return (now.isAfter(timeSaleStartTime) || now.isEqual(timeSaleStartTime)) && now.isBefore(timeSaleEndTime);
     }
 
-    public boolean availableSaleQuantity() {
+    public boolean availableSaleQuantity(int quantity) {
 
-        return saleQuantity < totalQuantity;
+        return saleQuantity + quantity <= totalQuantity;
     }
 
     public void addTimeSale(TimeSale timeSale) {
         this.timeSale = timeSale;
+    }
+
+    public void incrementSaleQuantity(Integer quantity) {
+
+        if (!availableIncrementSaleQuantity(quantity)) {
+            throw new BusinessException(ExceptionMessage.TIME_SALE_PRODUCT_LIMITED_SALE);
+        }
+
+        this.saleQuantity += quantity;
+    }
+
+    public boolean availableIncrementSaleQuantity(Integer quantity) {
+
+        return this.saleQuantity + quantity <= totalQuantity;
     }
 }

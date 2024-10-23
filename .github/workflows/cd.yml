@@ -57,8 +57,12 @@ jobs:
             --build-arg FILE_DIRECTORY=service/brand/brand-api -f ./Dockerfile .
           docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-server:latest \
             --build-arg FILE_DIRECTORY=service/coupon/coupon-api -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-consumer-server:latest \
+            --build-arg FILE_DIRECTORY=service/coupon/coupon-consumer -f ./Dockerfile .
           docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-timesale-server:latest \
             --build-arg FILE_DIRECTORY=service/timesale/timesale-api -f ./Dockerfile .
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-timesale-consumer-server:latest \
+            --build-arg FILE_DIRECTORY=service/timesale/timesale-consumer -f ./Dockerfile .
           docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-gateway-server:latest \
             --build-arg FILE_DIRECTORY=service/gateway/gateway-core -f ./Dockerfile .
           docker build -t ${{ env.DOCKER_HUB_USERNAME }}/autumn-eureka-server:latest \
@@ -69,7 +73,9 @@ jobs:
         run: |
           docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-user-server:latest
           docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-consumer-server:latest
           docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-timesale-server:latest
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-timesale-consumer-server:latest
           docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-order-server:latest
           docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-brand-server:latest
           docker push ${{ env.DOCKER_HUB_USERNAME }}/autumn-payment-server:latest
@@ -96,7 +102,9 @@ jobs:
             docker compose -f ./docker-compose-deploy.yml down
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-user-server:latest
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-consumer-server:latest
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-timesale-server:latest
+            docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-timesale-consumer-server:latest
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-order-server:latest
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-brand-server:latest
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-payment-server:latest

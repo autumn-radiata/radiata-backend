@@ -29,7 +29,7 @@ class TimeSaleProductTest {
                 .totalQuantity(100)
                 .build();
             // When
-            timeSaleProduct.sale();
+            timeSaleProduct.sale(1);
             // Then
             assertThat(timeSaleProduct.getSaleQuantity()).isEqualTo(1);
         }
@@ -47,7 +47,7 @@ class TimeSaleProductTest {
                 .totalQuantity(100)
                 .build();
             // When + Then
-            BusinessException result = catchThrowableOfType(timeSaleProduct::sale,
+            BusinessException result = catchThrowableOfType(() -> timeSaleProduct.sale(1),
                 BusinessException.class);
             assertThat(result).hasMessage(ExceptionMessage.TIME_SALE_PRODUCT_PERIOD.getMessage());
         }
@@ -65,7 +65,7 @@ class TimeSaleProductTest {
                 .totalQuantity(100)
                 .build();
             // When + Then
-            BusinessException result = catchThrowableOfType(timeSaleProduct::sale,
+            BusinessException result = catchThrowableOfType(() -> timeSaleProduct.sale(1),
                 BusinessException.class);
             assertThat(result).hasMessage(ExceptionMessage.TIME_SALE_PRODUCT_PERIOD.getMessage());
         }
@@ -84,8 +84,26 @@ class TimeSaleProductTest {
                 .totalQuantity(100)
                 .build();
             // When + Then
-            BusinessException result = catchThrowableOfType(timeSaleProduct::sale,
+            BusinessException result = catchThrowableOfType(() -> timeSaleProduct.sale(1),
                 BusinessException.class);
+            assertThat(result).hasMessage(ExceptionMessage.TIME_SALE_PRODUCT_LIMITED_SALE.getMessage());
+        }
+
+        @Test
+        @DisplayName("타임세일 상품 재고 보다 요청량이 많은 경우 예외를 반환한다.")
+        void sale_5() {
+            // Given
+            String productId = "productId";
+            TimeSaleProduct timeSaleProduct = TimeSaleProduct.builder()
+                    .productId(productId)
+                    .timeSaleStartTime(LocalDateTime.now().minusDays(1))
+                    .timeSaleEndTime(LocalDateTime.now().plusDays(1))
+                    .saleQuantity(0)
+                    .totalQuantity(100)
+                    .build();
+            // When + Then
+            BusinessException result = catchThrowableOfType(() -> timeSaleProduct.sale(101),
+                    BusinessException.class);
             assertThat(result).hasMessage(ExceptionMessage.TIME_SALE_PRODUCT_LIMITED_SALE.getMessage());
         }
     }

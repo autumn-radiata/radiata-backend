@@ -12,6 +12,7 @@ repositories {
 dependencies {
 
     api 'org.springframework.boot:spring-boot-starter-web'
+    api 'org.springframework.boot:spring-boot-starter-aop'
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }

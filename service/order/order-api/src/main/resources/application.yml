@@ -3,14 +3,14 @@ spring:
     name: order-service
   config:
     import: classpath:application-database.yml
-  profiles:
-    default: dev
   cloud:
     openfeign:
       okhttp:
         enabled: true
   lifecycle:
     timeout-per-shutdown-phase: 10s
+  kafka:
+    bootstrap-servers: yunjae.click:9092 # 사용할 Kafka브로커의 주소와 포트
 
 server:
   shutdown: graceful  # 애플리케이션 종료 시 정상 종료 (Graceful Shutdown)

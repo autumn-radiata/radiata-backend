@@ -55,6 +55,20 @@ services:
     depends_on:
       - eureka-server
 
+  coupon-consumer-server:
+    image: wodbs7758/autumn-coupon-consumer-server:latest
+    container_name: autumn-coupon-consumer-server
+    build:
+      dockerfile: Dockerfile
+      args:
+        - FILE_DIRECTORY=service/coupon/coupon-consumer
+    ports:
+      - "9081:9081"
+    stop_grace_period: 15s
+    stop_signal: SIGTERM
+    depends_on:
+      - eureka-server
+
   timesale-server:
     image: wodbs7758/autumn-timesale-server:latest
     container_name: autumn-timesale-server
@@ -64,6 +78,20 @@ services:
         - FILE_DIRECTORY=service/timesale/timesale-api
     ports:
       - "8082:8082"
+    stop_grace_period: 15s
+    stop_signal: SIGTERM
+    depends_on:
+      - eureka-server
+
+  timesale-consumer-server:
+    image: wodbs7758/autumn-timesale-consumer-server:latest
+    container_name: autumn-timesale-consumer-server
+    build:
+      dockerfile: Dockerfile
+      args:
+        - FILE_DIRECTORY=service/timesale/timesale-consumer
+    ports:
+      - "9082:9082"
     stop_grace_period: 15s
     stop_signal: SIGTERM
     depends_on:
