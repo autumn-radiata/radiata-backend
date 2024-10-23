@@ -28,8 +28,7 @@ public class RollbackService {
             deductedTimeSaleStocks.forEach(timeSaleProduct -> {
                 AddStockRequestDto requestDto = new AddStockRequestDto(timeSaleProduct.id(),
                     timeSaleProduct.quantity());
-                String data = EventSerializer.serialize(requestDto);
-                kafkaTemplate.send("timesale.add-stock", data);
+                kafkaTemplate.send("timesale.add-stock", requestDto);
             });
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: TimeSale-Service ");
@@ -42,8 +41,7 @@ public class RollbackService {
             // 상품 재고 증감 요청
             deductedProductStocks.forEach(product -> {
                 AddStockRequestDto requestDto = new AddStockRequestDto(product.id(), product.quantity());
-                String data = EventSerializer.serialize(requestDto);
-                kafkaTemplate.send("product.add-stock", data);
+                kafkaTemplate.send("product.add-stock", requestDto);
             });
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: Product-Service ");
@@ -55,8 +53,8 @@ public class RollbackService {
         try {
             // 쿠폰 상태 변경 요청(USED -> ISSUED)
             usedCoupons.forEach(usedCouponId -> {
-                String data = EventSerializer.serialize(usedCouponId);
-                kafkaTemplate.send("coupon.rollback-status", data);
+
+                kafkaTemplate.send("coupon.rollback-status", usedCouponId);
             });
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: Coupon-Service ");
@@ -68,8 +66,7 @@ public class RollbackService {
         try {
             // 적립금 증감 요청
             AddPointRequestDto requestDto = new AddPointRequestDto(userId, point);
-            String data = EventSerializer.serialize(requestDto);
-            kafkaTemplate.send("user.add-point", data);
+            kafkaTemplate.send("user.add-point", requestDto);
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: User(Point)-Service ");
         }
@@ -79,8 +76,7 @@ public class RollbackService {
     private void rollbackPaymentAmount(String paymentId) {
         try {
             // 결제 취소 요청 - (== 환불)
-            String data = EventSerializer.serialize(paymentId);
-            kafkaTemplate.send("payment.cancel", data);
+            kafkaTemplate.send("payment.cancel", paymentId);
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: Payment-Service ");
         }
