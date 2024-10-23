@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import radiata.common.domain.coupon.constant.CouponStatus;
 import radiata.common.domain.coupon.dto.response.CouponIssueResponseDto;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
@@ -69,6 +70,14 @@ public class CouponIssueServiceImplV1 implements CouponIssueService {
         couponIssue.use(userId);
 
         return couponIssueMapper.toDto(couponIssue);
+    }
+
+    @Override
+    public void rollbackCouponIssue(String couponIssueId, CouponStatus couponStatus) {
+
+        CouponIssue couponIssue = couponIssueReader.readCouponIssue(couponIssueId);
+
+        couponIssue.rollback(couponStatus);
     }
 
     @Override

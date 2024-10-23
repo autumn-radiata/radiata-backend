@@ -1,4 +1,4 @@
-package radiata.service.coupon.core.domain.model.constant;
+package radiata.common.domain.coupon.constant;
 
 public enum CouponType {
     FIRST_COME_FIRST_SERVED, UNLIMITED;

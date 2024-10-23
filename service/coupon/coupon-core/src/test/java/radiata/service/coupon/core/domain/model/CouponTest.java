@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
-import radiata.service.coupon.core.domain.model.constant.CouponType;
+import radiata.common.domain.coupon.constant.CouponType;
 
 class CouponTest {
 

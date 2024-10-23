@@ -23,8 +23,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 import radiata.common.exception.BusinessException;
-import radiata.service.coupon.core.domain.model.constant.CouponSaleType;
-import radiata.service.coupon.core.domain.model.constant.CouponType;
+import radiata.common.domain.coupon.constant.CouponSaleType;
+import radiata.common.domain.coupon.constant.CouponType;
 import radiata.service.coupon.core.domain.model.vo.CouponDiscountRate;
 
 @Entity

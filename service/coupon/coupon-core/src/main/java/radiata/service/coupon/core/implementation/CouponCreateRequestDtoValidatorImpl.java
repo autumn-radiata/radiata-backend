@@ -4,8 +4,8 @@ import radiata.common.annotation.Implementation;
 import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
 import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
-import radiata.service.coupon.core.domain.model.constant.CouponSaleType;
-import radiata.service.coupon.core.domain.model.constant.CouponType;
+import radiata.common.domain.coupon.constant.CouponSaleType;
+import radiata.common.domain.coupon.constant.CouponType;
 import radiata.service.coupon.core.implementation.interfaces.CouponCreateRequestDtoValidator;
 
 @Implementation

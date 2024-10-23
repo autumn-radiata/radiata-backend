@@ -5,8 +5,8 @@ import radiata.common.domain.coupon.dto.request.CouponCreateRequestDto;
 import radiata.common.domain.coupon.dto.request.CouponUpdateRequestDto;
 import radiata.common.domain.coupon.dto.response.CouponResponseDto;
 import radiata.service.coupon.core.domain.model.Coupon;
-import radiata.service.coupon.core.domain.model.constant.CouponSaleType;
-import radiata.service.coupon.core.domain.model.constant.CouponType;
+import radiata.common.domain.coupon.constant.CouponSaleType;
+import radiata.common.domain.coupon.constant.CouponType;
 import radiata.service.coupon.core.domain.model.vo.CouponDiscountRate;
 
 @Component
