@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import radiata.common.domain.timesale.dto.request.TimeSaleProductSaleRequestDto;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductCreateRequestDto;
 import radiata.common.response.CommonResponse;
 import radiata.service.timeslae.api.service.TimeSaleProductApiService;
@@ -40,10 +41,12 @@ public class TimeSaleProductController {
     @PatchMapping("/timesale-products/{timeSaleProductId}")
     public ResponseEntity<? extends CommonResponse> saleTimeSaleProduct(
             @PathVariable
-            String timeSaleProductId
+            String timeSaleProductId,
+            @RequestBody
+            TimeSaleProductSaleRequestDto requestDto
     ) {
 
-        timeSaleProductApiService.saleTimeSaleProduct(timeSaleProductId);
+        timeSaleProductApiService.saleTimeSaleProduct(timeSaleProductId, requestDto);
 
         return ResponseEntity.status(SALE_TIME_SALE_PRODUCT.getHttpStatus())
                 .body(success(SALE_TIME_SALE_PRODUCT.getMessage()));

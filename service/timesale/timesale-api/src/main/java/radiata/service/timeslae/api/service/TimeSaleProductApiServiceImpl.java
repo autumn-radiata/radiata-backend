@@ -3,6 +3,7 @@ package radiata.service.timeslae.api.service;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import radiata.common.domain.timesale.dto.request.TimeSaleProductSaleRequestDto;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductCreateRequestDto;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductResponseDto;
 import radiata.service.timesale.core.component.DistributeLockExecutor;
@@ -22,10 +23,11 @@ public class TimeSaleProductApiServiceImpl implements TimeSaleProductApiService 
     }
 
     @Override
-    public void saleTimeSaleProduct(String timeSaleProductId) {
+    public void saleTimeSaleProduct(String timeSaleProductId,
+            TimeSaleProductSaleRequestDto requestDto) {
 
         distributeLockExecutor.execute("lock_" + timeSaleProductId, 10000, 10000, () -> {
-            timeSaleProductService.sale(timeSaleProductId);
+            timeSaleProductService.sale(timeSaleProductId, requestDto);
         });
     }
 

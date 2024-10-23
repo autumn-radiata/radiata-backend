@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import radiata.common.domain.timesale.dto.request.TimeSaleProductSaleRequestDto;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductCreateRequestDto;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductResponseDto;
 import radiata.common.exception.BusinessException;
@@ -48,10 +49,10 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     }
 
     @Override
-    public void sale(String timeSaleProductId) {
+    public void sale(String timeSaleProductId, TimeSaleProductSaleRequestDto requestDto) {
 
         TimeSaleProduct timeSaleProduct = timeSaleProductReader.read(timeSaleProductId);
-        timeSaleProduct.sale();
+        timeSaleProduct.sale(requestDto.quantity());
 
         timeSaleProductResponseRedisRepository.delete(timeSaleProduct.getProductId());
     }
