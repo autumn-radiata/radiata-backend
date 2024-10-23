@@ -21,6 +21,7 @@ include 'service:coupon:coupon-consumer'
 
 include 'service:timesale:timesale-core'
 include 'service:timesale:timesale-api'
+include 'service:timesale:timesale-consumer'
 
 include 'service:order:order-core'
 include 'service:order:order-api'
@@ -28,4 +29,3 @@ include 'service:order:order-api'
 include 'service:gateway:gateway-core'
 
 include 'service:eureka:eureka-core'
-

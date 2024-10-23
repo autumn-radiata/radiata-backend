@@ -94,4 +94,18 @@ public class TimeSaleProduct extends BaseEntity {
     public void addTimeSale(TimeSale timeSale) {
         this.timeSale = timeSale;
     }
+
+    public void incrementSaleQuantity(Integer quantity) {
+
+        if (!availableIncrementSaleQuantity(quantity)) {
+            throw new BusinessException(ExceptionMessage.TIME_SALE_PRODUCT_LIMITED_SALE);
+        }
+
+        this.saleQuantity += quantity;
+    }
+
+    public boolean availableIncrementSaleQuantity(Integer quantity) {
+
+        return this.saleQuantity + quantity <= totalQuantity;
+    }
 }
