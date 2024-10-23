@@ -49,12 +49,14 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     }
 
     @Override
-    public void sale(String timeSaleProductId, TimeSaleProductSaleRequestDto requestDto) {
+    public TimeSaleProductResponseDto sale(String timeSaleProductId, TimeSaleProductSaleRequestDto requestDto) {
 
         TimeSaleProduct timeSaleProduct = timeSaleProductReader.read(timeSaleProductId);
         timeSaleProduct.sale(requestDto.quantity());
 
         timeSaleProductResponseRedisRepository.delete(timeSaleProduct.getProductId());
+
+        return timeSaleProductMapper.toDto(timeSaleProduct);
     }
 
     @Override

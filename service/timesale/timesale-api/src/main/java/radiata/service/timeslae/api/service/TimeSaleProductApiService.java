@@ -9,7 +9,7 @@ public interface TimeSaleProductApiService {
 
     TimeSaleProductResponseDto createTimeSaleProduct(TimeSaleProductCreateRequestDto requestDto);
 
-    void saleTimeSaleProduct(String timeSaleProductId, TimeSaleProductSaleRequestDto requestDto);
+    TimeSaleProductResponseDto saleTimeSaleProduct(String timeSaleProductId, TimeSaleProductSaleRequestDto requestDto);
 
     List<TimeSaleProductResponseDto> getMaxDiscountTimeSaleProduct(List<String> productIds);
 

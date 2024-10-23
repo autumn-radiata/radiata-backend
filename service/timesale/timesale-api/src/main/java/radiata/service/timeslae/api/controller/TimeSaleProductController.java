@@ -46,10 +46,10 @@ public class TimeSaleProductController {
             TimeSaleProductSaleRequestDto requestDto
     ) {
 
-        timeSaleProductApiService.saleTimeSaleProduct(timeSaleProductId, requestDto);
-
         return ResponseEntity.status(SALE_TIME_SALE_PRODUCT.getHttpStatus())
-                .body(success(SALE_TIME_SALE_PRODUCT.getMessage()));
+                .body(success(SALE_TIME_SALE_PRODUCT.getMessage(),
+                        timeSaleProductApiService.saleTimeSaleProduct(timeSaleProductId,
+                                requestDto)));
     }
 
     @GetMapping("/products/timesale-products/max-discount")

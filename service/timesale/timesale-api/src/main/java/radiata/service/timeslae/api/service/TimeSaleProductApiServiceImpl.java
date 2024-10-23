@@ -17,18 +17,19 @@ public class TimeSaleProductApiServiceImpl implements TimeSaleProductApiService 
     private final DistributeLockExecutor distributeLockExecutor;
 
     @Override
-    public TimeSaleProductResponseDto createTimeSaleProduct(TimeSaleProductCreateRequestDto requestDto) {
+    public TimeSaleProductResponseDto createTimeSaleProduct(
+            TimeSaleProductCreateRequestDto requestDto) {
 
         return timeSaleProductService.createTimeSaleProduct(requestDto);
     }
 
     @Override
-    public void saleTimeSaleProduct(String timeSaleProductId,
+    public TimeSaleProductResponseDto saleTimeSaleProduct(String timeSaleProductId,
             TimeSaleProductSaleRequestDto requestDto) {
 
-        distributeLockExecutor.execute("lock_" + timeSaleProductId, 10000, 10000, () -> {
-            timeSaleProductService.sale(timeSaleProductId, requestDto);
-        });
+        return distributeLockExecutor.execute("lock_" + timeSaleProductId, 10000, 10000,
+                () -> timeSaleProductService.sale(timeSaleProductId, requestDto)
+        );
     }
 
     @Override
@@ -38,7 +39,8 @@ public class TimeSaleProductApiServiceImpl implements TimeSaleProductApiService 
     }
 
     @Override
-    public List<TimeSaleProductResponseDto> getMaxDiscountTimeSaleProductHasStock(List<String> productIds) {
+    public List<TimeSaleProductResponseDto> getMaxDiscountTimeSaleProductHasStock(
+            List<String> productIds) {
 
         return timeSaleProductService.getMaxDiscountTimeSaleProductHasStock(productIds);
     }
