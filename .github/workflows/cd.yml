@@ -99,7 +99,6 @@ jobs:
           key: ${{ env.AWS_EC2_SSH_KEY }}
           script: |
             echo ${{ env.DOCKER_HUB_TOKEN }} | docker login -u ${{ env.DOCKER_HUB_USERNAME }} --password-stdin
-            docker compose -f ./docker-compose-deploy.yml down
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-user-server:latest
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-server:latest
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-coupon-consumer-server:latest
@@ -110,4 +109,5 @@ jobs:
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-payment-server:latest
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-gateway-server:latest
             docker pull ${{ env.DOCKER_HUB_USERNAME }}/autumn-eureka-server:latest
+            docker compose -f ./docker-compose-deploy.yml down
             docker compose -f ./docker-compose-deploy.yml up -d
