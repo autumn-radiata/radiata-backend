@@ -74,19 +74,21 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
         }
 
         List<TimeSaleProductResponseDto> allTimeSaleProducts = timeSaleReader.readByProductIds(productIds).stream()
-                .flatMap(timeSale -> timeSale.getTimeSaleProducts().stream())
-                .map(timeSaleProductMapper::toDto)
-                .toList();
-
+            .flatMap(timeSale -> timeSale.getTimeSaleProducts().stream())
+            .map(timeSaleProductMapper::toDto)
+            .toList();
 
         Map<String, TimeSaleProductResponseDto> maxDiscountProducts = allTimeSaleProducts.stream()
-                .collect(Collectors.toMap(
-                        TimeSaleProductResponseDto::productId,
-                        Function.identity(),
-                        (existing, replacement) -> replacement.discountRate() > existing.discountRate() ? replacement : existing
-                ));
+            .collect(Collectors.toMap(
+                TimeSaleProductResponseDto::productId,
+                Function.identity(),
+                (existing, replacement) -> replacement.discountRate() > existing.discountRate() ? replacement : existing
+            ));
 
-        return new ArrayList<>(maxDiscountProducts.values());
+        return productIds.stream()
+            .filter(maxDiscountProducts::containsKey)
+            .map(maxDiscountProducts::get)
+            .toList();
     }
 
     @Override
@@ -97,22 +99,20 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
         }
 
         List<TimeSaleProductResponseDto> allTimeSaleProducts = timeSaleReader.readByProductIds(productIds).stream()
-                .flatMap(timeSale -> timeSale.getTimeSaleProducts().stream())
-                .map(timeSaleProductMapper::toDto)
-                .toList();
-
+            .flatMap(timeSale -> timeSale.getTimeSaleProducts().stream())
+            .map(timeSaleProductMapper::toDto)
+            .toList();
 
         List<TimeSaleProductResponseDto> availableStockProducts = allTimeSaleProducts.stream()
-                .filter(product -> product.saleQuantity() < product.totalQuantity())
-                .toList();
-
+            .filter(product -> product.saleQuantity() < product.totalQuantity())
+            .toList();
 
         Map<String, TimeSaleProductResponseDto> maxDiscountProducts = availableStockProducts.stream()
-                .collect(Collectors.toMap(
-                        TimeSaleProductResponseDto::productId,
-                        Function.identity(),
-                        (existing, replacement) -> replacement.discountRate() > existing.discountRate() ? replacement : existing
-                ));
+            .collect(Collectors.toMap(
+                TimeSaleProductResponseDto::productId,
+                Function.identity(),
+                (existing, replacement) -> replacement.discountRate() > existing.discountRate() ? replacement : existing
+            ));
 
         return new ArrayList<>(maxDiscountProducts.values());
     }

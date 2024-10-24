@@ -1,8 +1,7 @@
 package radiata.service.timesale.core.infrastructure.repository;
 
 import static radiata.service.timesale.core.domain.QTimeSale.timeSale;
-import static radiata.service.timesale.core.domain.QTimeSaleProduct.*;
-
+import static radiata.service.timesale.core.domain.QTimeSaleProduct.timeSaleProduct;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
@@ -34,18 +33,18 @@ public class TimeSaleQueryRepositoryImpl implements TimeSaleQueryRepository {
 
     @Override
     public Page<TimeSale> findTimeSalesByCondition(TimeSaleSearchCondition condition,
-            Pageable pageable) {
+        Pageable pageable) {
 
         List<TimeSale> content = queryFactory.selectFrom(timeSale)
-                .where(titleEq(condition.title()))
-                .orderBy(getOrderSpecifiers(pageable.getSort()).toArray(OrderSpecifier[]::new))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+            .where(titleEq(condition.title()))
+            .orderBy(getOrderSpecifiers(pageable.getSort()).toArray(OrderSpecifier[]::new))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
 
         JPAQuery<Long> total = queryFactory.select(timeSale.count())
-                .from(timeSale)
-                .where(titleEq(condition.title()));
+            .from(timeSale)
+            .where(titleEq(condition.title()));
 
         return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
     }
@@ -56,14 +55,14 @@ public class TimeSaleQueryRepositoryImpl implements TimeSaleQueryRepository {
         LocalDateTime now = LocalDateTime.now();
 
         return Optional.ofNullable(queryFactory.select(timeSale)
-                .from(timeSale)
-                .leftJoin(timeSaleProduct).on(timeSaleProduct.timeSale.id.eq(timeSale.id))
-                .where(
-                        timeSaleProduct.productId.eq(productId),
-                        timeSaleProduct.timeSaleStartTime.before(now),
-                        timeSaleProduct.timeSaleEndTime.after(now)
-                )
-                .fetchOne());
+            .from(timeSale)
+            .leftJoin(timeSaleProduct).on(timeSaleProduct.timeSale.id.eq(timeSale.id))
+            .where(
+                timeSaleProduct.productId.eq(productId),
+                timeSaleProduct.timeSaleStartTime.before(now),
+                timeSaleProduct.timeSaleEndTime.after(now)
+            )
+            .fetchOne());
     }
 
     @Override
@@ -72,15 +71,16 @@ public class TimeSaleQueryRepositoryImpl implements TimeSaleQueryRepository {
         LocalDateTime now = LocalDateTime.now();
 
         return queryFactory.select(timeSale)
-                .from(timeSale)
-                .leftJoin(timeSaleProduct).on(timeSaleProduct.timeSale.id.eq(timeSale.id))
-                .where(
-                        timeSaleProduct.productId.in(productIds),
-                        timeSaleProduct.timeSaleStartTime.before(now),
-                        timeSaleProduct.timeSaleEndTime.after(now)
-                )
-                .fetch();
+            .from(timeSale)
+            .leftJoin(timeSaleProduct).on(timeSaleProduct.timeSale.id.eq(timeSale.id))
+            .where(
+                timeSaleProduct.productId.in(productIds),
+                timeSaleProduct.timeSaleStartTime.before(now),
+                timeSaleProduct.timeSaleEndTime.after(now)
+            )
+            .fetch();
     }
+
 
     private BooleanExpression titleEq(String title) {
 
@@ -91,8 +91,8 @@ public class TimeSaleQueryRepositoryImpl implements TimeSaleQueryRepository {
 
         List<OrderSpecifier> orders = sort.stream().map(o -> {
             com.querydsl.core.types.Order direction =
-                    o.isAscending() ? com.querydsl.core.types.Order.ASC
-                            : com.querydsl.core.types.Order.DESC;
+                o.isAscending() ? com.querydsl.core.types.Order.ASC
+                    : com.querydsl.core.types.Order.DESC;
             String property = o.getProperty();
             PathBuilder<TimeSale> orderByExpression = new PathBuilder<>(TimeSale.class, "timeSale");
             return new OrderSpecifier(direction, orderByExpression.get(property));

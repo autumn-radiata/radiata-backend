@@ -20,11 +20,11 @@ public class GatewayConfig {
             .route("order-service", r -> r.path("/orders/**")
                 .filters(f -> applyCommonFilters(f, "order-service"))
                 .uri("lb://order-service"))
-            .route("brand-service", r -> r.path("/goods/**", "/brands/**", "/categories/**")
+            .route("brand-service", r -> r.path("/products/**", "/brands/**", "/categories/**")
                 .filters(f -> applyCommonFilters(f, "brand-service"))
                 .uri("lb://brand-service"))
             //todo : /products 경로 겹침 >>products 변경 부탁드려용
-            .route("timesale-service", r -> r.path("/timesales/**", "/timesale-products/**", "/products/**")
+            .route("timesale-service", r -> r.path("/timesales/**", "/timesale-products/**")
                 .filters(f -> applyCommonFilters(f, "timesale-service"))
                 .uri("lb://timesale-service"))
             .route("payment-service", r -> r.path("/payments/**", "/payusers/**")

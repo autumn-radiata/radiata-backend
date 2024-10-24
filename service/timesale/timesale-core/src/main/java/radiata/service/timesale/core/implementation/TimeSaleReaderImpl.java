@@ -1,7 +1,6 @@
 package radiata.service.timesale.core.implementation;
 
 import static radiata.common.message.ExceptionMessage.NOT_FOUND;
-
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -39,7 +38,7 @@ public class TimeSaleReaderImpl implements TimeSaleReader {
     public TimeSale readByProductId(String productId) {
 
         return timeSaleQueryRepository.findByProductId(productId).orElseThrow(
-                () -> new BusinessException(NOT_FOUND)
+            () -> new BusinessException(NOT_FOUND)
         );
     }
 

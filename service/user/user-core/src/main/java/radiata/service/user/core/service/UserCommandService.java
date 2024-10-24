@@ -1,6 +1,7 @@
 package radiata.service.user.core.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -11,15 +12,18 @@ import radiata.common.exception.BusinessException;
 import radiata.common.message.ExceptionMessage;
 import radiata.service.user.core.domain.model.constant.PointType;
 import radiata.service.user.core.domain.model.entity.User;
+import radiata.service.user.core.domain.repository.PointHistoryRepository;
 import radiata.service.user.core.domain.repository.UserRepository;
 import radiata.service.user.core.implement.PointHandler;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserCommandService {
 
     private final UserRepository userRepository;
     private final PointHandler pointHandler;
+    private final PointHistoryRepository pointHistoryRepository;
 
     /**
      * 회원 정보 수정
