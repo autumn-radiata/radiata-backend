@@ -6,9 +6,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import radiata.common.domain.order.dto.request.AddPointRequestDto;
-import radiata.common.domain.order.dto.request.AddStockRequestDto;
+import radiata.common.domain.brand.request.ProductDeductRequestDto;
+import radiata.common.domain.coupon.constant.CouponStatus;
+import radiata.common.domain.coupon.dto.request.CouponIssueRollbackRequestDto;
 import radiata.common.domain.order.dto.response.StockInfoDto;
+import radiata.common.domain.payment.dto.request.PaymentCancelRequestDto;
+import radiata.common.domain.timesale.dto.request.TimeSaleProductSaleRollbackRequestDto;
+import radiata.common.domain.user.dto.request.PointModifyRequestDto;
 import radiata.service.order.core.domain.model.constant.OrderStatus;
 import radiata.service.order.core.domain.model.entity.Order;
 import radiata.service.order.core.domain.model.entity.OrderItem;
@@ -26,10 +30,9 @@ public class RollbackService {
         try {
             // 타임세일 상품 재고 증감 요청
             deductedTimeSaleStocks.forEach(timeSaleProduct -> {
-                AddStockRequestDto requestDto = new AddStockRequestDto(timeSaleProduct.id(),
-                    timeSaleProduct.quantity());
-                String data = EventSerializer.serialize(requestDto);
-                kafkaTemplate.send("timesale.add-stock", data);
+                TimeSaleProductSaleRollbackRequestDto requestDto = new TimeSaleProductSaleRollbackRequestDto(
+                    timeSaleProduct.id(), timeSaleProduct.quantity());
+                kafkaTemplate.send("timesale.add-stock", requestDto);
             });
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: TimeSale-Service ");
@@ -41,9 +44,8 @@ public class RollbackService {
         try {
             // 상품 재고 증감 요청
             deductedProductStocks.forEach(product -> {
-                AddStockRequestDto requestDto = new AddStockRequestDto(product.id(), product.quantity());
-                String data = EventSerializer.serialize(requestDto);
-                kafkaTemplate.send("product.add-stock", data);
+                ProductDeductRequestDto requestDto = new ProductDeductRequestDto(product.id(), product.quantity());
+                kafkaTemplate.send("product.add-stock", requestDto);
             });
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: Product-Service ");
@@ -55,8 +57,9 @@ public class RollbackService {
         try {
             // 쿠폰 상태 변경 요청(USED -> ISSUED)
             usedCoupons.forEach(usedCouponId -> {
-                String data = EventSerializer.serialize(usedCouponId);
-                kafkaTemplate.send("coupon.rollback-status", data);
+                CouponIssueRollbackRequestDto requestDto = new CouponIssueRollbackRequestDto(usedCouponId,
+                    CouponStatus.ISSUED);
+                kafkaTemplate.send("coupon.rollback-status", requestDto);
             });
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: Coupon-Service ");
@@ -67,9 +70,8 @@ public class RollbackService {
     private void rollbackRewardPoint(String userId, Integer point) {
         try {
             // 적립금 증감 요청
-            AddPointRequestDto requestDto = new AddPointRequestDto(userId, point);
-            String data = EventSerializer.serialize(requestDto);
-            kafkaTemplate.send("user.add-point", data);
+            PointModifyRequestDto requestDto = new PointModifyRequestDto(userId, point);
+            kafkaTemplate.send("user.add-point", requestDto);
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: User(Point)-Service ");
         }
@@ -79,8 +81,8 @@ public class RollbackService {
     private void rollbackPaymentAmount(String paymentId) {
         try {
             // 결제 취소 요청 - (== 환불)
-            String data = EventSerializer.serialize(paymentId);
-            kafkaTemplate.send("payment.cancel", data);
+            PaymentCancelRequestDto requestDto = new PaymentCancelRequestDto(paymentId);
+            kafkaTemplate.send("payment.cancel", requestDto);
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: Payment-Service ");
         }
@@ -89,7 +91,7 @@ public class RollbackService {
 
     // 주문 등록 - 보상 트랜잭션
     public void createOrderItemsRollback(OrderRollbackContext context) {
-
+        log.info("### 주문 등록 과정 - 보상 트랜잭션 수행 시작");
         rollbackTimeSaleStock(context.getDeductedTimeSales());
         rollbackProductStock(context.getDeductedProducts());
         rollbackCoupons(context.getUsedCoupons());
@@ -100,6 +102,7 @@ public class RollbackService {
 
         OrderRollbackContext rollbackContext = collectOrderItemInfo(order.getOrderItems());
 
+        log.info("### 주문 취소 or 미결제 주문 취소 시작 ### ");
         // TODO - 타임세일 시간 끝나면 복구 X
         rollbackTimeSaleStock(rollbackContext.getDeductedTimeSales());
         rollbackProductStock(rollbackContext.getDeductedProducts());
@@ -133,7 +136,7 @@ public class RollbackService {
         }
     }
 
-    public OrderRollbackContext collectOrderItemInfo(Set<OrderItem> orderItems) {
+    private OrderRollbackContext collectOrderItemInfo(Set<OrderItem> orderItems) {
         OrderRollbackContext rollbackContext = new OrderRollbackContext();
 
         for (OrderItem orderItem : orderItems) {

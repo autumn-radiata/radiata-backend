@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import radiata.common.annotation.Implementation;
 import radiata.common.domain.order.dto.request.OrderCreateRequestDto;
 import radiata.common.domain.order.dto.request.OrderItemCreateRequestDto;
-import radiata.common.domain.order.dto.response.CouponInfoDto;
 import radiata.common.domain.order.dto.response.OrderItemResponseDto;
 import radiata.service.order.core.domain.model.entity.Order;
 import radiata.service.order.core.domain.model.entity.OrderItem;
@@ -43,18 +42,14 @@ public class OrderItemService {
         for (OrderItemCreateRequestDto itemCreateDto : requestDto.itemList()) {
             // 주문 상품 ID 생성 및 주문 상품 목록에 추가
             OrderItem orderItem = createIdAndAddOrderItem(orderItems, itemCreateDto, order);
-            int quantity = itemCreateDto.quantity();
             // 1️⃣ 타임세일 상품 재고 확인 및 차감
-            String timeSaleProductId = itemCreateDto.timeSaleProductId();
-            processService.checkAndDeductTimeSaleProduct(rollbackContext, timeSaleProductId, quantity);
+            processService.checkAndDeductTimeSaleProduct(rollbackContext, orderItem);
             // 2️⃣ 상품 재고 확인 및 차감
-            String productId = itemCreateDto.productId();
-            processService.checkAndDeductStock(rollbackContext, productId, quantity);
+            processService.checkAndDeductStock(rollbackContext, orderItem);
             // 3️⃣ 쿠폰 사용 여부 체크
-            String couponIssuedId = itemCreateDto.couponIssuedId();
-            CouponInfoDto couponInfoDto = processService.checkAndUseCoupon(rollbackContext, couponIssuedId, userId);
-            // 상품 금액 설정 및 총 금액에 추가
-            orderPrice += orderItem.setPrice(couponInfoDto.saleType(), couponInfoDto.discountValue());
+            processService.checkAndUseCoupon(rollbackContext, userId, orderItem);
+            // 총 금액에 추가
+            orderPrice += orderItem.getPaymentPrice();
         }
 
         // 4️⃣ 적립금 확인 및 차감
