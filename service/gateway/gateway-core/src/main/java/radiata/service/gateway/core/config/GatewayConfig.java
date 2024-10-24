@@ -5,6 +5,8 @@ import org.springframework.cloud.gateway.route.builder.GatewayFilterSpec;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 
 @Configuration
 public class GatewayConfig {
@@ -38,15 +40,13 @@ public class GatewayConfig {
     }
 
     private GatewayFilterSpec applyCommonFilters(GatewayFilterSpec f, String serviceName) {
-//        return f.circuitBreaker(c -> c
-//                .setName(serviceName)
-//                .setFallbackUri("forward:/fallBack")
-//            )
-//            .retry(c -> c
-//                .setRetries(3)
-//                .setSeries(HttpStatus.Series.SERVER_ERROR)
-//                .setMethods(HttpMethod.GET));
-
-        return f;
+        return f.circuitBreaker(c -> c
+                .setName(serviceName)
+                .setFallbackUri("forward:/fallBack")
+            )
+            .retry(c -> c
+                .setRetries(3)
+                .setSeries(HttpStatus.Series.SERVER_ERROR)
+                .setMethods(HttpMethod.GET));
     }
 }
