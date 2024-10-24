@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import radiata.common.domain.timesale.dto.condition.TimeSaleSearchCondition;
 import radiata.service.timesale.core.domain.TimeSale;
+import radiata.service.timesale.core.domain.TimeSaleProduct;
 
 public interface TimeSaleReader {
 
@@ -14,5 +15,5 @@ public interface TimeSaleReader {
 
     TimeSale readByProductId(String productId);
 
-    List<TimeSale> readByProductIds(List<String> productIds);
+    List<TimeSaleProduct> readByProductIds(List<String> productIds);
 }

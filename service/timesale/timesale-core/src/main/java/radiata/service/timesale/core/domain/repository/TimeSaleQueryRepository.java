@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import radiata.common.domain.timesale.dto.condition.TimeSaleSearchCondition;
 import radiata.service.timesale.core.domain.TimeSale;
+import radiata.service.timesale.core.domain.TimeSaleProduct;
 
 public interface TimeSaleQueryRepository {
 
@@ -13,5 +14,5 @@ public interface TimeSaleQueryRepository {
 
     Optional<TimeSale> findByProductId(String productId);
 
-    List<TimeSale> findByProductIds(List<String> productIds);
+    List<TimeSaleProduct> findByProductIds(List<String> productIds);
 }

@@ -4,7 +4,6 @@ import static radiata.common.message.SuccessMessage.CREATE_TIME_SALE_PRODUCT;
 import static radiata.common.message.SuccessMessage.GET_MAX_DISCOUNT_TIME_SALE_PRODUCT;
 import static radiata.common.message.SuccessMessage.SALE_TIME_SALE_PRODUCT;
 import static radiata.common.response.SuccessResponse.success;
-
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -29,49 +28,49 @@ public class TimeSaleProductController {
 
     @PostMapping("/timesale-products")
     public ResponseEntity<? extends CommonResponse> createTimeSaleProduct(
-            @Valid @RequestBody
-            TimeSaleProductCreateRequestDto requestDto
+        @Valid @RequestBody
+        TimeSaleProductCreateRequestDto requestDto
     ) {
 
         return ResponseEntity.status(CREATE_TIME_SALE_PRODUCT.getHttpStatus())
-                .body(success(CREATE_TIME_SALE_PRODUCT.getMessage(),
-                        timeSaleProductApiService.createTimeSaleProduct(requestDto)));
+            .body(success(CREATE_TIME_SALE_PRODUCT.getMessage(),
+                timeSaleProductApiService.createTimeSaleProduct(requestDto)));
     }
 
     @PatchMapping("/timesale-products/{timeSaleProductId}")
     public ResponseEntity<? extends CommonResponse> saleTimeSaleProduct(
-            @PathVariable
-            String timeSaleProductId,
-            @RequestBody
-            TimeSaleProductSaleRequestDto requestDto
+        @PathVariable
+        String timeSaleProductId,
+        @RequestBody
+        TimeSaleProductSaleRequestDto requestDto
     ) {
 
         return ResponseEntity.status(SALE_TIME_SALE_PRODUCT.getHttpStatus())
-                .body(success(SALE_TIME_SALE_PRODUCT.getMessage(),
-                        timeSaleProductApiService.saleTimeSaleProduct(timeSaleProductId,
-                                requestDto)));
+            .body(success(SALE_TIME_SALE_PRODUCT.getMessage(),
+                timeSaleProductApiService.saleTimeSaleProduct(timeSaleProductId,
+                    requestDto)));
     }
 
-    @GetMapping("/products/timesale-products/max-discount")
+    @GetMapping("/timesale-products/max-discount")
     public ResponseEntity<? extends CommonResponse> getMaxDiscountTimeSaleProduct(
-            @RequestParam
-            List<String> productIds
+        @RequestParam
+        List<String> productIds
     ) {
 
         return ResponseEntity.status(GET_MAX_DISCOUNT_TIME_SALE_PRODUCT.getHttpStatus())
-                .body(success(GET_MAX_DISCOUNT_TIME_SALE_PRODUCT.getMessage(),
-                        timeSaleProductApiService.getMaxDiscountTimeSaleProduct(productIds)));
+            .body(success(GET_MAX_DISCOUNT_TIME_SALE_PRODUCT.getMessage(),
+                timeSaleProductApiService.getMaxDiscountTimeSaleProduct(productIds)));
     }
 
-    @GetMapping("/products/timesale-products/max-discount-has-stock")
+    @GetMapping("/timesale-products/max-discount-has-stock")
     public ResponseEntity<? extends CommonResponse> getMaxDiscountTimeSaleProductHasStock(
-            @RequestParam
-            List<String> productIds
+        @RequestParam
+        List<String> productIds
     ) {
 
         return ResponseEntity.status(GET_MAX_DISCOUNT_TIME_SALE_PRODUCT.getHttpStatus())
-                .body(success(GET_MAX_DISCOUNT_TIME_SALE_PRODUCT.getMessage(),
-                        timeSaleProductApiService.getMaxDiscountTimeSaleProductHasStock(
-                                productIds)));
+            .body(success(GET_MAX_DISCOUNT_TIME_SALE_PRODUCT.getMessage(),
+                timeSaleProductApiService.getMaxDiscountTimeSaleProductHasStock(
+                    productIds)));
     }
 }
