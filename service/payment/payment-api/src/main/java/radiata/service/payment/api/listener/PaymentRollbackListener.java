@@ -17,7 +17,7 @@ public class PaymentRollbackListener {
     private final ObjectMapper objectMapper;
     private final PaymentRollbackService paymentRollbackService;
 
-    @KafkaListener(topics = "payment.cancel")
+    @KafkaListener(topics = "payment.cancel", groupId = "payment.cancel.update")
     public void cancelPayment(String message) throws JsonProcessingException {
         PaymentCancelRequestDto request = objectMapper.readValue(message, PaymentCancelRequestDto.class);
         paymentRollbackService.rollbackPayment(request.paymentId());

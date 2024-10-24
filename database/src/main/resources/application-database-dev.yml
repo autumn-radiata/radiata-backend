@@ -2,19 +2,19 @@ spring:
   datasource:
     hikari:
       main:
-        url: jdbc:postgresql://yunjae.click:54321/radiata-prod-postgres-total
+        url: jdbc:postgresql://main.db.yunjae.click:54321/radiata_prod_postgres_total
         username: radiata
         password: 12345678
         driver-class-name: org.postgresql.Driver
       batch:
-        url: jdbc:postgresql://yunjae.click:54322/radiata-prod-postgres-batch
+        url: jdbc:postgresql://batch.db.yunjae.click:54322/radiata_prod_postgres_batch
         username: radiata
         password: 12345678
         driver-class-name: org.postgresql.Driver
 
   data:
     redis:
-      host: yunjae.click
+      host: infra.yunjae.click
       port: 63801
 
   jpa:
