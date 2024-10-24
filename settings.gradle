@@ -3,9 +3,6 @@ rootProject.name = 'autumn'
 include 'common'
 include 'database'
 
-include 'support:logging'
-include 'support:monitoring'
-
 include 'service:payment:payment-core'
 include 'service:payment:payment-api'
 

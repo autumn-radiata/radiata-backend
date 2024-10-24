@@ -78,7 +78,7 @@ subprojects {
 }
 
 def isDirectory() {
-    def directoryModules = ['service', 'support', 'order', 'payment', 'user']
+    def directoryModules = ['service', 'order', 'payment', 'user']
     return directoryModules.contains(project.name)
 }
 
