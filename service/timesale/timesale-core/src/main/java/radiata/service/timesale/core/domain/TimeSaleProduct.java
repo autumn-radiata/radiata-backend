@@ -95,17 +95,17 @@ public class TimeSaleProduct extends BaseEntity {
         this.timeSale = timeSale;
     }
 
-    public void incrementSaleQuantity(Integer quantity) {
+    public void decrementSaleQuantity(Integer quantity) {
 
-        if (!availableIncrementSaleQuantity(quantity)) {
+        if (!availableDecrementSaleQuantity(quantity)) {
             throw new BusinessException(ExceptionMessage.TIME_SALE_PRODUCT_LIMITED_SALE);
         }
 
-        this.saleQuantity += quantity;
+        this.saleQuantity -= quantity;
     }
 
-    public boolean availableIncrementSaleQuantity(Integer quantity) {
+    public boolean availableDecrementSaleQuantity(Integer quantity) {
 
-        return this.saleQuantity + quantity <= totalQuantity;
+        return this.saleQuantity - quantity >= 0;
     }
 }

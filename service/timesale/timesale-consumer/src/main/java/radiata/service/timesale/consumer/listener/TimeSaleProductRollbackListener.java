@@ -25,8 +25,8 @@ public class TimeSaleProductRollbackListener {
         TimeSaleProductSaleRollbackRequestDto requestDto = objectMapper.readValue(
                 message, TimeSaleProductSaleRollbackRequestDto.class);
 
-        distributeLockExecutor.execute("timeSaleProduct_sale_lock_" + requestDto.timeSaleProductId(), 10000, 10000,
-                () -> productService.incrementSaleQuantity(requestDto.timeSaleProductId(), requestDto.quantity())
+        distributeLockExecutor.execute("timeSaleProduct_sale_lock_" + requestDto.timeSaleProductId(), 1000, 1000,
+                () -> productService.decrementSaleQuantity(requestDto.timeSaleProductId(), requestDto.quantity())
         );
     }
 }

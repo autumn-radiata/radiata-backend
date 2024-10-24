@@ -7,5 +7,5 @@ public interface TimeSaleProductUpdateService {
 
     TimeSaleProductResponseDto sale(String timeSaleProductId, TimeSaleProductSaleRequestDto requestDto);
 
-    void incrementSaleQuantity(String timeSaleProductId, Integer quantity);
+    void decrementSaleQuantity(String timeSaleProductId, Integer quantity);
 }

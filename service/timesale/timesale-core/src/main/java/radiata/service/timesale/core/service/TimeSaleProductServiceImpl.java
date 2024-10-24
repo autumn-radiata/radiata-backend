@@ -60,10 +60,10 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
     }
 
     @Override
-    public void incrementSaleQuantity(String timeSaleProductId, Integer quantity) {
+    public void decrementSaleQuantity(String timeSaleProductId, Integer quantity) {
 
         TimeSaleProduct timeSaleProduct = timeSaleProductReader.read(timeSaleProductId);
-        timeSaleProduct.incrementSaleQuantity(quantity);
+        timeSaleProduct.decrementSaleQuantity(quantity);
     }
 
     @Override
