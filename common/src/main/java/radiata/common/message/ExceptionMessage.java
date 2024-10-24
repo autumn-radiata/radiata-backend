@@ -57,10 +57,8 @@ public enum ExceptionMessage {
     NOT_EQUALS_PRICE(CONFLICT, "5002", "결제 요청 금액과 주문 금액이 일치하지 않습니다."),
     // 주문 취소가 가능하지 않은 주문 상태일 때.
     IMPOSSIBLE_CANCEL_ORDER_PAYMENT(CONFLICT, "5003", "주문 취소가 불가한 주문 상태입니다."),
-    // 주문 실패 했을 때
-    ORDER_CREATION_FAILED(BAD_REQUEST, "5004", "주문 생성에 실패했습니다."),
-    // 결제 실패했을 때
-    ORDER_PAYMENT_FAILED(BAD_REQUEST, "5005", "주문 상품 결제에 실패했습니다."),
+    // FeignException 메시지, 코드 파싱 실패 시
+    FEIGN_CLIENT_PARSE_ERROR(CONFLICT, "5004", "FeignException 메시지 파싱 실패"),
 
     /* 쿠폰 6000번대 */
 

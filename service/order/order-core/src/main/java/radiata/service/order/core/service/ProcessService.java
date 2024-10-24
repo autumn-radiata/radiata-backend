@@ -1,6 +1,11 @@
 package radiata.service.order.core.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -37,6 +42,7 @@ public class ProcessService {
     private final PaymentClient paymentClient;
     private final UserClient userClient;
     private final RollbackService rollbackService;
+    private final ObjectMapper objectMapper;
 
 
     // 타임세일상품 재고 확인 및 차감 요청
@@ -46,7 +52,6 @@ public class ProcessService {
             int quantity = orderItem.getQuantity();
 
             if (timeSaleProductId != null) {
-                // TODO - 갯수 넘기면 header Or param으로 날릴 예정
                 int discountRate = timeSaleProductClient.checkAndDeductTimeSaleProduct(timeSaleProductId,
                     new TimeSaleProductSaleRequestDto(quantity)).data().discountRate();
                 context.addDeductedTimeSale(timeSaleProductId, quantity);
@@ -55,7 +60,8 @@ public class ProcessService {
         } catch (FeignException e) {
             log.error("[TimeSale-Service FeignException]: Deduct TimeSale Product Request Error");
             rollbackService.createOrderItemsRollback(context);
-            throw new BusinessException(HttpStatus.CONFLICT, e.getMessage(), "5006");
+            Map<String, String> errorInfo = parseFeignExceptionMessage(e);
+            throw new BusinessException(HttpStatus.valueOf(e.status()), errorInfo);
         }
     }
 
@@ -70,7 +76,8 @@ public class ProcessService {
         } catch (FeignException e) {
             log.error("[Brand(Product)-Service FeignException]: DeductStock Request Error");
             rollbackService.createOrderItemsRollback(context);
-            throw new BusinessException(HttpStatus.CONFLICT, e.getMessage(), "5007");
+            Map<String, String> errorInfo = parseFeignExceptionMessage(e);
+            throw new BusinessException(HttpStatus.valueOf(e.status()), errorInfo);
         }
     }
 
@@ -91,7 +98,8 @@ public class ProcessService {
         } catch (FeignException e) {
             log.error("[Coupon-Service FeignException]: UseCoupon Request Error");
             rollbackService.createOrderItemsRollback(context);
-            throw new BusinessException(HttpStatus.CONFLICT, e.getMessage(), "5008");
+            Map<String, String> errorInfo = parseFeignExceptionMessage(e);
+            throw new BusinessException(HttpStatus.valueOf(e.status()), errorInfo);
         }
     }
 
@@ -106,7 +114,8 @@ public class ProcessService {
         } catch (FeignException e) {
             log.error("[User(Point)-Service FeignException]: UsePoint Request Error");
             rollbackService.createOrderItemsRollback(context);
-            throw new BusinessException(HttpStatus.CONFLICT, e.getMessage(), "5008");
+            Map<String, String> errorInfo = parseFeignExceptionMessage(e);
+            throw new BusinessException(HttpStatus.valueOf(e.status()), errorInfo);
         }
     }
 
@@ -119,7 +128,8 @@ public class ProcessService {
         } catch (FeignException e) {
             log.error("[Payment-Service FeignException]: EasyPay Request Error");
             rollbackService.cancelOrderItemsRollback(order);
-            throw new BusinessException(ExceptionMessage.ORDER_PAYMENT_FAILED);
+            Map<String, String> errorInfo = parseFeignExceptionMessage(e);
+            throw new BusinessException(HttpStatus.valueOf(e.status()), errorInfo);
         }
     }
 
@@ -132,7 +142,8 @@ public class ProcessService {
         } catch (FeignException e) {
             log.error("[Payment-Service FeignException]: TossPay Request Error");
             rollbackService.cancelOrderItemsRollback(order);
-            throw new BusinessException(ExceptionMessage.ORDER_PAYMENT_FAILED);
+            Map<String, String> errorInfo = parseFeignExceptionMessage(e);
+            throw new BusinessException(HttpStatus.valueOf(e.status()), errorInfo);
         }
     }
 
@@ -171,5 +182,30 @@ public class ProcessService {
         order.updateOrderStatus(OrderStatus.PAYMENT_CANCEL_REQUESTED);
         // 주문 관련 롤백 요청
         rollbackService.cancelOrderItemsRollback(order);
+    }
+
+    // FeignException -> status, message, code 추출
+    private Map<String, String> parseFeignExceptionMessage(FeignException e) {
+        String responseJson = e.contentUTF8();
+        Map<String, String> responseMap = new HashMap<>();
+
+        try {
+            // JSON을 파싱해서 message와 code 추출
+            Map<String, Object> parsedJson = objectMapper.readValue(responseJson,
+                new TypeReference<Map<String, Object>>() {
+                });
+
+            String message = (String) parsedJson.get("message");
+            String code = (String) parsedJson.get("code");
+
+            responseMap.put("message", message);
+            responseMap.put("code", code);
+
+        } catch (JsonProcessingException jsonException) {
+            log.error("Error parsing Feign response: {}", jsonException.getMessage());
+            throw new BusinessException(ExceptionMessage.FEIGN_CLIENT_PARSE_ERROR);
+        }
+
+        return responseMap;
     }
 }

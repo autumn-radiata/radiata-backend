@@ -1,6 +1,6 @@
 package radiata.common.exception;
 
-import java.io.IOException;
+import java.util.Map;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import radiata.common.message.ExceptionMessage;
@@ -18,9 +18,15 @@ public class BusinessException extends RuntimeException {
         this.code = code;
     }
 
-    public BusinessException(ExceptionMessage exceptionMessage)  {
+    public BusinessException(ExceptionMessage exceptionMessage) {
         this.httpStatus = exceptionMessage.getHttpStatus();
         this.message = exceptionMessage.getMessage();
         this.code = exceptionMessage.getCode();
+    }
+
+    public BusinessException(HttpStatus httpStatus, Map<String, String> feignErrorInfo) {
+        this.httpStatus = httpStatus;
+        this.message = feignErrorInfo.get("message");
+        this.code = feignErrorInfo.get("code");
     }
 }
