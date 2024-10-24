@@ -40,4 +40,8 @@ public class PaymentSaver {
 
         return paymentRepository.save(payment);
     }
+
+    public Payment save(Payment payment) {
+        return paymentRepository.save(payment);
+    }
 }

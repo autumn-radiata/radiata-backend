@@ -92,4 +92,16 @@ public class PaymentRequester {
         // 결제 승인
         payment.approve();
     }
+
+    public void cancelTossPayment(Payment payment) {
+        // 토스 결제 취소 API 호출
+        log.info("Toss payment cancel request: {}", payment.getId());
+        payment.fail();
+    }
+
+    public void cancelEasyPay(Payment payment, PayUser payUser) {
+        // 간편결제 취소 API 호출
+        payUser.deposit(payment.getAmount());
+        payment.fail();
+    }
 }
