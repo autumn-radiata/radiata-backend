@@ -74,7 +74,7 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
         }
 
         List<TimeSaleProductResponseDto> allTimeSaleProducts = timeSaleReader.readByProductIds(productIds).stream()
-            // .flatMap(timeSale -> timeSale.getTimeSaleProducts().stream())
+            .flatMap(timeSale -> timeSale.getTimeSaleProducts().stream())
             .map(timeSaleProductMapper::toDto)
             .toList();
 
@@ -85,7 +85,10 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
                 (existing, replacement) -> replacement.discountRate() > existing.discountRate() ? replacement : existing
             ));
 
-        return new ArrayList<>(maxDiscountProducts.values());
+        return productIds.stream()
+            .filter(maxDiscountProducts::containsKey)
+            .map(maxDiscountProducts::get)
+            .toList();
     }
 
     @Override
@@ -96,7 +99,7 @@ public class TimeSaleProductServiceImpl implements TimeSaleProductService {
         }
 
         List<TimeSaleProductResponseDto> allTimeSaleProducts = timeSaleReader.readByProductIds(productIds).stream()
-            //.flatMap(timeSale -> timeSale.getTimeSaleProducts().stream())
+            .flatMap(timeSale -> timeSale.getTimeSaleProducts().stream())
             .map(timeSaleProductMapper::toDto)
             .toList();
 

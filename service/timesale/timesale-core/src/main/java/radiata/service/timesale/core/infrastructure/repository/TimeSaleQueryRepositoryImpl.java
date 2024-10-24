@@ -18,7 +18,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import radiata.common.domain.timesale.dto.condition.TimeSaleSearchCondition;
 import radiata.service.timesale.core.domain.TimeSale;
-import radiata.service.timesale.core.domain.TimeSaleProduct;
 import radiata.service.timesale.core.domain.repository.TimeSaleQueryRepository;
 
 @Repository
@@ -67,19 +66,19 @@ public class TimeSaleQueryRepositoryImpl implements TimeSaleQueryRepository {
     }
 
     @Override
-    public List<TimeSaleProduct> findByProductIds(List<String> productIds) {
+    public List<TimeSale> findByProductIds(List<String> productIds) {
 
         LocalDateTime now = LocalDateTime.now();
 
-        return queryFactory.select(timeSaleProduct)  // 타임세일 상품을 선택
-            .from(timeSaleProduct)  // 타임세일 상품을 기준으로 쿼리
-            .leftJoin(timeSale).on(timeSale.id.eq(timeSaleProduct.timeSale.id))  // 타임세일과 조인
+        return queryFactory.select(timeSale)
+            .from(timeSale)
+            .leftJoin(timeSaleProduct).on(timeSaleProduct.timeSale.id.eq(timeSale.id))
             .where(
-                timeSaleProduct.productId.in(productIds),  // 주어진 상품 ID 리스트에 포함된 상품
-                timeSaleProduct.timeSaleStartTime.before(now),  // 타임세일 시작 시간 전에
-                timeSaleProduct.timeSaleEndTime.after(now)  // 타임세일 종료 시간 이후인 상품
+                timeSaleProduct.productId.in(productIds),
+                timeSaleProduct.timeSaleStartTime.before(now),
+                timeSaleProduct.timeSaleEndTime.after(now)
             )
-            .fetch();  // 결과를 리스트로 반환
+            .fetch();
     }
 
 

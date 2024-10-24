@@ -9,7 +9,6 @@ import radiata.common.annotation.Implementation;
 import radiata.common.domain.timesale.dto.condition.TimeSaleSearchCondition;
 import radiata.common.exception.BusinessException;
 import radiata.service.timesale.core.domain.TimeSale;
-import radiata.service.timesale.core.domain.TimeSaleProduct;
 import radiata.service.timesale.core.domain.repository.TimeSaleQueryRepository;
 import radiata.service.timesale.core.domain.repository.TimeSaleRepository;
 import radiata.service.timesale.core.implementation.interfaces.TimeSaleReader;
@@ -44,7 +43,7 @@ public class TimeSaleReaderImpl implements TimeSaleReader {
     }
 
     @Override
-    public List<TimeSaleProduct> readByProductIds(List<String> productIds) {
+    public List<TimeSale> readByProductIds(List<String> productIds) {
 
         return timeSaleQueryRepository.findByProductIds(productIds);
     }
