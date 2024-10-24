@@ -2,7 +2,6 @@ package radiata.service.brand.api.presentation;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -62,7 +61,7 @@ public class ProductController {
     ) {
         System.out.println("gender:" + condition.gender());
 
-        Page<ProductGetResponseDto> response = productQueryService.getProducts(condition, pageable);
+        var response = productQueryService.getProducts(condition, pageable);
         return SuccessResponse.success(SuccessMessage.OK.getMessage(), response);
     }
 

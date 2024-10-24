@@ -1,6 +1,8 @@
 package radiata.service.brand.core.service;
 
 import feign.FeignException;
+import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -12,6 +14,7 @@ import radiata.common.domain.brand.response.ProductGetResponseDto;
 import radiata.common.domain.timesale.dto.response.TimeSaleProductResponseDto;
 import radiata.service.brand.core.implement.ProductReader;
 import radiata.service.brand.core.implement.RedisService;
+import radiata.service.brand.core.implement.RestPage;
 import radiata.service.brand.core.model.entity.Product;
 import radiata.service.brand.core.service.FeignClient.TimeSaleClient;
 import radiata.service.brand.core.service.Mapper.ProductMapper;
@@ -78,26 +81,51 @@ public class ProductQueryService {
      * 상품 목록 조회
      */
     @Transactional(readOnly = true)
-    public Page<ProductGetResponseDto> getProducts(ProductSearchCondition condition, Pageable pageable) {
+    public RestPage<ProductGetResponseDto> getProducts(ProductSearchCondition condition, Pageable pageable) {
 
         String productSearchPagingKey = generateSearchCacheKey(condition, pageable);
-        Page<ProductGetResponseDto> cachedProducts = redisService.getProductDto(productSearchPagingKey, Page.class);
+        //레디스 조회
+        RestPage<ProductGetResponseDto> cachedProducts = redisService.getProductDto(productSearchPagingKey,
+            RestPage.class);
         if (cachedProducts != null) {
             return cachedProducts;
         }
 
+        //db 조회
         Page<ProductGetResponseDto> productsSearchWithCondition = productReader.readWithCondition(condition, pageable)
             .map(productMapper::toProductGetResponseDto);
 
-        //todo : TimeSaleProduct api ,최저가 비교
+        // 최저가 비교
 
-        if (pageable.getPageSize() <= 5) {
-            redisService.setProductDtoWithExpire(productSearchPagingKey, productsSearchWithCondition,
-                PRODUCT_SEARCH_DURATION);
+        List<String> RequestMaxProductsDiscountIds = productsSearchWithCondition.stream()
+            .map(ProductGetResponseDto::productId)
+            .toList();
+
+        List<TimeSaleProductResponseDto> timeSaleMaxProducts = timeSaleClient.getMaxDiscountTimeSaleProducts(
+            RequestMaxProductsDiscountIds).data();
+
+        List<ProductGetResponseDto> list = productsSearchWithCondition.stream().toList();
+
+        //최저가 list
+        for (TimeSaleProductResponseDto dto : timeSaleMaxProducts) {
+            list.stream()
+                .filter(t -> Objects.equals(t.productId(), dto.productId())).findFirst()
+                .map(t ->
+                    list.set(list.indexOf(t),
+                        productMapper.toMaxDiscountAmount(t, Math.max(t.discountAmount(), dto.discountRate())))
+                );
         }
 
-        return productsSearchWithCondition;
+        RestPage<ProductGetResponseDto> response = productMapper.toRestPageFromDiscountMax(list,
+            productsSearchWithCondition.getSize(),
+            productsSearchWithCondition.getTotalElements());
 
+        if (pageable.getPageNumber() <= 5) {
+            redisService.setProductDtoWithExpire(productSearchPagingKey,
+                response,
+                PRODUCT_SEARCH_DURATION);
+        }
+        return response;
     }
 
 
@@ -105,7 +133,7 @@ public class ProductQueryService {
 
         try {
             TimeSaleProductResponseDto maxDisCountTimeSaleProduct =
-                timeSaleClient.getMaxDiscountTimeSaleProduct(product.getId()).data();
+                timeSaleClient.getMaxDiscountTimeSaleProducts(product.getId().lines().toList()).data().getFirst();
 
             if (maxDisCountTimeSaleProduct.discountRate() > product.getDiscountAmount()) {
                 product.setMaxDiscountAmount(maxDisCountTimeSaleProduct.discountRate());
