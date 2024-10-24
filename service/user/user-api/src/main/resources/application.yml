@@ -6,7 +6,7 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: 10s
   kafka:
-    bootstrap-servers: yunjae.click:9092
+    bootstrap-servers: infra.yunjae.click:9092
 
 server:
   shutdown: graceful  # 애플리케이션 종료 시 정상 종료 (Graceful Shutdown)

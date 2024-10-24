@@ -4,7 +4,7 @@ spring:
   application:
     name: coupon-consumer-service
   kafka:
-    bootstrap-servers: http://yunjae.click:9092
+    bootstrap-servers: http://infra.yunjae.click:9092
 
 
 server:
