@@ -10,10 +10,10 @@ spring:
     discovery:
       locator:
         enabled: true
-    gateway:
-      filter:
-        circuit-breaker:
-          enabled:
+  #    gateway:
+  #      filter:
+  #        circuit-breaker:
+  #          enabled:
   lifecycle:
     timeout-per-shutdown-phase: 12s
 
