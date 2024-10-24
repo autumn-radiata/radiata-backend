@@ -28,6 +28,19 @@ jwt:
 springdoc:
   swagger-ui:
     use-root-path: true
+    urls:
+      - url: http://yunjae.click:8080/v3/api-docs
+        name: Payment API
+      - url: http://yunjae.click:8081/v3/api-docs
+        name: Coupon API
+      - url: http://yunjae.click:8082/v3/api-docs
+        name: Timesale API
+      - url: http://yunjae.click:8083/v3/api-docs
+        name: User API
+      - url: http://yunjae.click:8484/v3/api-docs
+        name: Brand API
+      - url: http://yunjae.click:8085/v3/api-docs
+        name: Order API
 
 management:
   endpoints:
