@@ -45,7 +45,8 @@ public class RollbackService {
             // 상품 재고 증감 요청
             deductedProductStocks.forEach(product -> {
                 ProductDeductRequestDto requestDto = new ProductDeductRequestDto(product.id(), product.quantity());
-                kafkaTemplate.send("product.add-stock", requestDto);
+                String data = EventSerializer.serialize(requestDto);
+                kafkaTemplate.send("product.add-stock", data);
             });
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: Product-Service ");
@@ -71,7 +72,8 @@ public class RollbackService {
         try {
             // 적립금 증감 요청
             PointModifyRequestDto requestDto = new PointModifyRequestDto(userId, point);
-            kafkaTemplate.send("user.add-point", requestDto);
+            String data = EventSerializer.serialize(requestDto);
+            kafkaTemplate.send("user.add-point", data);
         } catch (RuntimeException e) {
             log.error(" [Rollback Error]: User(Point)-Service ");
         }
