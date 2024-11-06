@@ -21,7 +21,7 @@
 
 | 이름                                  | 역할 분담    |
 |-------------------------------------|----------|
-| [김재윤](https://github.com/lycoris62) | 결제       |
+| [김재윤](https://github.com/yunjae62) | 결제       |
 | [조원호](https://github.com/wonowonow) | 쿠폰, 타임세일 |
 | [윤선미](https://github.com/hgalchi)   | 유저, 브랜드  |
 | [박현도](https://github.com/atto08)    | 주문       |
