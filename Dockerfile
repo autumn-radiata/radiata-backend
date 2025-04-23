@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jre-alpine
 ARG FILE_DIRECTORY
 
 # 시간대 설정
